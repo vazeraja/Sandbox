@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="ReanimatorGraphEditor.uss" />
+    <uie:Toolbar style="background-color: rgb(59, 79, 92);">
+        <uie:ToolbarMenu display-tooltip-when-elided="true" text="Assets" />
+    </uie:Toolbar>
+    <Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl fixed-pane-initial-dimension="750">
+        <ui:VisualElement name="left-panel">
+            <ui:Label text="Resolution Graph" display-tooltip-when-elided="true" style="border-left-color: rgb(56, 56, 56); border-right-color: rgb(56, 56, 56); border-top-color: rgb(56, 56, 56); border-bottom-color: rgb(56, 56, 56); background-color: rgb(13, 55, 58);" />
+            <Aarthificial.Reanimation.ResolutionGraph.Editor.ReanimatorGraphView focusable="true" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="right-panel">
+            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(13, 55, 58);" />
+            <Aarthificial.Reanimation.ResolutionGraph.Editor.InspectorCustomControl style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl>
+</ui:UXML>
