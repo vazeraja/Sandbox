@@ -1,5 +1,6 @@
 ﻿using Aarthificial.Reanimation.Editor.Nodes;
 using Aarthificial.Reanimation.Nodes;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.Object;
@@ -63,6 +64,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                             animationEditor.OnInspectorGUI();
                             animationEditor.RequiresConstantRepaint();
                             animationEditor.HasPreviewGUI();
+                            
+                            EditorGUILayout.Space();
                             animationEditor.OnPreviewGUI(GUILayoutUtility.GetRect(200, 200), new GUIStyle());
                         }
                         break;

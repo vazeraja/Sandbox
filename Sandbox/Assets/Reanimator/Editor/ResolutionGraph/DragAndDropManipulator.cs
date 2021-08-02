@@ -41,19 +41,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                                 };
                                 break;
                             }
-                            case SwitchNode switchNode: {
-                                EditorApplication.delayCall += () => {
-                                    var nodes = switchNode.nodes;
-                                    graphView.CreateSwitchNode(switchNode.GetType(), nodePosition, nodes);
-                                };
-                                break;
-                            }
-                            case OverrideNode overrideNode: {
-                                EditorApplication.delayCall += () => {
-                                    graphView.CreateNode(overrideNode.GetType(), nodePosition);
-                                };
-                                break;
-                            }
                         }
                     }
                 }

@@ -18,8 +18,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         public Port input;
         public Port output;
 
-        public ReanimatorGraphNode(ReanimatorNode node, ReanimatorGraphView graphView, InspectorCustomControl inspector)
-            : base(nodeStyleSheetPath) {
+        public ReanimatorGraphNode(ReanimatorNode node, ReanimatorGraphView graphView, InspectorCustomControl inspector) : base(nodeStyleSheetPath) {
             // UseDefaultStyling();
             this.node = node;
             this.inspector = inspector;
@@ -32,12 +31,12 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             style.left = node.position.x;
             style.top = node.position.y;
 
-            this.AddManipulator(new InspectorManipulator(graphView, inspector));
-
             CreateInputPorts();
             CreateOutputPorts();
             CreateTitleEditField();
             SetupClasses();
+            
+            this.AddManipulator(new InspectorManipulator(graphView, inspector));
         }
 
         private void SetupClasses() {
@@ -123,13 +122,13 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         }
 
         public void PlayAnimationPreview() {
-            RemoveFromClassList("selected ---");
+            RemoveFromClassList("--- selected ---");
             RemoveFromClassList("not-selected");
 
             if (!Application.isPlaying) {
                 switch (selected) {
                     case true:
-                        AddToClassList("selected ---");
+                        AddToClassList("--- selected ---");
                         break;
                     case false:
                         AddToClassList("not-selected");

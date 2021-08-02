@@ -16,14 +16,12 @@ MonoBehaviour:
   title: JumpToIdleAnimation
   position: {x: 1297, y: 58}
   cels:
-  - sprite: {fileID: 8494806145318214075, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: 8494806145318214075, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys:
       - idleTransition
       values: 02000000
-  - sprite: {fileID: 5560605583954493893, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 5560605583954493893, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys: []
       values: 
@@ -51,14 +49,12 @@ MonoBehaviour:
   title: RunNJumpAnimation
   position: {x: 1206.5, y: -496.99997}
   cels:
-  - sprite: {fileID: 6612509912714155400, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 6612509912714155400, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys:
       - run
       values: 02000000
-  - sprite: {fileID: 5560605583954493893, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 5560605583954493893, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys: []
       values: 
@@ -112,8 +108,7 @@ MonoBehaviour:
   title: DashAnimation
   position: {x: 716, y: 122.00001}
   cels:
-  - sprite: {fileID: 5724131686658579246, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 5724131686658579246, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys: []
       values: 
@@ -142,33 +137,27 @@ MonoBehaviour:
   title: RunAnimation
   position: {x: 1010.00006, y: -221.00005}
   cels:
-  - sprite: {fileID: -3434879642533976785, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: -3434879642533976785, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -6900529643414002696, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: -6900529643414002696, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: 8494806145318214075, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: 8494806145318214075, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -3020548108663225488, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: -3020548108663225488, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -622354641076717811, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: -622354641076717811, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: 6171374375413776551, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: 6171374375413776551, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys: []
       values: 
@@ -197,8 +186,7 @@ MonoBehaviour:
   title: AirDashAnimation
   position: {x: 716, y: 207.99998}
   cels:
-  - sprite: {fileID: 5724131686658579246, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 5724131686658579246, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys: []
       values: 
@@ -224,21 +212,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: a6fdbe8ddecc6634b9ae9322c24e2641
   title: HitAnimation
-  position: {x: 575, y: -10}
+  position: {x: 553, y: -0.000020980835}
   cels:
-  - sprite: {fileID: 4088135725779492898, guid: 0686ed5205576b84c985475e2c72957d,
-      type: 3}
+  - sprite: {fileID: 4088135725779492898, guid: 0686ed5205576b84c985475e2c72957d, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: 4088135725779492898, guid: 0686ed5205576b84c985475e2c72957d,
-      type: 3}
+  - sprite: {fileID: 4088135725779492898, guid: 0686ed5205576b84c985475e2c72957d, type: 3}
     drivers:
       keys:
       - idleTransition
       values: 02000000
-  - sprite: {fileID: 4088135725779492898, guid: 0686ed5205576b84c985475e2c72957d,
-      type: 3}
+  - sprite: {fileID: 4088135725779492898, guid: 0686ed5205576b84c985475e2c72957d, type: 3}
     drivers:
       keys:
       - idleTransition
@@ -267,13 +252,11 @@ MonoBehaviour:
   title: JumpAnimation
   position: {x: 1206.5, y: -592.0615}
   cels:
-  - sprite: {fileID: 3298105886585063087, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 3298105886585063087, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: 5560605583954493893, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 5560605583954493893, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys: []
       values: 
@@ -410,23 +393,19 @@ MonoBehaviour:
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: 4625936013739869009, guid: 70334b78acba2ad4db16b9e6a5515a8d,
-      type: 3}
+  - sprite: {fileID: 4625936013739869009, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: 7090611045446874900, guid: 70334b78acba2ad4db16b9e6a5515a8d,
-      type: 3}
+  - sprite: {fileID: 7090611045446874900, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -6129432467426448923, guid: 70334b78acba2ad4db16b9e6a5515a8d,
-      type: 3}
+  - sprite: {fileID: -6129432467426448923, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -6043553512486061327, guid: 70334b78acba2ad4db16b9e6a5515a8d,
-      type: 3}
+  - sprite: {fileID: -6043553512486061327, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:
       keys: []
       values: 
@@ -454,23 +433,19 @@ MonoBehaviour:
   title: IdleAnimation
   position: {x: 1297, y: -119.00004}
   cels:
-  - sprite: {fileID: -2937644175521846342, guid: f31e889de574c78499d5df74639f2b86,
-      type: 3}
+  - sprite: {fileID: -2937644175521846342, guid: f31e889de574c78499d5df74639f2b86, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -6672705515115128521, guid: f31e889de574c78499d5df74639f2b86,
-      type: 3}
+  - sprite: {fileID: -6672705515115128521, guid: f31e889de574c78499d5df74639f2b86, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -672653471037824313, guid: f31e889de574c78499d5df74639f2b86,
-      type: 3}
+  - sprite: {fileID: -672653471037824313, guid: f31e889de574c78499d5df74639f2b86, type: 3}
     drivers:
       keys: []
       values: 
-  - sprite: {fileID: -3433722061912466453, guid: f31e889de574c78499d5df74639f2b86,
-      type: 3}
+  - sprite: {fileID: -3433722061912466453, guid: f31e889de574c78499d5df74639f2b86, type: 3}
     drivers:
       keys: []
       values: 
@@ -552,14 +527,12 @@ MonoBehaviour:
   title: RunToIdleAnimation
   position: {x: 1297, y: -35}
   cels:
-  - sprite: {fileID: 6171374375413776551, guid: 96c42d47a44319a49a6f5c769ee74b73,
-      type: 3}
+  - sprite: {fileID: 6171374375413776551, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
       keys:
       - idleTransition
       values: 01000000
-  - sprite: {fileID: 7984399840888605053, guid: 7cf92fcfe9147d94e961ea8384f393f7,
-      type: 3}
+  - sprite: {fileID: 7984399840888605053, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
       keys: []
       values: 

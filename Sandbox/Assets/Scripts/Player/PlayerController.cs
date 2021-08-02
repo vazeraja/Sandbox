@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour {
 
     #endregion
     
-    private InputState inputState => provider;
+    public InputState inputState => provider;
     public AnimState State { get; set; } = AnimState.Movement;
     public Vector2 MovementDirection => inputState.movementDirection;
     public bool IsCrouching => inputState.isCrouching;

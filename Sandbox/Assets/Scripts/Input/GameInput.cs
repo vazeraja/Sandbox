@@ -51,33 +51,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Interact"",
-                    ""type"": ""Button"",
-                    ""id"": ""dabc56f1-2ebe-4f74-9475-81bc8e5c32bf"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Hat"",
                     ""type"": ""Button"",
                     ""id"": ""ae340359-eca5-4eca-af79-ff9cbeb7a937"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Menu"",
-                    ""type"": ""Button"",
-                    ""id"": ""fc990194-8a7f-423c-bfd1-948bed9062a9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""OpenDevConsole"",
-                    ""type"": ""Button"",
-                    ""id"": ""dcbcb6e6-cb56-481d-af2f-ea3ad19e8adf"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -295,17 +271,6 @@ public class @GameInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""241b2433-c327-4497-987d-7d53b8e0d21f"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""2783a939-ac4d-4800-9131-ba298be29fce"",
                     ""path"": ""<Keyboard>/h"",
                     ""interactions"": """",
@@ -323,142 +288,6 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""Crouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fee6aea1-46ef-4573-9d2c-e9d7e8044a7c"",
-                    ""path"": ""<Keyboard>/m"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""Menu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0f9c921c-c737-4827-8e9f-1f595bb92124"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""OpenDevConsole"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Dialogues"",
-            ""id"": ""53768bd8-c94e-4805-abee-e6c15ca1fa64"",
-            ""actions"": [
-                {
-                    ""name"": ""AdvanceDialogue"",
-                    ""type"": ""Button"",
-                    ""id"": ""9ace3f39-c79b-4bbc-ac18-26cafae1f479"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""7fdec36e-9182-4c02-b692-3025d78c8431"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""AdvanceDialogue"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""08979c15-12c2-4736-962a-03eec0bff52f"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""79fef163-a828-41ee-a93a-f048723efc24"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""AdvanceDialogue"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Menu"",
-            ""id"": ""fefa30dd-41ec-4691-9f2e-e42d68ddf78f"",
-            ""actions"": [
-                {
-                    ""name"": ""TabLeft"",
-                    ""type"": ""Button"",
-                    ""id"": ""f2b5a80a-0244-4619-9ecd-281706ef12ff"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""TabRight"",
-                    ""type"": ""Button"",
-                    ""id"": ""f074c4ad-1f2a-4214-b29d-230df2cf181c"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""CloseMenu"",
-                    ""type"": ""Button"",
-                    ""id"": ""fbccc0fb-039b-455c-9c0c-2e7afe97a6df"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""20de2bac-faf1-4efc-96a9-8a5bcc941615"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""TabLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""319e5ab4-f475-47f9-a3dc-a515a9b575a5"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""TabRight"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0a607d77-0bb3-4599-9ec1-fcfd0e4fcd08"",
-                    ""path"": ""<Keyboard>/m"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""CloseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -490,18 +319,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Crouch = m_Gameplay.FindAction("Crouch", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
-        m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
         m_Gameplay_Hat = m_Gameplay.FindAction("Hat", throwIfNotFound: true);
-        m_Gameplay_Menu = m_Gameplay.FindAction("Menu", throwIfNotFound: true);
-        m_Gameplay_OpenDevConsole = m_Gameplay.FindAction("OpenDevConsole", throwIfNotFound: true);
-        // Dialogues
-        m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
-        m_Dialogues_AdvanceDialogue = m_Dialogues.FindAction("AdvanceDialogue", throwIfNotFound: true);
-        // Menu
-        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
-        m_Menu_TabLeft = m_Menu.FindAction("TabLeft", throwIfNotFound: true);
-        m_Menu_TabRight = m_Menu.FindAction("TabRight", throwIfNotFound: true);
-        m_Menu_CloseMenu = m_Menu.FindAction("CloseMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -555,10 +373,7 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Crouch;
     private readonly InputAction m_Gameplay_Dash;
-    private readonly InputAction m_Gameplay_Interact;
     private readonly InputAction m_Gameplay_Hat;
-    private readonly InputAction m_Gameplay_Menu;
-    private readonly InputAction m_Gameplay_OpenDevConsole;
     public struct GameplayActions
     {
         private @GameInput m_Wrapper;
@@ -567,10 +382,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Crouch => m_Wrapper.m_Gameplay_Crouch;
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
-        public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         public InputAction @Hat => m_Wrapper.m_Gameplay_Hat;
-        public InputAction @Menu => m_Wrapper.m_Gameplay_Menu;
-        public InputAction @OpenDevConsole => m_Wrapper.m_Gameplay_OpenDevConsole;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -592,18 +404,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
-                @Interact.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
-                @Interact.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
-                @Interact.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
                 @Hat.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHat;
                 @Hat.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHat;
                 @Hat.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHat;
-                @Menu.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMenu;
-                @Menu.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMenu;
-                @Menu.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMenu;
-                @OpenDevConsole.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenDevConsole;
-                @OpenDevConsole.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenDevConsole;
-                @OpenDevConsole.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenDevConsole;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -620,104 +423,13 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
-                @Interact.started += instance.OnInteract;
-                @Interact.performed += instance.OnInteract;
-                @Interact.canceled += instance.OnInteract;
                 @Hat.started += instance.OnHat;
                 @Hat.performed += instance.OnHat;
                 @Hat.canceled += instance.OnHat;
-                @Menu.started += instance.OnMenu;
-                @Menu.performed += instance.OnMenu;
-                @Menu.canceled += instance.OnMenu;
-                @OpenDevConsole.started += instance.OnOpenDevConsole;
-                @OpenDevConsole.performed += instance.OnOpenDevConsole;
-                @OpenDevConsole.canceled += instance.OnOpenDevConsole;
             }
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
-
-    // Dialogues
-    private readonly InputActionMap m_Dialogues;
-    private IDialoguesActions m_DialoguesActionsCallbackInterface;
-    private readonly InputAction m_Dialogues_AdvanceDialogue;
-    public struct DialoguesActions
-    {
-        private @GameInput m_Wrapper;
-        public DialoguesActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @AdvanceDialogue => m_Wrapper.m_Dialogues_AdvanceDialogue;
-        public InputActionMap Get() { return m_Wrapper.m_Dialogues; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(DialoguesActions set) { return set.Get(); }
-        public void SetCallbacks(IDialoguesActions instance)
-        {
-            if (m_Wrapper.m_DialoguesActionsCallbackInterface != null)
-            {
-                @AdvanceDialogue.started -= m_Wrapper.m_DialoguesActionsCallbackInterface.OnAdvanceDialogue;
-                @AdvanceDialogue.performed -= m_Wrapper.m_DialoguesActionsCallbackInterface.OnAdvanceDialogue;
-                @AdvanceDialogue.canceled -= m_Wrapper.m_DialoguesActionsCallbackInterface.OnAdvanceDialogue;
-            }
-            m_Wrapper.m_DialoguesActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @AdvanceDialogue.started += instance.OnAdvanceDialogue;
-                @AdvanceDialogue.performed += instance.OnAdvanceDialogue;
-                @AdvanceDialogue.canceled += instance.OnAdvanceDialogue;
-            }
-        }
-    }
-    public DialoguesActions @Dialogues => new DialoguesActions(this);
-
-    // Menu
-    private readonly InputActionMap m_Menu;
-    private IMenuActions m_MenuActionsCallbackInterface;
-    private readonly InputAction m_Menu_TabLeft;
-    private readonly InputAction m_Menu_TabRight;
-    private readonly InputAction m_Menu_CloseMenu;
-    public struct MenuActions
-    {
-        private @GameInput m_Wrapper;
-        public MenuActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @TabLeft => m_Wrapper.m_Menu_TabLeft;
-        public InputAction @TabRight => m_Wrapper.m_Menu_TabRight;
-        public InputAction @CloseMenu => m_Wrapper.m_Menu_CloseMenu;
-        public InputActionMap Get() { return m_Wrapper.m_Menu; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
-        public void SetCallbacks(IMenuActions instance)
-        {
-            if (m_Wrapper.m_MenuActionsCallbackInterface != null)
-            {
-                @TabLeft.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnTabLeft;
-                @TabLeft.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnTabLeft;
-                @TabLeft.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnTabLeft;
-                @TabRight.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnTabRight;
-                @TabRight.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnTabRight;
-                @TabRight.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnTabRight;
-                @CloseMenu.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnCloseMenu;
-                @CloseMenu.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnCloseMenu;
-                @CloseMenu.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnCloseMenu;
-            }
-            m_Wrapper.m_MenuActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @TabLeft.started += instance.OnTabLeft;
-                @TabLeft.performed += instance.OnTabLeft;
-                @TabLeft.canceled += instance.OnTabLeft;
-                @TabRight.started += instance.OnTabRight;
-                @TabRight.performed += instance.OnTabRight;
-                @TabRight.canceled += instance.OnTabRight;
-                @CloseMenu.started += instance.OnCloseMenu;
-                @CloseMenu.performed += instance.OnCloseMenu;
-                @CloseMenu.canceled += instance.OnCloseMenu;
-            }
-        }
-    }
-    public MenuActions @Menu => new MenuActions(this);
     private int m_KeyboardOrGamepadSchemeIndex = -1;
     public InputControlScheme KeyboardOrGamepadScheme
     {
@@ -733,19 +445,6 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
-        void OnInteract(InputAction.CallbackContext context);
         void OnHat(InputAction.CallbackContext context);
-        void OnMenu(InputAction.CallbackContext context);
-        void OnOpenDevConsole(InputAction.CallbackContext context);
-    }
-    public interface IDialoguesActions
-    {
-        void OnAdvanceDialogue(InputAction.CallbackContext context);
-    }
-    public interface IMenuActions
-    {
-        void OnTabLeft(InputAction.CallbackContext context);
-        void OnTabRight(InputAction.CallbackContext context);
-        void OnCloseMenu(InputAction.CallbackContext context);
     }
 }

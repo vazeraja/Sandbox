@@ -43,6 +43,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new DragAndDropManipulator());
             
+            Undo.undoRedoPerformed += UndoRedo;
+            EditorApplication.update += PlayAnimationPreview;
         }
 
         public void Initialize(ResolutionGraph graph, ReanimatorGraphEditor editorWindow, InspectorCustomControl inspector)
@@ -51,16 +53,9 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             this.editorWindow = editorWindow;
             this.inspector = inspector;
             
-            Undo.undoRedoPerformed -= UndoRedo;
-            // TODO: Needs optimizing -- causes CPU to work a lot harder for some reason
-            EditorApplication.update -= PlayAnimationPreview;
             graphViewChanged -= OnGraphViewChanged;
-            
             DeleteElements(graphElements.ToList());
-            
             graphViewChanged += OnGraphViewChanged;
-            EditorApplication.update += PlayAnimationPreview;
-            Undo.undoRedoPerformed += UndoRedo;
             
             CreateSearchWindow(editorWindow);
             // CreateBlackboard();
@@ -179,7 +174,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 ReanimatorGraphNode child = edge.input.node as ReanimatorGraphNode;
 
                 graph.AddChild(parent?.node, child?.node);
-                SaveToGraphSaveData();
             });
 
             return graphViewChange;
@@ -237,7 +231,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             AddElement(graphNode);
         }
 
-        public void PlayAnimationPreview()
+        private void PlayAnimationPreview()
         {
             GraphNodes.ForEach(node => {
                 if (node.node is SimpleAnimationNode simpleAnimationNode) {
