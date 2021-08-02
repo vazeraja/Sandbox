@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Aarthificial.Reanimation.Editor
 {
-    static internal class Helpers
+    internal static class Helpers
     {
         /// <summary>
         /// Shamelessly stolen from <a href="https://forum.unity.com/threads/drawing-a-sprite-in-editor-window.419199/#post-3059891">Woofy</a>
