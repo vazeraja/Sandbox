@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 9b2fc9b1233627f4485f3ae8af27b699
   title: RunAnimation
-  position: {x: 1010.00006, y: -221.00005}
+  position: {x: 1010.0001, y: -220.99994}
   cels:
   - sprite: {fileID: -3434879642533976785, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
@@ -431,7 +431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 069c5c17a9493314ab6769232ad1bbbb
   title: IdleAnimation
-  position: {x: 1297, y: -119.00004}
+  position: {x: 1296.9998, y: -119.00002}
   cels:
   - sprite: {fileID: -2937644175521846342, guid: f31e889de574c78499d5df74639f2b86, type: 3}
     drivers:

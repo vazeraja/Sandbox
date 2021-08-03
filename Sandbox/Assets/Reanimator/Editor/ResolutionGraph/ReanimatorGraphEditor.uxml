@@ -11,7 +11,7 @@
         <ui:VisualElement name="right-panel">
             <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(13, 55, 58);" />
             <Aarthificial.Reanimation.ResolutionGraph.Editor.InspectorCustomControl style="flex-grow: 1;" />
-            <ui:VisualElement style="height: 204px; flex-direction: row; align-items: auto; justify-content: center;" />
+            <ui:VisualElement name="animation-preview" style="height: 390px; flex-direction: row; align-items: auto; justify-content: center;" />
         </ui:VisualElement>
     </Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl>
 </ui:UXML>
