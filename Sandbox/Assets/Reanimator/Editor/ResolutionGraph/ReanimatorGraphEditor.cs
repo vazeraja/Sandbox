@@ -33,11 +33,13 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
 
         private ResolutionGraph resolutionGraph;
-        private ReanimatorGraphView editorGraph;
-        private InspectorCustomControl inspector;
-        private ToolbarMenu toolbarMenu;
-        private VisualElement animationPreview;
+        
         private VisualElement root;
+        private ReanimatorGraphView editorGraph;
+        private ToolbarMenu toolbarMenu;
+        private InspectorCustomControl inspector;
+        private VisualElement animationPreview;
+        private Label previewPanelLabel;
         
         public void CreateGUI()
         {
@@ -63,6 +65,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 });
             });
 
+            previewPanelLabel = root.Q<Label>("preview-panel-title");
 
             if (resolutionGraph == null) {
                 OnSelectionChange();
