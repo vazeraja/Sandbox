@@ -7,10 +7,7 @@ using static UnityEngine.Object;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class InspectorManipulator : MouseManipulator {
-        private readonly ReanimatorGraphView reanimatorGraphView;
-        private readonly InspectorCustomControl VE_Inspector;
-        private readonly VisualElement VE_AnimationPreview;
-
+        
         private IMGUIContainer inspectorContainer;
         private IMGUIContainer animationContainer;
 
@@ -19,8 +16,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private SwitchNodeEditor switchNodeEditor;
         private OverrideNodeEditor overrideNodeEditor;
         
-        private GUIContent m_InfoText = new GUIContent("Animation Preview:");
-
+        public InspectorManipulator() { }
+        
         protected override void RegisterCallbacksOnTarget()
         {
             target.RegisterCallback<MouseDownEvent>(ShowInInspector);
@@ -31,38 +28,39 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             target.UnregisterCallback<MouseDownEvent>(ShowInInspector);
         }
 
-        public InspectorManipulator(ReanimatorGraphView reanimatorGraphView, InspectorCustomControl veInspector,
-            VisualElement veAnimationPreview)
-        {
-            this.VE_Inspector = veInspector;
-            this.reanimatorGraphView = reanimatorGraphView;
-            this.VE_AnimationPreview = veAnimationPreview;
-        }
 
         private void ShowInInspector(MouseDownEvent evt)
         {
-            if (!(target is ReanimatorGraphNode graphNode)) return;
+            if (!(target is ReanimatorGraphView graphView)) 
+                return;
+
             if (!CanStopManipulation(evt)) return;
 
-            ClearAll();
+            if (!(evt.target is ReanimatorGraphNode clickedElement)) {
+                var ve = evt.target as VisualElement;
+                clickedElement = ve?.GetFirstAncestorOfType<ReanimatorGraphNode>();
+                if (clickedElement == null)
+                    return;
+            }
 
-            overrideNodeEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as OverrideNodeEditor;
-            editor = UnityEditor.Editor.CreateEditor(graphNode.node);
-            animationEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as AnimationNodeEditor;
-            switchNodeEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as SwitchNodeEditor;
+            ClearAll(graphView);
             
-            switch (graphNode.node) {
-                case BaseNode _ when graphNode.IsSelected(reanimatorGraphView):
+            switch (clickedElement.node) {
+                case BaseNode _ when clickedElement.IsSelected(graphView):
+                    editor = UnityEditor.Editor.CreateEditor(clickedElement.node);
+
                     if (editor && editor.target) {
-                        VE_AnimationPreview.style.display = DisplayStyle.None;
+                        graphView.animationPreview.style.display = DisplayStyle.None;
                         inspectorContainer = new IMGUIContainer(() => {
                             editor.OnInspectorGUI();
                         });
                     }
                     break;
-                case SimpleAnimationNode _ when graphNode.IsSelected(reanimatorGraphView):
+                case SimpleAnimationNode _ when clickedElement.IsSelected(graphView):
+                    animationEditor = UnityEditor.Editor.CreateEditor(clickedElement.node) as AnimationNodeEditor;
+
                     if (animationEditor && animationEditor.target) {
-                        VE_AnimationPreview.style.display = DisplayStyle.Flex;
+                        graphView.animationPreview.style.display = DisplayStyle.Flex;
                         
                         inspectorContainer = new IMGUIContainer(() => {
                             animationEditor.OnInspectorGUI();
@@ -77,17 +75,21 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                         });
                     }
                     break;
-                case SwitchNode _ when graphNode.IsSelected(reanimatorGraphView):
+                case SwitchNode _ when clickedElement.IsSelected(graphView):
+                    switchNodeEditor = UnityEditor.Editor.CreateEditor(clickedElement.node) as SwitchNodeEditor;
+
                     if (switchNodeEditor && switchNodeEditor.target) {
-                        VE_AnimationPreview.style.display = DisplayStyle.None;
+                        graphView.animationPreview.style.display = DisplayStyle.None;
                         inspectorContainer = new IMGUIContainer(() => {
                             switchNodeEditor.OnInspectorGUI();
                         });
                     }
                     break;
-                case OverrideNode _ when graphNode.IsSelected(reanimatorGraphView):
+                case OverrideNode _ when clickedElement.IsSelected(graphView):
+                    overrideNodeEditor = UnityEditor.Editor.CreateEditor(clickedElement.node) as OverrideNodeEditor;
+
                     if (overrideNodeEditor && overrideNodeEditor.target) {
-                        VE_AnimationPreview.style.display = DisplayStyle.None;
+                        graphView.animationPreview.style.display = DisplayStyle.None;
                         inspectorContainer = new IMGUIContainer(() => {
                             overrideNodeEditor.OnInspectorGUI();
                         });
@@ -95,14 +97,14 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     break;
             }
             
-            VE_Inspector.Add(inspectorContainer);
-            VE_AnimationPreview.Add(animationContainer);
+            graphView.inspector.Add(inspectorContainer);
+            graphView.animationPreview.Add(animationContainer);
         }
 
-        private void ClearAll()
+        private void ClearAll(ReanimatorGraphView graphView)
         {
-            VE_Inspector.Clear();
-            VE_AnimationPreview.Clear();
+            graphView.inspector.Clear();
+            graphView.animationPreview.Clear();
 
             DestroyImmediate(editor);
             DestroyImmediate(switchNodeEditor);

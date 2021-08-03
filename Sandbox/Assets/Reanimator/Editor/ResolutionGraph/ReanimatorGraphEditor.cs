@@ -9,6 +9,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+
+    public interface IEditorWindow {
+        
+    }
+
     public class ReanimatorGraphEditor : EditorWindow {
         [MenuItem("Reanimator/Resolution Graph")]
         public static void ShowWindow()
@@ -32,10 +37,11 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private InspectorCustomControl inspector;
         private ToolbarMenu toolbarMenu;
         private VisualElement animationPreview;
+        private VisualElement root;
         
         public void CreateGUI()
         {
-            VisualElement root = rootVisualElement;
+            root = rootVisualElement;
 
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(visualTreePath);
             visualTree.CloneTree(root);
