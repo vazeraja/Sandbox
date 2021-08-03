@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace Aarthificial.Reanimation.Editor
@@ -11,7 +13,7 @@ namespace Aarthificial.Reanimation.Editor
         /// </summary>
         /// <param name="position"></param>
         /// <param name="sprite"></param>
-        public static void DrawTexturePreview(Rect position, Sprite sprite)
+        internal static void DrawTexturePreview(Rect position, Sprite sprite)
         {
             var fullSize = new Vector2(sprite.texture.width, sprite.texture.height);
             var size = new Vector2(sprite.textureRect.width, sprite.textureRect.height);
@@ -33,6 +35,11 @@ namespace Aarthificial.Reanimation.Editor
             position.center = center;
 
             GUI.DrawTextureWithTexCoords(position, sprite.texture, coords);
+        }
+
+        internal static List<T> LoadAssetsOfType<T>() where T : UnityEngine.Object {
+            string[] assetIds = AssetDatabase.FindAssets($"t:{typeof(T).Name}");
+            return assetIds.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<T>).ToList();
         }
     }
 }

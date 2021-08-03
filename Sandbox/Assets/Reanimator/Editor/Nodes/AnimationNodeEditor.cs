@@ -16,7 +16,7 @@ namespace Aarthificial.Reanimation.Editor.Nodes
     {
         protected static float FPS = 10;
         protected static int CurrentFrame;
-        protected static bool ShouldPlay = false;
+        protected static bool ShouldPlay = true;
         protected readonly List<Sprite> Sprites = new List<Sprite>();
         protected SerializedProperty Cels;
 

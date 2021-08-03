@@ -12,17 +12,20 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         public readonly ReanimatorNode node;
         private InspectorCustomControl inspector;
         private ReanimatorGraphView graphView;
+        private VisualElement animationPreview;
 
         public const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
 
         public Port input;
         public Port output;
 
-        public ReanimatorGraphNode(ReanimatorNode node, ReanimatorGraphView graphView, InspectorCustomControl inspector) : base(nodeStyleSheetPath) {
+        public ReanimatorGraphNode(ReanimatorNode node, ReanimatorGraphView graphView, InspectorCustomControl inspector,
+            VisualElement animationPreview) : base(nodeStyleSheetPath) {
             // UseDefaultStyling();
             this.node = node;
             this.inspector = inspector;
             this.graphView = graphView;
+            this.animationPreview = animationPreview;
 
             this.node.name = node.title == string.Empty ? node.GetType().Name : node.title;
             title = node.GetType().Name;
@@ -36,7 +39,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             CreateTitleEditField();
             SetupClasses();
             
-            this.AddManipulator(new InspectorManipulator(graphView, inspector));
+            this.AddManipulator(new InspectorManipulator(graphView, inspector, animationPreview));
         }
 
         private void SetupClasses() {

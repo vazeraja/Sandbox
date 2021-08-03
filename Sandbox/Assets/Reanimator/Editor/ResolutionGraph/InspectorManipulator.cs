@@ -9,6 +9,9 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class InspectorManipulator : MouseManipulator {
         private readonly InspectorCustomControl inspector;
         private readonly ReanimatorGraphView reanimatorGraphView;
+        private readonly VisualElement animationPreview;
+
+        private IMGUIContainer container;
 
         private UnityEditor.Editor editor;
         private AnimationNodeEditor animationEditor;
@@ -25,7 +28,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             target.UnregisterCallback<MouseDownEvent>(ShowInInspector);
         }
 
-        public InspectorManipulator(ReanimatorGraphView reanimatorGraphView, InspectorCustomControl inspector)
+        public InspectorManipulator(ReanimatorGraphView reanimatorGraphView, InspectorCustomControl inspector,
+            VisualElement animationPreview)
         {
             this.inspector = inspector;
             this.reanimatorGraphView = reanimatorGraphView;
@@ -37,17 +41,19 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             if (!CanStopManipulation(evt)) return;
 
             inspector.Clear();
+            container.Clear();
+            
             DestroyImmediate(editor);
             DestroyImmediate(switchNodeEditor);
             DestroyImmediate(animationEditor);
             DestroyImmediate(overrideNodeEditor);
-            
+
             overrideNodeEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as OverrideNodeEditor;
             editor = UnityEditor.Editor.CreateEditor(graphNode.node);
             animationEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as AnimationNodeEditor;
             switchNodeEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as SwitchNodeEditor;
 
-            IMGUIContainer container = new IMGUIContainer(() => {
+            container = new IMGUIContainer(() => {
                 switch (graphNode.node) {
                     case OverrideNode _ when graphNode.IsSelected(reanimatorGraphView):
                         if (overrideNodeEditor && editor.target) {
@@ -55,7 +61,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                         }
                         break;
                     case BaseNode _ when graphNode.IsSelected(reanimatorGraphView):
-                        if (switchNodeEditor && editor.target) {
+                        if (editor && editor.target) {
                             editor.OnInspectorGUI();
                         }
                         break;

@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class ReanimatorSettings : ScriptableObject {
-        public const string k_MyCustomSettingsPath = "Assets/Reanimator/Editor/Settings/MyCustomSettings.asset";
+        private const string k_MyCustomSettingsPath = "Assets/Reanimator/Editor/Settings/MyCustomSettings.asset";
 
         [SerializeField] private int m_Number;
 
@@ -17,7 +17,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         {
             var settings = AssetDatabase.LoadAssetAtPath<ReanimatorSettings>(k_MyCustomSettingsPath);
             if (settings == null) {
-                settings = ScriptableObject.CreateInstance<ReanimatorSettings>();
+                settings = CreateInstance<ReanimatorSettings>();
                 settings.m_Number = 42;
                 settings.m_SomeString = "The answer to the universe";
                 AssetDatabase.CreateAsset(settings, k_MyCustomSettingsPath);
@@ -32,56 +32,52 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             return new SerializedObject(GetOrCreateSettings());
         }
     }
-    // Register a SettingsProvider using UIElements for the drawing framework:
-static class MyCustomSettingsUIElementsRegister
-{
-    [SettingsProvider]
-    public static SettingsProvider CreateMyCustomSettingsProvider()
-    {
-        // First parameter is the path in the Settings window.
-        // Second parameter is the scope of this setting: it only appears in the Settings window for the Project scope.
-        var provider = new SettingsProvider("Project/MyCustomUIElementsSettings", SettingsScope.Project)
+
+    // Create MyCustomSettingsProvider by deriving from SettingsProvider:
+    class MyCustomSettingsProvider : SettingsProvider {
+        private SerializedObject m_CustomSettings;
+
+        private class Styles {
+            public static readonly GUIContent number = new GUIContent("My Number");
+            public static readonly GUIContent someString = new GUIContent("Some string");
+        }
+
+        private const string k_MyCustomSettingsPath = "Assets/Reanimator/Editor/Settings/MyCustomSettings.asset";
+
+        private MyCustomSettingsProvider(string path, SettingsScope scope = SettingsScope.User) : base(path, scope)
+        { }
+
+        public static bool IsSettingsAvailable() => File.Exists(k_MyCustomSettingsPath);
+
+        public override void OnActivate(string searchContext, VisualElement rootElement)
         {
-            label = "Custom UI Elements",
-            // activateHandler is called when the user clicks on the Settings item in the Settings window.
-            activateHandler = (searchContext, rootElement) =>
-            {
-                var settings = ReanimatorSettings.GetSerializedSettings();
+            // This function is called when the user clicks on the MyCustom element in the Settings window.
+            m_CustomSettings = ReanimatorSettings.GetSerializedSettings();
+        }
 
-                // rootElement is a VisualElement. If you add any children to it, the OnGUI function
-                // isn't called because the SettingsProvider uses the UIElements drawing framework.
-                var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Editor/settings_ui.uss");
-                rootElement.styleSheets.Add(styleSheet);
-                var title = new Label()
-                {
-                    text = "Custom UI Elements"
+        public override void OnGUI(string searchContext)
+        {
+            // Use IMGUI to display UI:
+            EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("m_Number"), Styles.number);
+            EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("m_SomeString"), Styles.someString);
+            m_CustomSettings.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        // Register the SettingsProvider
+        [SettingsProvider]
+        public static SettingsProvider CreateMyCustomSettingsProvider()
+        {
+            if (IsSettingsAvailable()) {
+                var provider = new MyCustomSettingsProvider("Project/MyCustomSettingsProvider", SettingsScope.Project) {
+                    keywords = GetSearchKeywordsFromGUIContentProperties<Styles>()
                 };
-                title.AddToClassList("title");
-                rootElement.Add(title);
 
-                var properties = new VisualElement()
-                {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Column
-                    }
-                };
-                properties.AddToClassList("property-list");
-                rootElement.Add(properties);
+                // Automatically extract all keywords from the Styles.
+                return provider;
+            }
 
-                properties.Add(new PropertyField(settings.FindProperty("m_SomeString")));
-                properties.Add(new PropertyField(settings.FindProperty("m_Number")));
-
-                rootElement.Bind(settings);
-            },
-
-            // Populate the search keywords to enable smart search filtering and label highlighting:
-            keywords = new HashSet<string>(new[] { "Number", "Some String" })
-        };
-
-        return provider;
+            // Settings Asset doesn't exist yet; no need to display anything in the Settings window.
+            return null;
+        }
     }
-}
-
- 
 }

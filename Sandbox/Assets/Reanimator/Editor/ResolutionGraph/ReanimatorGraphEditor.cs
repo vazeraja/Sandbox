@@ -1,8 +1,10 @@
 using System;
+using Aarthificial.Reanimation.Editor;
 using Aarthificial.Reanimation.Editor.Nodes;
 using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,6 +30,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private ResolutionGraph resolutionGraph;
         private ReanimatorGraphView editorGraph;
         private InspectorCustomControl inspector;
+        private ToolbarMenu toolbarMenu;
+        private VisualElement animationPreview;
         
         public void CreateGUI()
         {
@@ -41,6 +45,17 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
 
             editorGraph = root.Q<ReanimatorGraphView>();
             inspector = root.Q<InspectorCustomControl>();
+            animationPreview = root.Q<VisualElement>("animation-preview");
+            
+            // Toolbar assets menu
+            toolbarMenu = root.Q<ToolbarMenu>();
+            var behaviourTrees = Helpers.LoadAssetsOfType<ResolutionGraph>();
+            behaviourTrees.ForEach(graph => {
+                toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
+                    Selection.activeObject = graph;
+                });
+            });
+
 
             if (resolutionGraph == null) {
                 OnSelectionChange();
@@ -49,6 +64,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 SelectTree(resolutionGraph);
             }
         }
+        
         private void OnSelectionChange()
         {
             EditorApplication.delayCall += () => {
@@ -75,10 +91,10 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             resolutionGraph = newGraph;
 
             if (Application.isPlaying) {
-                editorGraph.Initialize(resolutionGraph, this, inspector);
+                editorGraph.Initialize(this, resolutionGraph, inspector, animationPreview);
             }
             else {
-                editorGraph.Initialize(resolutionGraph, this, inspector);
+                editorGraph.Initialize(this, resolutionGraph, inspector, animationPreview);
             }
 
             EditorApplication.delayCall += () => { editorGraph.FrameAll(); };
