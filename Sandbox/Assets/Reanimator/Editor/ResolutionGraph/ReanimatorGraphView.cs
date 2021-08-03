@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Aarthificial.Reanimation.Cels;
 using Aarthificial.Reanimation.Common;
+using Aarthificial.Reanimation.Editor;
 using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -12,29 +13,8 @@ using UnityEngine.UIElements;
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
-
-        public ResolutionGraph graph { get; set; }
-        public ReanimatorGraphEditor editorWindow { get; set; }
-        public InspectorCustomControl inspector { get; set; }
-        public VisualElement animationPreview { get; set; }
-
-        public ReanimatorSearchWindowProvider searchWindowProvider;
-        public Blackboard Blackboard;
-        public List<ExposedProperty> ExposedProperties = new List<ExposedProperty>();
-
-        private IEnumerable<ReanimatorGroup> CommentBlocks => graphElements.ToList().Where(x => x is ReanimatorGroup)
-            .Cast<ReanimatorGroup>().ToList();
-
-        private List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-        private IEnumerable<Edge> GraphEdges => edges.ToList();
-
-        private IEnumerable<MiniMap> MiniMaps =>
-            graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
-
-        private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
-        public readonly Vector2 BlockSize = new Vector2(300, 200);
-
-
+        
+        
         public ReanimatorGraphView()
         {
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
@@ -43,7 +23,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             Insert(0, new GridBackground());
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
-            this.AddManipulator(new InspectorManipulator());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new DragAndDropManipulator());
@@ -51,8 +30,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             Undo.undoRedoPerformed += UndoRedo;
             EditorApplication.update += PlayAnimationPreview;
         }
-
-
+        
         public void Initialize(
             ReanimatorGraphEditor editorWindow,
             ResolutionGraph graph,
@@ -61,23 +39,21 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
-            this.inspector = inspector;
-            this.animationPreview = animationPreview;
-
+            inspectorPanel = inspector;
+            animationPreviewPanel = animationPreview;
+            
             graphViewChanged -= OnGraphViewChanged;
-            DeleteElements(graphElements);
-            DeleteElements(MiniMaps);
+            DeleteElements(graphElements.ToList());
             graphViewChanged += OnGraphViewChanged;
 
             CreateSearchWindow(editorWindow);
-            // CreateBlackboard();
             CreateMiniMap();
-            LoadGraph();
+            Load();
         }
 
         private void UndoRedo()
         {
-            Initialize(editorWindow, graph, inspector, animationPreview);
+            Initialize(editorWindow, graph, inspectorPanel, animationPreviewPanel);
             AssetDatabase.SaveAssets();
         }
 
@@ -92,36 +68,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             nodeCreationRequest = context =>
                 SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindowProvider);
         }
-
-        private void CreateBlackboard()
-        {
-            var blackboard = new Blackboard(this);
-            blackboard.Add(new BlackboardSection {title = "Exposed Drivers"});
-            blackboard.addItemRequested = blackboard1 => { AddBlackboardProperty(new ExposedProperty()); };
-            Blackboard = blackboard;
-            Add(blackboard);
-        }
-
-        [Serializable]
-        public class ExposedProperty {
-            public string propertyName = "new prop";
-        }
-
-        private void AddBlackboardProperty(ExposedProperty prop)
-        {
-            var property = new ExposedProperty();
-            property.propertyName = prop.propertyName;
-            ExposedProperties.Add(property);
-
-            var ve = new VisualElement();
-            var blackboardField = new BlackboardField {
-                text = property.propertyName,
-                typeText = "string prop"
-            };
-            ve.Add(blackboardField);
-            Blackboard.Add(ve);
-        }
-
+        
         /// <summary>
         /// Creates a minimap on top left corner of the graphview
         /// </summary>
@@ -176,9 +123,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                         var child = edge.input.node as ReanimatorGraphNode;
                         graph.RemoveChild(parent?.node, child?.node);
                         break;
-                    case ReanimatorGroup group:
-                        SaveToGraphSaveData();
-                        break;
                 }
             });
 
@@ -202,8 +146,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         
         private void CreateGraphNode(ReanimatorNode node)
         {
-            var graphNode = new ReanimatorGraphNode(node);
-            graphNode.OnSelected();
+            var graphNode = new ReanimatorGraphNode(this, node);
             AddElement(graphNode);
         }
 
@@ -245,10 +188,10 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         }
         
         private void PlayAnimationPreview() => GraphNodes.ForEach(node => {
-            if (node.node is SimpleAnimationNode simpleAnimationNode) node.PlayAnimationPreview();
+            if (node.node is SimpleAnimationNode) node.PlayAnimationPreview();
         });
 
-        public void SaveToGraphSaveData()
+        public void Save()
         {
             var saveData = new SaveData();
 
@@ -276,7 +219,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             }
         }
 
-        private void LoadGraph()
+        private void Load()
         {
             // Create root node if graph is empty
             if (graph.nodes.Count == 0) {
@@ -290,14 +233,14 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
 
             // Create all connections based on the children of the nodes in the graph
             graph.nodes.ForEach(p => {
-                var children = ResolutionGraph.GetChildren(p);
+                var children = Helpers.GetChildren(p);
                 foreach (var c in children) {
                     // Returns node by its guid and cast it back to a ReanimatorGraphNode
                     var parent = GetNodeByGuid(p.guid) as ReanimatorGraphNode;
                     var child = GetNodeByGuid(c.guid) as ReanimatorGraphNode;
 
                     // If it is a new graph, check if the root has a child or not
-                    if (parent?.node is BaseNode node && child?.node == null)
+                    if (parent?.node is BaseNode && child?.node == null)
                         continue;
 
                     // Connect each parents output to the saved children
@@ -313,5 +256,21 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 block.AddElements(GraphNodes.Where(x => commentBlockData.ChildNodes.Contains(x.node.guid)));
             }
         }
+
+        private ResolutionGraph graph;
+        private ReanimatorGraphEditor editorWindow;
+        public InspectorCustomControl inspectorPanel;
+        public VisualElement animationPreviewPanel;
+        private ReanimatorSearchWindowProvider searchWindowProvider;
+
+        private IEnumerable<ReanimatorGroup> CommentBlocks => graphElements
+            .ToList()
+            .Where(x => x is ReanimatorGroup)
+            .Cast<ReanimatorGroup>().ToList();
+
+        private List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
+
+        private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
+        private readonly Vector2 BlockSize = new Vector2(300, 200);
     }
 }

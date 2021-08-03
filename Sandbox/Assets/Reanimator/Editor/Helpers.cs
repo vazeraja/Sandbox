@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEngine;
 
@@ -38,8 +39,33 @@ namespace Aarthificial.Reanimation.Editor
         }
 
         internal static List<T> LoadAssetsOfType<T>() where T : UnityEngine.Object {
-            string[] assetIds = AssetDatabase.FindAssets($"t:{typeof(T).Name}");
-            return assetIds.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<T>).ToList();
+            //List<string> assetIds = AssetDatabase.FindAssets($"t:{typeof(T).Name}").ToList();
+            return AssetDatabase.FindAssets($"t:{typeof(T).Name}").ToList().Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<T>).ToList();
+        }
+        internal static List<ReanimatorNode> GetChildren(ReanimatorNode parent)
+        {
+            List<ReanimatorNode> children = new List<ReanimatorNode>();
+            
+            switch (parent) {
+                case BaseNode rootNode when rootNode.root != null:
+                    children.Add(rootNode.root);
+                    break;
+                case OverrideNode overrideNode when overrideNode.next != null:
+                    children.Add(overrideNode.next);
+                    break;
+                case SwitchNode switchNode:
+                    return switchNode.nodes;
+            }
+
+            return children;
+        }
+
+        internal static void Traverse(ReanimatorNode node, Action<ReanimatorNode> visitor)
+        {
+            if (!node) return;
+            visitor.Invoke(node);
+            var children = GetChildren(node);
+            children.ForEach(n => Traverse(n, visitor));
         }
     }
 }

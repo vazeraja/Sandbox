@@ -68,7 +68,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     graphView.CreateNode(typeof(OverrideNode), graphMousePosition);
                     return true;
                 case Group group:
-                    graphView.CreateCommentBlock(new Rect(graphMousePosition, graphView.BlockSize));
+                    graphView.CreateCommentBlock(new Rect(graphMousePosition, new Vector2(300, 200)));
                     return true;
             }
             return false;

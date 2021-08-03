@@ -34,16 +34,20 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
 
         private ResolutionGraph resolutionGraph;
         
-        private VisualElement root;
         private ReanimatorGraphView editorGraph;
         private ToolbarMenu toolbarMenu;
         private InspectorCustomControl inspector;
         private VisualElement animationPreview;
-        private Label previewPanelLabel;
-        
+        public Label previewPanelLabel;
+
+        private void OnEnable()
+        {
+            
+        }
+
         public void CreateGUI()
         {
-            root = rootVisualElement;
+            VisualElement root = rootVisualElement;
 
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(visualTreePath);
             visualTree.CloneTree(root);
@@ -54,9 +58,9 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             editorGraph = root.Q<ReanimatorGraphView>();
             inspector = root.Q<InspectorCustomControl>();
             animationPreview = root.Q<VisualElement>("animation-preview");
-            
-            // Toolbar assets menu
             toolbarMenu = root.Q<ToolbarMenu>();
+
+
             var behaviourTrees = Helpers.LoadAssetsOfType<ResolutionGraph>();
             behaviourTrees.ForEach(graph => {
                 toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
@@ -64,8 +68,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     OnSelectionChange();
                 });
             });
-
-            previewPanelLabel = root.Q<Label>("preview-panel-title");
+            
+            Label previewLabel = root.Q<Label>("preview-panel-title");
 
             if (resolutionGraph == null) {
                 OnSelectionChange();
