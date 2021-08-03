@@ -52,17 +52,9 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             switchNodeEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as SwitchNodeEditor;
             
             switch (graphNode.node) {
-                case OverrideNode _ when graphNode.IsSelected(reanimatorGraphView):
-                    if (overrideNodeEditor && overrideNodeEditor.target) {
-                        VE_AnimationPreview.style.visibility = Visibility.Hidden;
-                        inspectorContainer = new IMGUIContainer(() => {
-                            overrideNodeEditor.OnInspectorGUI();
-                        });
-                    }
-                    break;
                 case BaseNode _ when graphNode.IsSelected(reanimatorGraphView):
                     if (editor && editor.target) {
-                        VE_AnimationPreview.style.visibility = Visibility.Hidden;
+                        VE_AnimationPreview.style.display = DisplayStyle.None;
                         inspectorContainer = new IMGUIContainer(() => {
                             editor.OnInspectorGUI();
                         });
@@ -70,11 +62,13 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     break;
                 case SimpleAnimationNode _ when graphNode.IsSelected(reanimatorGraphView):
                     if (animationEditor && animationEditor.target) {
-                        VE_AnimationPreview.style.visibility = Visibility.Visible;
+                        VE_AnimationPreview.style.display = DisplayStyle.Flex;
                         
                         inspectorContainer = new IMGUIContainer(() => {
                             animationEditor.OnInspectorGUI();
                         });
+                        
+                        
                         animationContainer = new IMGUIContainer(() => {
                             EditorGUILayout.Space();
                             animationEditor.RequiresConstantRepaint();
@@ -85,9 +79,17 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     break;
                 case SwitchNode _ when graphNode.IsSelected(reanimatorGraphView):
                     if (switchNodeEditor && switchNodeEditor.target) {
-                        VE_AnimationPreview.style.visibility = Visibility.Hidden;
+                        VE_AnimationPreview.style.display = DisplayStyle.None;
                         inspectorContainer = new IMGUIContainer(() => {
                             switchNodeEditor.OnInspectorGUI();
+                        });
+                    }
+                    break;
+                case OverrideNode _ when graphNode.IsSelected(reanimatorGraphView):
+                    if (overrideNodeEditor && overrideNodeEditor.target) {
+                        VE_AnimationPreview.style.display = DisplayStyle.None;
+                        inspectorContainer = new IMGUIContainer(() => {
+                            overrideNodeEditor.OnInspectorGUI();
                         });
                     }
                     break;

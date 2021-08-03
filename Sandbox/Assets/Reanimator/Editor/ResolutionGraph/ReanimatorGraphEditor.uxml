@@ -3,15 +3,23 @@
     <uie:Toolbar style="background-color: rgb(59, 79, 92);">
         <uie:ToolbarMenu display-tooltip-when-elided="true" text="Assets" />
     </uie:Toolbar>
-    <Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl fixed-pane-initial-dimension="750">
+    <Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl fixed-pane-initial-dimension="800">
         <ui:VisualElement name="left-panel">
             <ui:Label text="Resolution Graph" display-tooltip-when-elided="true" style="border-left-color: rgb(56, 56, 56); border-right-color: rgb(56, 56, 56); border-top-color: rgb(56, 56, 56); border-bottom-color: rgb(56, 56, 56); background-color: rgb(13, 55, 58);" />
-            <Aarthificial.Reanimation.ResolutionGraph.Editor.ReanimatorGraphView focusable="true" style="flex-grow: 1;" />
+            <Aarthificial.Reanimation.ResolutionGraph.Editor.ReanimatorGraphView focusable="true" style="flex-grow: 1;">
+                <ui:VisualElement />
+            </Aarthificial.Reanimation.ResolutionGraph.Editor.ReanimatorGraphView>
         </ui:VisualElement>
-        <ui:VisualElement name="right-panel">
+        <ui:VisualElement name="right-panel" style="flex-direction: column; flex-wrap: nowrap; align-items: stretch; justify-content: flex-end;">
             <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(13, 55, 58);" />
-            <Aarthificial.Reanimation.ResolutionGraph.Editor.InspectorCustomControl style="flex-grow: 1;" />
-            <ui:VisualElement name="animation-preview" style="height: 390px; flex-direction: row; align-items: auto; justify-content: center;" />
+            <Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl orientation="Vertical" fixed-pane-initial-dimension="426" focusable="true" name="TwoPanelCustomControl" fixed-pane-index="0" style="position: relative; border-left-color: rgba(33, 32, 32, 255); border-right-color: rgba(33, 32, 32, 255); border-top-color: rgba(33, 32, 32, 255); border-bottom-color: rgba(33, 32, 32, 255); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; align-items: stretch; min-height: auto;">
+                <ui:VisualElement name="top-panel">
+                    <Aarthificial.Reanimation.ResolutionGraph.Editor.InspectorCustomControl style="flex-grow: 1; border-left-color: rgba(26, 26, 26, 255); border-right-color: rgba(26, 26, 26, 255); border-top-color: rgba(26, 26, 26, 255); border-bottom-color: rgba(26, 26, 26, 255); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 1px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="bottom-panel" style="max-height: none; min-height: auto;">
+                    <ui:VisualElement name="animation-preview" style="flex-grow: 1; max-width: none; max-height: none; justify-content: flex-end; align-items: stretch; opacity: 1; min-height: auto; border-left-color: rgba(26, 26, 26, 255); border-right-color: rgba(26, 26, 26, 255); border-top-color: rgba(26, 26, 26, 255); border-bottom-color: rgba(26, 26, 26, 255); border-left-width: 0; border-right-width: 0; border-top-width: 1px; border-bottom-width: 0;" />
+                </ui:VisualElement>
+            </Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl>
         </ui:VisualElement>
     </Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl>
 </ui:UXML>

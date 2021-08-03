@@ -53,6 +53,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             behaviourTrees.ForEach(graph => {
                 toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
                     Selection.activeObject = graph;
+                    OnSelectionChange();
                 });
             });
 
