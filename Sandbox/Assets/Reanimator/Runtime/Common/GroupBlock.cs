@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Aarthificial.Reanimation.Nodes;
 using UnityEngine;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation.Common {
     
     [Serializable]
     public class GroupBlock {

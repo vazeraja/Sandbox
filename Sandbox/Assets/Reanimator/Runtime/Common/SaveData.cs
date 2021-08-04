@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Aarthificial.Reanimation.Nodes;
-using Aarthificial.Reanimation.ResolutionGraph.Editor;
 using UnityEngine;
 
-namespace Aarthificial.Reanimation.ResolutionGraph {
+namespace Aarthificial.Reanimation.Common {
     
     [Serializable]
     public class NodeLinkData {
@@ -13,8 +12,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph {
     }
     [Serializable]
     public class ReanimatorNodeData {
-        public string NodeGUID;
         public ReanimatorNode ReanimatorNode;
+        public string NodeGUID;
         public Vector2 Position;
     }
     [Serializable]

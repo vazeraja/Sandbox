@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System;
-using System.Linq;
+using Aarthificial.Reanimation.Common;
 using Aarthificial.Reanimation.Nodes;
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -16,7 +16,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph {
         public List<ReanimatorNode> currentTrace = new List<ReanimatorNode>();
 
         public SaveData SaveData = new SaveData();
-        
         
     }
 }

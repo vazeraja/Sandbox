@@ -30,32 +30,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f3b175a540fa3e8479f4c017722fe5fe
   title: RunAnimation
-  position: {x: 503, y: 0}
-  cels:
-  - sprite: {fileID: 8562431805029759849, guid: d907cee78eda0484e9ed0c704dd5ac50, type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: -8898711724394727108, guid: d907cee78eda0484e9ed0c704dd5ac50, type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: 1419535152013476003, guid: d907cee78eda0484e9ed0c704dd5ac50, type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: -874605140446810071, guid: d907cee78eda0484e9ed0c704dd5ac50, type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: 4496215235596873431, guid: d907cee78eda0484e9ed0c704dd5ac50, type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: 5915515978982725832, guid: d907cee78eda0484e9ed0c704dd5ac50, type: 3}
-    drivers:
-      keys: []
-      values: 
+  position: {x: 504, y: -76}
+  cels: []
   controlDriver:
     name: 
     autoIncrement: 1
@@ -81,27 +57,12 @@ MonoBehaviour:
   - {fileID: -6966010986285571502}
   - {fileID: -6689801868859213147}
   - {fileID: 4075698059609802293}
-  - {fileID: 1587955294285367223}
+  - {fileID: 5215725629504640835}
   currentTrace: []
   SaveData:
+    NodeLinks: []
+    ReanimatorNodeData: []
     CommentBlockData: []
---- !u!114 &1587955294285367223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cd1e6768d7d47f2976614169efeebba, type: 3}
-  m_Name: OverrideNode
-  m_EditorClassIdentifier: 
-  guid: a2afc2d95c31ba448b969514d6b5636c
-  title: 
-  position: {x: 503, y: -110}
-  next: {fileID: 0}
-  overrides: []
 --- !u!114 &4075698059609802293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,15 +77,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f0491f65172583448bb092a4b22e9296
   title: SwitchNode
-  position: {x: 249, y: -58}
+  position: {x: 246, y: -24}
   nodes:
   - {fileID: -6689801868859213147}
-  - {fileID: 1587955294285367223}
+  - {fileID: 5215725629504640835}
   controlDriver:
     name: 
     autoIncrement: 0
     percentageBased: 0
     guid: d177d131-62bc-4543-8106-c50bd3effeef
+  drivers:
+    keys: []
+    values: 
+--- !u!114 &5215725629504640835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38410541ac5f4ea48c5cdb5f1d957b6f, type: 3}
+  m_Name: IdleAnimation
+  m_EditorClassIdentifier: 
+  guid: 8548e3ac443cdf444820bd4ae0d3c84a
+  title: IdleAnimation
+  position: {x: 504, y: 37}
+  cels: []
+  controlDriver:
+    name: 
+    autoIncrement: 0
+    percentageBased: 0
+    guid: 5e66d867-69bc-4175-a534-487b0a07c532
   drivers:
     keys: []
     values: 

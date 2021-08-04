@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aarthificial.Reanimation.Editor.ResolutionGraph;
 using Aarthificial.Reanimation.Nodes;
+using Aarthificial.Reanimation.ResolutionGraph.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -37,17 +39,17 @@ namespace Aarthificial.Reanimation.Editor
 
             GUI.DrawTextureWithTexCoords(position, sprite.texture, coords);
         }
+        internal static ReanimatorSaveService SaveService(ReanimatorGraphView graphView) => new ReanimatorSaveService(graphView);
 
         internal static void SetDirty(IEnumerable<UnityEngine.Object> targets) => targets.ForEach(EditorUtility.SetDirty);
 
-        private static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        internal static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             foreach (var item in source)
                 action(item);
         }
 
         internal static List<T> LoadAssetsOfType<T>() where T : UnityEngine.Object {
-            //List<string> assetIds = AssetDatabase.FindAssets($"t:{typeof(T).Name}").ToList();
             return AssetDatabase.FindAssets($"t:{typeof(T).Name}").ToList().Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<T>).ToList();
         }
         internal static List<ReanimatorNode> GetChildren(ReanimatorNode parent)

@@ -65,6 +65,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     input.portName = "";
                     inputContainer.Add(input);
                     AddToClassList("simpleAnimation");
+                    root = false;
                     break;
                 case SwitchNode _:
                     input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
@@ -76,6 +77,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     output.portName = "";
                     outputContainer.Add(output);
                     AddToClassList("switch");
+                    root = false;
                     break;
                 case OverrideNode _:
                     input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
@@ -86,6 +88,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     inputContainer.Add(input);
                     output.portName = "";
                     outputContainer.Add(output);
+                    root = false;
                     AddToClassList("override");
                     break;
                 case BaseNode _:
@@ -95,6 +98,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;
                     capabilities &= ~Capabilities.Deletable;
+                    root = true;
                     AddToClassList("base");
                     break;
             }
@@ -111,14 +115,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         
         public ReanimatorNode node { get; }
         private readonly ReanimatorGraphView reanimatorGraphView;
-        
-        private IMGUIContainer inspectorContainer;
-        private IMGUIContainer animationContainer;
 
-        private UnityEditor.Editor editor;
-        private AnimationNodeEditor animationEditor;
-        private SwitchNodeEditor switchNodeEditor;
-        private OverrideNodeEditor overrideNodeEditor;
+        public bool root;
         
         public Port input { get; }
         public Port output { get; }

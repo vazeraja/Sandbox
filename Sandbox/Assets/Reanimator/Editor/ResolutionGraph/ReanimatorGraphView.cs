@@ -4,6 +4,7 @@ using System.Linq;
 using Aarthificial.Reanimation.Cels;
 using Aarthificial.Reanimation.Common;
 using Aarthificial.Reanimation.Editor;
+using Aarthificial.Reanimation.Editor.ResolutionGraph;
 using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -27,13 +28,12 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new DragAndDropManipulator());
-            this.AddManipulator(new NodeSelectionManipulator());
 
             Undo.undoRedoPerformed += UndoRedo;
             EditorApplication.update += PlayAnimationPreview;
         }
 
-        public void Initialize(ReanimatorGraphEditor editorWindow, ResolutionGraph graph)
+        public void Initialize(ReanimatorGraphEditor editorWindow, Reanimation.ResolutionGraph.ResolutionGraph graph)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;

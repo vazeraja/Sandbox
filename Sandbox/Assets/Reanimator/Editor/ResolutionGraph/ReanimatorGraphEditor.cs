@@ -1,7 +1,5 @@
-using System;
 using Aarthificial.Reanimation.Editor;
-using Aarthificial.Reanimation.Editor.Nodes;
-using Aarthificial.Reanimation.Nodes;
+using Aarthificial.Reanimation.Editor.ResolutionGraph;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
@@ -9,10 +7,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
-
-    public interface IEditorWindow {
-        
-    }
 
     public class ReanimatorGraphEditor : EditorWindow {
         [MenuItem("Reanimator/Resolution Graph")]
@@ -39,6 +33,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private InspectorCustomControl inspectorPanel;
         private VisualElement animationPreview;
         private TwoPanelInspector twoPanelInspector;
+        private ToolbarButton saveButton;
 
         public void CreateGUI()
         {
@@ -55,18 +50,21 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             animationPreview = root.Q<VisualElement>("animation-preview");
             twoPanelInspector = root.Q<TwoPanelInspector>("TwoPanelInspector");
             toolbarMenu = root.Q<ToolbarMenu>();
+            saveButton = root.Q<ToolbarButton>("save-button");
 
             editorGraph.onNodeSelected = DrawNodeProperties;
             
-            var behaviourTrees = Helpers.LoadAssetsOfType<ResolutionGraph>();
-            behaviourTrees.ForEach(graph => {
+            var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
+            resolutionGraphs.ForEach(graph => {
                 toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
                     Selection.activeObject = graph;
                     OnSelectionChange();
                 });
             });
-            
-            Label previewLabel = root.Q<Label>("preview-panel-title");
+
+            saveButton.clicked += () => {
+                resolutionGraph.SaveData = Helpers.SaveService(editorGraph);
+            };
 
             if (resolutionGraph == null) {
                 OnSelectionChange();
@@ -88,6 +86,11 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 ResolutionGraph graph = Selection.activeObject as ResolutionGraph;
                 SelectTree(graph);
             };
+        }
+
+        private void OnDisable()
+        {
+            resolutionGraph.SaveData = Helpers.SaveService(editorGraph);
         }
 
         private void SelectTree(ResolutionGraph newGraph)

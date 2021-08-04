@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Aarthificial.Reanimation.Common;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -15,18 +15,16 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             title = block.Title;
         }
 
-        protected override void OnGroupRenamed(string oldName, string newName)
-        {
-            var saveService = GraphSaveService.GetInstance(graphView);
-            saveService.Save();
-        }
+        // protected override void OnGroupRenamed(string oldName, string newName)
+        // {
+        //     GraphSaveService.GetInstance(graphView).Save();
+        // }
 
-        protected override void OnElementsAdded(IEnumerable<GraphElement> elements)
-        {
-            var saveService = GraphSaveService.GetInstance(graphView);
-            saveService.Save();
-        }
-
+        // protected override void OnElementsAdded(IEnumerable<GraphElement> elements)
+        // {
+        //     GraphSaveService.GetInstance(graphView).Save();
+        // }
+ 
         public override void SetPosition(Rect newPos)
         {
             base.SetPosition(newPos);

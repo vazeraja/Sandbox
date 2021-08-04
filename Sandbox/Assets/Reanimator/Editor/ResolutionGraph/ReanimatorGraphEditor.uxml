@@ -3,7 +3,7 @@
     <uie:Toolbar>
         <uie:ToolbarMenu display-tooltip-when-elided="false" text="Assets" />
         <uie:ToolbarSpacer />
-        <uie:ToolbarButton text="Save" display-tooltip-when-elided="true" enable-rich-text="true" style="-unity-text-align: middle-left; margin-left: -1px; padding-right: 2px; padding-top: 0; flex-direction: row; align-items: center; margin-right: 0;" />
+        <uie:ToolbarButton text="Save" display-tooltip-when-elided="true" enable-rich-text="true" name="save-button" style="-unity-text-align: middle-left; margin-left: -1px; padding-right: 2px; padding-top: 0; flex-direction: row; align-items: center; margin-right: 0;" />
     </uie:Toolbar>
     <Aarthificial.Reanimation.ResolutionGraph.Editor.TwoPanelCustomControl fixed-pane-initial-dimension="800">
         <ui:VisualElement name="left-panel">
