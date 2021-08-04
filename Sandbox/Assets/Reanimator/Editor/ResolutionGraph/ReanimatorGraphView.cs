@@ -14,8 +14,8 @@ using UnityEngine.UIElements;
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
-        
-        
+
+
         public ReanimatorGraphView()
         {
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
@@ -32,7 +32,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             Undo.undoRedoPerformed += UndoRedo;
             EditorApplication.update += PlayAnimationPreview;
         }
-        
+
         public void Initialize(ReanimatorGraphEditor editorWindow, ResolutionGraph graph)
         {
             this.graph = graph;
@@ -64,7 +64,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             nodeCreationRequest = context =>
                 SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindowProvider);
         }
-        
+
         /// <summary>
         /// Creates a minimap on top left corner of the graphview
         /// </summary>
@@ -139,7 +139,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             CreateGraphNode(node);
             return node;
         }
-        
+
         private void CreateGraphNode(ReanimatorNode node)
         {
             var graphNode = new ReanimatorGraphNode(this, node) {
@@ -148,7 +148,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             AddElement(graphNode);
         }
 
-        
+
         /// <summary>
         /// Creates a simple animation node on the graph
         /// -- Used for drag and drop nodes --
@@ -184,7 +184,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             if (!(CreateNode(type, nodePosition) is SwitchNode switchNode)) return;
             switchNode.nodes = reanimatorNodes;
         }
-        
+
         private void PlayAnimationPreview() => GraphNodes.ForEach(node => {
             if (node.node is SimpleAnimationNode) node.PlayAnimationPreview();
         });
@@ -216,6 +216,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 EditorUtility.SetDirty(graph);
             }
         }
+
         private void Load()
         {
             // Create root node if graph is empty
