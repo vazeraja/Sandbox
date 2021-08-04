@@ -7,6 +7,6 @@ using UnityEngine;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class InspectorCustomControl : ScrollView {
-        public new class UxmlFactory : UxmlFactory<InspectorCustomControl, ScrollView.UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<InspectorCustomControl, UxmlTraits> { }
     }
 }

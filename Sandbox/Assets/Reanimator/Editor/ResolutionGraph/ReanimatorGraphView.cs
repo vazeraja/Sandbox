@@ -8,6 +8,7 @@ using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
@@ -26,22 +27,17 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new DragAndDropManipulator());
+            this.AddManipulator(new NodeSelectionManipulator());
 
             Undo.undoRedoPerformed += UndoRedo;
             EditorApplication.update += PlayAnimationPreview;
         }
         
-        public void Initialize(
-            ReanimatorGraphEditor editorWindow,
-            ResolutionGraph graph,
-            InspectorCustomControl inspector,
-            VisualElement animationPreview)
+        public void Initialize(ReanimatorGraphEditor editorWindow, ResolutionGraph graph)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
-            inspectorPanel = inspector;
-            animationPreviewPanel = animationPreview;
-            
+
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
             graphViewChanged += OnGraphViewChanged;
@@ -53,7 +49,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
 
         private void UndoRedo()
         {
-            Initialize(editorWindow, graph, inspectorPanel, animationPreviewPanel);
+            Initialize(editorWindow, graph);
             AssetDatabase.SaveAssets();
         }
 
@@ -146,7 +142,9 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         
         private void CreateGraphNode(ReanimatorNode node)
         {
-            var graphNode = new ReanimatorGraphNode(this, node);
+            var graphNode = new ReanimatorGraphNode(this, node) {
+                onNodeSelected = onNodeSelected
+            };
             AddElement(graphNode);
         }
 
@@ -218,7 +216,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 EditorUtility.SetDirty(graph);
             }
         }
-
         private void Load()
         {
             // Create root node if graph is empty
@@ -259,9 +256,8 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
 
         private ResolutionGraph graph;
         private ReanimatorGraphEditor editorWindow;
-        public InspectorCustomControl inspectorPanel;
-        public VisualElement animationPreviewPanel;
         private ReanimatorSearchWindowProvider searchWindowProvider;
+        public Action<ReanimatorGraphNode> onNodeSelected;
 
         private IEnumerable<ReanimatorGroup> CommentBlocks => graphElements
             .ToList()

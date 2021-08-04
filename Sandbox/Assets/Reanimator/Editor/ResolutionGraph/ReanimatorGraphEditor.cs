@@ -36,14 +36,9 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         
         private ReanimatorGraphView editorGraph;
         private ToolbarMenu toolbarMenu;
-        private InspectorCustomControl inspector;
+        private InspectorCustomControl inspectorPanel;
         private VisualElement animationPreview;
-        public Label previewPanelLabel;
-
-        private void OnEnable()
-        {
-            
-        }
+        private TwoPanelInspector twoPanelInspector;
 
         public void CreateGUI()
         {
@@ -56,11 +51,13 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             root.styleSheets.Add(styleSheet);
 
             editorGraph = root.Q<ReanimatorGraphView>();
-            inspector = root.Q<InspectorCustomControl>();
+            inspectorPanel = root.Q<InspectorCustomControl>();
             animationPreview = root.Q<VisualElement>("animation-preview");
+            twoPanelInspector = root.Q<TwoPanelInspector>("TwoPanelInspector");
             toolbarMenu = root.Q<ToolbarMenu>();
 
-
+            editorGraph.onNodeSelected = DrawNodeProperties;
+            
             var behaviourTrees = Helpers.LoadAssetsOfType<ResolutionGraph>();
             behaviourTrees.ForEach(graph => {
                 toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
@@ -78,20 +75,17 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 SelectTree(resolutionGraph);
             }
         }
-        
+
+        private void DrawNodeProperties(ReanimatorGraphNode graphNode)
+        {
+            twoPanelInspector.Initialize(inspectorPanel, animationPreview);
+            twoPanelInspector.DrawNodeProperties(graphNode);
+        }
+
         private void OnSelectionChange()
         {
             EditorApplication.delayCall += () => {
                 ResolutionGraph graph = Selection.activeObject as ResolutionGraph;
-                if (!graph) {
-                    if (Selection.activeGameObject) {
-                        Reanimator reanimator = Selection.activeGameObject.GetComponent<Reanimator>();
-                        if (reanimator) {
-                            graph = reanimator.graph.Value;
-                        }
-                    }
-                }
-
                 SelectTree(graph);
             };
         }
@@ -105,10 +99,10 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             resolutionGraph = newGraph;
 
             if (Application.isPlaying) {
-                editorGraph.Initialize(this, resolutionGraph, inspector, animationPreview);
+                editorGraph.Initialize(this, resolutionGraph);
             }
             else {
-                editorGraph.Initialize(this, resolutionGraph, inspector, animationPreview);
+                editorGraph.Initialize(this, resolutionGraph);
             }
 
             EditorApplication.delayCall += () => { editorGraph.FrameAll(); };

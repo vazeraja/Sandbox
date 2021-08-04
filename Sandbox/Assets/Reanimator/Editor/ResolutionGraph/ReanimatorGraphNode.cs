@@ -1,4 +1,5 @@
-﻿using Aarthificial.Reanimation.Editor.Nodes;
+﻿using System;
+using Aarthificial.Reanimation.Editor.Nodes;
 using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEngine;
@@ -8,62 +9,8 @@ using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public sealed class ReanimatorGraphNode : Node {
-        
-        private void ShowNodeInInspector()
-        {
-            ClearAll(reanimatorGraphView);
-            
-            switch (node) {
-                case BaseNode _:
-                    editor = UnityEditor.Editor.CreateEditor(node);
-                    if (editor && editor.target) {
-                        reanimatorGraphView.animationPreviewPanel.style.display = DisplayStyle.None;
-                        inspectorContainer = new IMGUIContainer(() => { editor.OnInspectorGUI(); });
-                    }
 
-                    break;
-                case SimpleAnimationNode _:
-                    animationEditor = UnityEditor.Editor.CreateEditor(node) as AnimationNodeEditor;
-                    if (animationEditor && animationEditor.target) {
-                        reanimatorGraphView.animationPreviewPanel.style.display = DisplayStyle.Flex;
-                        inspectorContainer = new IMGUIContainer(() => { animationEditor.OnInspectorGUI(); });
-                        animationContainer = new IMGUIContainer(() => {
-                            animationEditor.RequiresConstantRepaint();
-                            animationEditor.HasPreviewGUI();
-                            animationEditor.OnPreviewGUI(GUILayoutUtility.GetRect(150, 150), new GUIStyle());
-                        });
-                    }
-
-                    break;
-                case SwitchNode _:
-                    switchNodeEditor = UnityEditor.Editor.CreateEditor(node) as SwitchNodeEditor;
-                    if (switchNodeEditor && switchNodeEditor.target) {
-                        reanimatorGraphView.animationPreviewPanel.style.display = DisplayStyle.None;
-                        inspectorContainer = new IMGUIContainer(() => { switchNodeEditor.OnInspectorGUI(); });
-                    }
-
-                    break;
-                case OverrideNode _:
-                    overrideNodeEditor = UnityEditor.Editor.CreateEditor(node) as OverrideNodeEditor;
-                    if (overrideNodeEditor && overrideNodeEditor.target) {
-                        reanimatorGraphView.animationPreviewPanel.style.display = DisplayStyle.None;
-                        inspectorContainer = new IMGUIContainer(() => { overrideNodeEditor.OnInspectorGUI(); });
-                    }
-                    break;
-            }
-            reanimatorGraphView.inspectorPanel.Add(inspectorContainer);
-            reanimatorGraphView.animationPreviewPanel.Add(animationContainer);
-        }
-        private void ClearAll(ReanimatorGraphView graphView)
-        {
-            graphView.inspectorPanel.Clear();
-            graphView.animationPreviewPanel.Clear();
-
-            Object.DestroyImmediate(editor);
-            Object.DestroyImmediate(switchNodeEditor);
-            Object.DestroyImmediate(animationEditor);
-            Object.DestroyImmediate(overrideNodeEditor);
-        }
+        public Action<ReanimatorGraphNode> onNodeSelected;
         
         public void PlayAnimationPreview()
         {
@@ -95,7 +42,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         public override void OnSelected()
         {
             base.OnSelected();
-            ShowNodeInInspector();
+            onNodeSelected?.Invoke(this);
         }
         
         public ReanimatorGraphNode(ReanimatorGraphView reanimatorGraphView, ReanimatorNode node) : base(nodeStyleSheetPath)

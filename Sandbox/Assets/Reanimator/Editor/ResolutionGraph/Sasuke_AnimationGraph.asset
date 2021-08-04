@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 2643a84ec0dc3714d87a7f2a30034df5
   title: RunNJumpAnimation
-  position: {x: 1206.5, y: -496.99997}
+  position: {x: 1206.5001, y: -482.99994}
   cels:
   - sprite: {fileID: 6612509912714155400, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 7cc164ab5cb9354428846ef421b16096
   title: JumpAnimation
-  position: {x: 1207.0002, y: -592.0001}
+  position: {x: 1206.5001, y: -566}
   cels:
   - sprite: {fileID: 3298105886585063087, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8888fbbc40ce6ee45b940373ac11a8dc
   title: RootMovement_Idle
-  position: {x: 1026, y: -221.00002}
+  position: {x: 1026, y: -221.00006}
   nodes:
   - {fileID: 4121047940114990893}
   - {fileID: 5145656718631313926}
@@ -323,7 +323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec083b8678648e496376b01594506fa, type: 3}
   m_Name: Sasuke_AnimationGraph
   m_EditorClassIdentifier: 
-  sprite: {fileID: 2119321894245011408, guid: 8cb61626df0de444ba5c773b94c7ba59, type: 3}
   root: {fileID: 4312978999189567477}
   nodes:
   - {fileID: -1168521784519300095}
@@ -387,7 +386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 4c81fdd4ff18f8f41a57d94ed6f9d667
   title: FlipAnimation
-  position: {x: 966, y: -395.00006}
+  position: {x: 966, y: -407.00006}
   cels:
   - sprite: {fileID: -14635915900717176, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:
@@ -471,7 +470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: afe91bd7c62d4d14b889a31a301a9e8c
   title: Root
-  position: {x: 222.90543, y: -38.00003}
+  position: {x: 232.92569, y: -25.999989}
   nodes:
   - {fileID: 1210843896723939208}
   - {fileID: 8972811193946634867}
@@ -498,7 +497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 2ecd64fc9442d22479371d890e162ebd
   title: RootMovement_Air
-  position: {x: 734, y: -445.00003}
+  position: {x: 734, y: -482.99994}
   nodes:
   - {fileID: -7832042094402424365}
   - {fileID: 1700534619507601169}
