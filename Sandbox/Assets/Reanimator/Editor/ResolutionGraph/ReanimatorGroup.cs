@@ -17,12 +17,14 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
 
         protected override void OnGroupRenamed(string oldName, string newName)
         {
-            graphView.Save();
+            var saveService = GraphSaveService.GetInstance(graphView);
+            saveService.Save();
         }
 
         protected override void OnElementsAdded(IEnumerable<GraphElement> elements)
         {
-            graphView.Save();
+            var saveService = GraphSaveService.GetInstance(graphView);
+            saveService.Save();
         }
 
         public override void SetPosition(Rect newPos)
