@@ -6,11 +6,11 @@ using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation {
 
-    public class ReanimatorGraphEditor : EditorWindow {
+    public class ReanimatorGraphEditorWindow : EditorWindow {
         [MenuItem("Reanimator/Resolution Graph")]
         public static void ShowWindow()
         {
-            ReanimatorGraphEditor wnd = GetWindow<ReanimatorGraphEditor>();
+            ReanimatorGraphEditorWindow wnd = GetWindow<ReanimatorGraphEditorWindow>();
             wnd.titleContent = new GUIContent("ReanimatorGraph");
         }
 
@@ -29,9 +29,10 @@ namespace Aarthificial.Reanimation {
         private ReanimatorGraphView editorGraph;
         private ToolbarMenu toolbarMenu;
         private InspectorCustomControl inspectorPanel;
-        private VisualElement animationPreview;
+        private VisualElement animationPreviewPanel;
         private TwoPanelInspector twoPanelInspector;
         private ToolbarButton saveButton;
+        private ToolbarButton loadButton;
 
         public void CreateGUI()
         {
@@ -44,13 +45,14 @@ namespace Aarthificial.Reanimation {
             root.styleSheets.Add(styleSheet);
 
             editorGraph = root.Q<ReanimatorGraphView>();
+            
             inspectorPanel = root.Q<InspectorCustomControl>();
-            animationPreview = root.Q<VisualElement>("animation-preview");
+            animationPreviewPanel = root.Q<VisualElement>("animation-preview");
             twoPanelInspector = root.Q<TwoPanelInspector>("TwoPanelInspector");
+            
             toolbarMenu = root.Q<ToolbarMenu>();
             saveButton = root.Q<ToolbarButton>("save-button");
-
-            editorGraph.onNodeSelected = DrawNodeProperties;
+            loadButton = root.Q<ToolbarButton>("load-button");
             
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
             resolutionGraphs.ForEach(graph => {
@@ -63,6 +65,11 @@ namespace Aarthificial.Reanimation {
             saveButton.clicked += () => {
                 resolutionGraph.saveData = Helpers.SaveService(editorGraph);
             };
+            loadButton.clicked += () => {
+                Debug.Log("Reload the graph");
+            };
+            
+            editorGraph.onNodeSelected = DrawNodeProperties;
 
             if (resolutionGraph == null) {
                 OnSelectionChange();
@@ -74,7 +81,7 @@ namespace Aarthificial.Reanimation {
 
         private void DrawNodeProperties(ReanimatorGraphNode graphNode)
         {
-            twoPanelInspector.Initialize(inspectorPanel, animationPreview);
+            twoPanelInspector.Initialize(inspectorPanel, animationPreviewPanel);
             twoPanelInspector.DrawNodeProperties(graphNode);
         }
 

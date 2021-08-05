@@ -13,20 +13,21 @@ namespace Aarthificial.Reanimation {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
 
-        public void Initialize(ReanimatorGraphEditor editorWindowWindow, ResolutionGraph graph, bool useSaveData = true)
+        public void Initialize(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph, bool useSaveData = true)
         {
             this.graph = graph;
-            this.editorWindow = editorWindowWindow;
+            this.editorWindow = editorWindow;
 
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
-            graphViewChanged += OnGraphViewChanged; 
+            graphViewChanged += OnGraphViewChanged;
 
-            CreateSearchWindow(editorWindowWindow);
+            CreateSearchWindow(editorWindow);
             CreateMiniMap();
 
-            //ReanimatorSaveService.GetInstance(this).LoadFromSaveData();
+            // TODO: Implement secondary load if initial load fails 
             ReanimatorSaveService.GetInstance(this).LoadFromSubAssets();
+            //ReanimatorSaveService.GetInstance(this).LoadFromSaveData();
         }
 
         private void UndoRedo()
@@ -83,7 +84,7 @@ namespace Aarthificial.Reanimation {
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
             => ports.ToList()
                 .Where(endPort => endPort.direction != startPort.direction && endPort.node != startPort.node).ToList();
-        
+
         /// <summary>
         /// Create a sub asset of node when a node is requested to be created from the search window
         /// </summary>
@@ -106,11 +107,11 @@ namespace Aarthificial.Reanimation {
         public ReanimatorGraphNode CreateGraphNode(ReanimatorNode node, string assetName = null)
         {
             node.name = string.IsNullOrEmpty(assetName) ? node.GetType().Name : assetName;
-            
+
             var graphNode = new ReanimatorGraphNode(node) {
                 onNodeSelected = onNodeSelected
             };
-            
+
             AddElement(graphNode);
             return graphNode;
         }
@@ -151,7 +152,7 @@ namespace Aarthificial.Reanimation {
             if (!(CreateNode(type, nodePosition) is SwitchNode switchNode)) return;
             switchNode.nodes = reanimatorNodes;
         }
-        
+
         /// <summary>
         /// Creates a scriptable object sub asset for the current resolution graph and adds it to the list
         /// of nodes saved in the resolution graph
@@ -174,12 +175,12 @@ namespace Aarthificial.Reanimation {
             }
 
             Undo.RegisterCreatedObjectUndo(node, "Resolution Tree");
-            
+
             EditorUtility.SetDirty(graph);
             AssetDatabase.SaveAssets();
             return node;
         }
-        
+
         /// <summary>
         /// Removes the scriptable object sub asset from the resolution graph and removes it from the list
         /// of nodes saved in the resolution graph
@@ -190,7 +191,7 @@ namespace Aarthificial.Reanimation {
             Undo.RecordObject(graph, "Resolution Tree");
             graph.nodes.Remove(node);
             Undo.DestroyObjectImmediate(node);
-            
+
             EditorUtility.SetDirty(graph);
             AssetDatabase.SaveAssets();
         }
@@ -224,7 +225,7 @@ namespace Aarthificial.Reanimation {
                     break;
             }
         }
-        
+
         /// <summary>
         /// Removes appropriate child node(s) when an edge or node is deleted
         /// </summary>
@@ -254,7 +255,7 @@ namespace Aarthificial.Reanimation {
                     break;
             }
         }
-        
+
 
         /// <summary>
         /// Event listener to intercept the GraphView graphViewChanged delegate.
@@ -285,15 +286,14 @@ namespace Aarthificial.Reanimation {
 
             return graphViewChange;
         }
-        
+
         private void PlayAnimationPreview() => GraphNodes.ForEach(node => {
             if (node.node is SimpleAnimationNode) node.PlayAnimationPreview();
         });
-        
+
         public ReanimatorGraphView()
         {
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
-            styleSheets.Add(styleSheet);
+            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath));
 
             Insert(0, new GridBackground());
             this.AddManipulator(new ContentZoomer());
@@ -302,15 +302,18 @@ namespace Aarthificial.Reanimation {
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new DragAndDropManipulator());
 
-            Undo.undoRedoPerformed += UndoRedo;
+            Undo.undoRedoPerformed += () => {
+                Initialize(editorWindow, graph);
+                AssetDatabase.SaveAssets();
+            };
             EditorApplication.update += PlayAnimationPreview;
         }
 
         public ResolutionGraph graph;
-        private ReanimatorGraphEditor editorWindow;
+        private ReanimatorGraphEditorWindow editorWindow;
         private ReanimatorSearchWindowProvider searchWindowProvider;
         public Action<ReanimatorGraphNode> onNodeSelected;
-        
+
         private List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
 
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";

@@ -346,6 +346,10 @@ MonoBehaviour:
   currentTrace: []
   saveData:
     NodeLinks:
+    - BaseNode: {fileID: -1168521784519300095}
+      BaseNodeGUID: 2f135011018bdbc4789bcc27f3d8e396
+      TargetNode: {fileID: 4312978999189567477}
+      TargetNodeGUID: afe91bd7c62d4d14b889a31a301a9e8c
     - BaseNode: {fileID: 4312978999189567477}
       BaseNodeGUID: afe91bd7c62d4d14b889a31a301a9e8c
       TargetNode: {fileID: 1210843896723939208}
@@ -411,6 +415,9 @@ MonoBehaviour:
       TargetNode: {fileID: -9130189663412503569}
       TargetNodeGUID: 6a86ea4d07dbf3c4b894895c0ec70bdf
     ReanimatorNodeData:
+    - ReanimatorNode: {fileID: -1168521784519300095}
+      NodeGUID: 2f135011018bdbc4789bcc27f3d8e396
+      Position: {x: 9, y: -26}
     - ReanimatorNode: {fileID: 4312978999189567477}
       NodeGUID: afe91bd7c62d4d14b889a31a301a9e8c
       Position: {x: 233, y: -26}

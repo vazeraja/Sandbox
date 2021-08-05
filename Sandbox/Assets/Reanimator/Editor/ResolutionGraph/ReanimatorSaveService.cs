@@ -112,38 +112,31 @@ namespace Aarthificial.Reanimation {
             ConnectNodes();
         }
 
-        private bool GenerateNodes()
+        private void GenerateNodes()
         {
             try {
                 foreach (var tempNode in GraphSaveData.ReanimatorNodeData.Select(perNode =>
                     _graphView.CreateGraphNode(perNode.ReanimatorNode))) {
                     _graphView.AddElement(tempNode);
                 }
-
-                return true;
             }
             catch (Exception e) {
                 Debug.LogException(e);
-                return false;
             }
         }
 
-        private bool ConnectNodes()
+        private void ConnectNodes()
         {
             try {
-                foreach (var connection in GraphSaveData.NodeLinks) {
-                    var baseNode = Nodes.Find(x => x.node.guid == connection.BaseNodeGUID);
-                    var targetNode = Nodes.Find(x => x.node.guid == connection.TargetNodeGUID);
-
-                    var edge = baseNode?.output.ConnectTo(targetNode?.input);
+                foreach (var edge in from connection in GraphSaveData.NodeLinks
+                    let baseNode = Nodes.Find(x => x.node.guid == connection.BaseNodeGUID)
+                    let targetNode = Nodes.Find(x => x.node.guid == connection.TargetNodeGUID)
+                    select baseNode?.output.ConnectTo(targetNode?.input)) {
                     _graphView.Add(edge);
                 }
-
-                return true;
             }
             catch (Exception e) {
                 Debug.LogException(e);
-                return false;
             }
         }
 
