@@ -115,14 +115,17 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             CreateGraphNode(node);
             return node;
         }
-        
+
         /// <summary>
         /// Create a ReanimatorNode graph element and add it to the graph view 
         /// </summary>
         /// <param name="node"></param>
-        private void CreateGraphNode(ReanimatorNode node)
+        /// <param name="assetName"></param>
+        private void CreateGraphNode(ReanimatorNode node, string assetName = null)
         {
-            var graphNode = new ReanimatorGraphNode(this, node) {
+            node.name = string.IsNullOrEmpty(assetName) ? node.GetType().Name : assetName;
+            
+            var graphNode = new ReanimatorGraphNode(node) {
                 onNodeSelected = onNodeSelected
             };
             AddElement(graphNode);
@@ -312,7 +315,9 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             }
 
             // Create every graph node from the nodes in the graph
-            graph.nodes.ForEach(CreateGraphNode);
+            graph.nodes.ForEach(node => {
+                CreateGraphNode(node, node.title);
+            });
 
             // Create all connections based on the children of the nodes in the graph
             graph.nodes.ForEach(p => {

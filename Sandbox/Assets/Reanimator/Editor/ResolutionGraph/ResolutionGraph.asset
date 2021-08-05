@@ -16,6 +16,30 @@ MonoBehaviour:
   title: BaseNode
   position: {x: 0, y: 0}
   root: {fileID: 4075698059609802293}
+--- !u!114 &-6749794517442224632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38410541ac5f4ea48c5cdb5f1d957b6f, type: 3}
+  m_Name: JumpAnimation
+  m_EditorClassIdentifier: 
+  guid: 6592cfd25ef75554ba7011a35657443f
+  title: JumpAnimation
+  position: {x: 482, y: 26}
+  cels: []
+  controlDriver:
+    name: 
+    autoIncrement: 0
+    percentageBased: 0
+    guid: 27101681-11d6-42f4-8e97-83e1986405f7
+  drivers:
+    keys: []
+    values: 
 --- !u!114 &-6689801868859213147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f3b175a540fa3e8479f4c017722fe5fe
   title: RunAnimation
-  position: {x: 504, y: -76}
+  position: {x: 482, y: -130}
   cels: []
   controlDriver:
     name: 
@@ -58,10 +82,31 @@ MonoBehaviour:
   - {fileID: -6689801868859213147}
   - {fileID: 4075698059609802293}
   - {fileID: 5215725629504640835}
+  - {fileID: -6749794517442224632}
   currentTrace: []
   SaveData:
-    NodeLinks: []
-    ReanimatorNodeData: []
+    NodeLinks:
+    - BaseNodeGUID: 7a2bb84e27baa104fa077cfe6069db74
+      TargetNodeGUID: f0491f65172583448bb092a4b22e9296
+    - BaseNodeGUID: f0491f65172583448bb092a4b22e9296
+      TargetNodeGUID: f3b175a540fa3e8479f4c017722fe5fe
+    - BaseNodeGUID: f0491f65172583448bb092a4b22e9296
+      TargetNodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
+    - BaseNodeGUID: f0491f65172583448bb092a4b22e9296
+      TargetNodeGUID: 6592cfd25ef75554ba7011a35657443f
+    ReanimatorNodeData:
+    - ReanimatorNode: {fileID: -6689801868859213147}
+      NodeGUID: f3b175a540fa3e8479f4c017722fe5fe
+      Position: {x: 482, y: -130}
+    - ReanimatorNode: {fileID: 4075698059609802293}
+      NodeGUID: f0491f65172583448bb092a4b22e9296
+      Position: {x: 246, y: -24}
+    - ReanimatorNode: {fileID: 5215725629504640835}
+      NodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
+      Position: {x: 482, y: -50}
+    - ReanimatorNode: {fileID: -6749794517442224632}
+      NodeGUID: 6592cfd25ef75554ba7011a35657443f
+      Position: {x: 482, y: 26}
     CommentBlockData: []
 --- !u!114 &4075698059609802293
 MonoBehaviour:
@@ -81,6 +126,7 @@ MonoBehaviour:
   nodes:
   - {fileID: -6689801868859213147}
   - {fileID: 5215725629504640835}
+  - {fileID: -6749794517442224632}
   controlDriver:
     name: 
     autoIncrement: 0
@@ -103,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8548e3ac443cdf444820bd4ae0d3c84a
   title: IdleAnimation
-  position: {x: 504, y: 37}
+  position: {x: 482, y: -50}
   cels: []
   controlDriver:
     name: 

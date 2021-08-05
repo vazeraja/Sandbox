@@ -7,21 +7,7 @@ using UnityEngine;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class ReanimatorSaveService {
-        private ReanimatorGraphView _graphView;
-
-        private List<Edge> Edges => _graphView.edges.ToList();
-        private List<ReanimatorGraphNode> Nodes => _graphView.nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-
-        private IEnumerable<Group> CommentBlocks =>
-            _graphView.graphElements.ToList().Where(x => x is Group).Cast<Group>().ToList();
-
-        public static implicit operator SaveData(ReanimatorSaveService saveService) => saveService.Save();
-
-        public ReanimatorSaveService(ReanimatorGraphView graphView)
-        {
-            _graphView = graphView;
-        }
-
+        
         private SaveData Save()
         {
             Debug.Log("Saving");
@@ -36,21 +22,23 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private bool SaveNodes(SaveData saveData)
         {
             if (!Edges.Any()) return false;
-            var connectedSockets = Edges.Where(x => x.input.node != null).ToArray();
-            for (var i = 0; i < connectedSockets.Count(); i++) {
-                var outputNode = connectedSockets[i].output.node as ReanimatorGraphNode;
-                var inputNode = connectedSockets[i].input.node as ReanimatorGraphNode;
+            var connectedPorts = Edges.Where(x => x.input.node != null).ToArray();
+            foreach (var edge in connectedPorts) {
+                var outputNode = edge.output.node as ReanimatorGraphNode;
+                var inputNode = edge.input.node as ReanimatorGraphNode;
                 saveData.NodeLinks.Add(new NodeLinkData {
+                    BaseNode = outputNode?.node,
                     BaseNodeGUID = outputNode?.node.guid,
+                    TargetNode = inputNode?.node,
                     TargetNodeGUID = inputNode?.node.guid
                 });
             }
 
-            foreach (var node in _graphView.graph.nodes.Where(node => !(node is BaseNode))) {
+            foreach (var graphNode in Nodes.Where(node => !(node.node is BaseNode))) {
                 saveData.ReanimatorNodeData.Add(new ReanimatorNodeData {
-                    ReanimatorNode = node,
-                    NodeGUID = node.guid,
-                    Position = GetGraphNodeByGuid(node).GetPosition().position
+                    ReanimatorNode = graphNode.node,
+                    NodeGUID = graphNode.node.guid,
+                    Position = GetGraphNodeByGuid(graphNode.node).GetPosition().position
                 });
             }
 
@@ -76,5 +64,18 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 });
             }
         }
+        
+        public static implicit operator SaveData(ReanimatorSaveService saveService) => saveService.Save();
+
+        public ReanimatorSaveService(ReanimatorGraphView graphView)
+        {
+            _graphView = graphView;
+        }
+        
+        private readonly ReanimatorGraphView _graphView;
+        private IEnumerable<Edge> Edges => _graphView.edges.ToList();
+        private IEnumerable<ReanimatorGraphNode> Nodes => _graphView.nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
+        private IEnumerable<Group> CommentBlocks => _graphView.graphElements.ToList().Where(x => x is Group).Cast<Group>().ToList();
+        
     }
 }

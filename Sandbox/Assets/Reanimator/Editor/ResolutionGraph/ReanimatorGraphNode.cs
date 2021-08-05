@@ -11,6 +11,12 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public sealed class ReanimatorGraphNode : Node {
 
         public Action<ReanimatorGraphNode> onNodeSelected;
+
+        private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
+        
+        public ReanimatorNode node { get; }
+        public Port input { get; }
+        public Port output { get; }
         
         public void PlayAnimationPreview()
         {
@@ -45,11 +51,10 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             onNodeSelected?.Invoke(this);
         }
         
-        public ReanimatorGraphNode(ReanimatorGraphView reanimatorGraphView, ReanimatorNode node) : base(nodeStyleSheetPath)
+        public ReanimatorGraphNode(ReanimatorNode node) : base(nodeStyleSheetPath)
         {
             // UseDefaultStyling();
             this.node = node;
-            this.reanimatorGraphView = reanimatorGraphView;
             this.node.name = node.title == string.Empty ? node.GetType().Name : node.title;
             title = node.GetType().Name;
             viewDataKey = node.guid;
@@ -65,7 +70,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     input.portName = "";
                     inputContainer.Add(input);
                     AddToClassList("simpleAnimation");
-                    root = false;
                     break;
                 case SwitchNode _:
                     input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
@@ -77,7 +81,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     output.portName = "";
                     outputContainer.Add(output);
                     AddToClassList("switch");
-                    root = false;
                     break;
                 case OverrideNode _:
                     input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
@@ -88,7 +91,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     inputContainer.Add(input);
                     output.portName = "";
                     outputContainer.Add(output);
-                    root = false;
                     AddToClassList("override");
                     break;
                 case BaseNode _:
@@ -98,7 +100,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;
                     capabilities &= ~Capabilities.Deletable;
-                    root = true;
                     AddToClassList("base");
                     break;
             }
@@ -111,16 +112,5 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             extensionContainer.Add(textField);
         }
 
-        private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
-        
-        public ReanimatorNode node { get; }
-        private readonly ReanimatorGraphView reanimatorGraphView;
-
-        public bool root;
-        
-        public Port input { get; }
-        public Port output { get; }
-
-        
     }
 }
