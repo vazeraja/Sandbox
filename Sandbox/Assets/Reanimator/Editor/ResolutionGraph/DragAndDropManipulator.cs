@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class DragAndDropManipulator : MouseManipulator {
         protected override void RegisterCallbacksOnTarget()
         {

@@ -5,7 +5,7 @@ using Aarthificial.Reanimation.Nodes;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class TwoPanelInspector : TwoPaneSplitView {
         public new class UxmlFactory : UxmlFactory<TwoPanelInspector, UxmlTraits> { }
 

@@ -9,20 +9,20 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
 
-        public void Initialize(ReanimatorGraphEditor editorWindow, ResolutionGraph graph, bool useSaveData = true)
+        public void Initialize(ReanimatorGraphEditor editorWindowWindow, ResolutionGraph graph, bool useSaveData = true)
         {
             this.graph = graph;
-            this.editorWindow = editorWindow;
+            this.editorWindow = editorWindowWindow;
 
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
             graphViewChanged += OnGraphViewChanged; 
 
-            CreateSearchWindow(editorWindow);
+            CreateSearchWindow(editorWindowWindow);
             CreateMiniMap();
 
             //ReanimatorSaveService.GetInstance(this).LoadFromSaveData();

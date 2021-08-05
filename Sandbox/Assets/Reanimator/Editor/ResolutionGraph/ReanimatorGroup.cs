@@ -2,7 +2,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public sealed class ReanimatorGroup : Group {
         private GroupBlock block;
         private readonly ReanimatorGraphView graphView;

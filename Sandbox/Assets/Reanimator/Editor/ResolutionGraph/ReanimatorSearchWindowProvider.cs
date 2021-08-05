@@ -5,7 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class ReanimatorSearchWindowProvider : ScriptableObject, ISearchWindowProvider {
         
         private EditorWindow window;

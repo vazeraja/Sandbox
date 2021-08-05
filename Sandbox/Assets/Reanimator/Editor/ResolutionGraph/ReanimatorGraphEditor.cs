@@ -1,12 +1,10 @@
-using Aarthificial.Reanimation.Editor;
-using Aarthificial.Reanimation.Editor.ResolutionGraph;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
 
     public class ReanimatorGraphEditor : EditorWindow {
         [MenuItem("Reanimator/Resolution Graph")]
@@ -63,7 +61,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             });
 
             saveButton.clicked += () => {
-                resolutionGraph.SaveData = Helpers.SaveService(editorGraph);
+                resolutionGraph.saveData = Helpers.SaveService(editorGraph);
             };
 
             if (resolutionGraph == null) {
@@ -90,7 +88,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
 
         private void OnDisable()
         {
-            resolutionGraph.SaveData = Helpers.SaveService(editorGraph);
+            resolutionGraph.saveData = Helpers.SaveService(editorGraph);
         }
 
         private void SelectTree(ResolutionGraph newGraph)

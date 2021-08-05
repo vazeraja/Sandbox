@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Aarthificial.Reanimation.Common;
 using Aarthificial.Reanimation.Nodes;
 using UnityEngine;
 
-namespace Aarthificial.Reanimation.ResolutionGraph {
+namespace Aarthificial.Reanimation {
     public delegate void ReanimatorListener();
 
     public class Reanimator : MonoBehaviour {

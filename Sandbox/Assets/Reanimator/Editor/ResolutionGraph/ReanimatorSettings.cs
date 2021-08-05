@@ -5,7 +5,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.Editor.ResolutionGraph {
+namespace Aarthificial.Reanimation {
     public class ReanimatorSettings : ScriptableObject {
         private const string k_MyCustomSettingsPath = "Assets/Reanimator/Editor/Settings/MyCustomSettings.asset";
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Aarthificial.Reanimation;
-using Aarthificial.Reanimation.ResolutionGraph;
+﻿using Aarthificial.Reanimation;
 using UnityEngine;
 
 public class PlayerRenderer : MonoBehaviour {

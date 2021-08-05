@@ -7,7 +7,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public sealed class ReanimatorGraphNode : Node {
 
         public Action<ReanimatorGraphNode> onNodeSelected;

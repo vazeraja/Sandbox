@@ -1,8 +1,9 @@
-﻿using UnityEditor;
+﻿using Aarthificial.Reanimation.Common;
+using UnityEditor;
 using UnityEngine;
 
-namespace MainGame {
-    
+namespace Aarthificial.Reanimation.Editor.Common
+{
     [CustomPropertyDrawer(typeof(Optional<>))]
     public class OptionalPropertyDrawer : PropertyDrawer {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label){

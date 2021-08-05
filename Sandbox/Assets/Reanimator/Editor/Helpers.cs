@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aarthificial.Reanimation.Editor.ResolutionGraph;
 using Aarthificial.Reanimation.Nodes;
-using Aarthificial.Reanimation.ResolutionGraph.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Aarthificial.Reanimation.Editor
+namespace Aarthificial.Reanimation
 {
     internal static class Helpers
     {

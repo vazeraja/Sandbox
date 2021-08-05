@@ -1,8 +1,7 @@
 ﻿using UnityEditor;
-using UnityEditor.Rendering;
 using UnityEngine;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor
+namespace Aarthificial.Reanimation
 {
     [CustomEditor(typeof(Reanimator))]
     public class ReanimatorEditor : UnityEditor.Editor {

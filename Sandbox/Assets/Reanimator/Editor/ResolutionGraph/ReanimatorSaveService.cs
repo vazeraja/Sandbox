@@ -9,7 +9,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class ReanimatorSaveService {
         private SaveData Save()
         {
@@ -175,7 +175,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private ReanimatorGraphView _graphView;
 
         private List<ReanimatorNode> GraphSubAssets => _graphView.graph.nodes;
-        private SaveData GraphSaveData => _graphView.graph.SaveData;
+        private SaveData GraphSaveData => _graphView.graph.saveData;
         private List<Edge> Edges => _graphView.edges.ToList();
 
         private List<ReanimatorGraphNode> Nodes =>
