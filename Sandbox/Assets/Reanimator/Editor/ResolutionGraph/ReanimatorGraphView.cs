@@ -3,48 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using Aarthificial.Reanimation.Cels;
 using Aarthificial.Reanimation.Common;
-using Aarthificial.Reanimation.Editor;
-using Aarthificial.Reanimation.Editor.ResolutionGraph;
 using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
 
-
-        public ReanimatorGraphView()
-        {
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
-            styleSheets.Add(styleSheet);
-
-            Insert(0, new GridBackground());
-            this.AddManipulator(new ContentZoomer());
-            this.AddManipulator(new ContentDragger());
-            this.AddManipulator(new SelectionDragger());
-            this.AddManipulator(new RectangleSelector());
-            this.AddManipulator(new DragAndDropManipulator());
-
-            Undo.undoRedoPerformed += UndoRedo;
-            EditorApplication.update += PlayAnimationPreview;
-        }
-
-        public void Initialize(ReanimatorGraphEditor editorWindow, Reanimation.ResolutionGraph.ResolutionGraph graph)
+        public void Initialize(ReanimatorGraphEditor editorWindow, ResolutionGraph graph, bool useSaveData = true)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
 
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
-            graphViewChanged += OnGraphViewChanged;
+            graphViewChanged += OnGraphViewChanged; 
 
             CreateSearchWindow(editorWindow);
             CreateMiniMap();
-            Load();
+
+            //ReanimatorSaveService.GetInstance(this).LoadFromSaveData();
+            ReanimatorSaveService.GetInstance(this).LoadFromSubAssets();
         }
 
         private void UndoRedo()
@@ -121,14 +103,16 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         /// </summary>
         /// <param name="node"></param>
         /// <param name="assetName"></param>
-        private void CreateGraphNode(ReanimatorNode node, string assetName = null)
+        public ReanimatorGraphNode CreateGraphNode(ReanimatorNode node, string assetName = null)
         {
             node.name = string.IsNullOrEmpty(assetName) ? node.GetType().Name : assetName;
             
             var graphNode = new ReanimatorGraphNode(node) {
                 onNodeSelected = onNodeSelected
             };
+            
             AddElement(graphNode);
+            return graphNode;
         }
 
 
@@ -175,7 +159,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         /// <param name="type"></param>
         /// <param name="assetName"></param>
         /// <returns></returns>
-        private ReanimatorNode CreateSubAsset(Type type, string assetName = null)
+        public ReanimatorNode CreateSubAsset(Type type, string assetName = null)
         {
             ReanimatorNode node = ScriptableObject.CreateInstance(type) as ReanimatorNode;
 
@@ -305,59 +289,31 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         private void PlayAnimationPreview() => GraphNodes.ForEach(node => {
             if (node.node is SimpleAnimationNode) node.PlayAnimationPreview();
         });
-        private void Load()
+        
+        public ReanimatorGraphView()
         {
-            // Create root node if graph is empty
-            if (graph.nodes.Count == 0) {
-                graph.root = CreateSubAsset(typeof(BaseNode)) as BaseNode;
-                EditorUtility.SetDirty(graph);
-                AssetDatabase.SaveAssets();
-            }
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
+            styleSheets.Add(styleSheet);
 
-            // Create every graph node from the nodes in the graph
-            graph.nodes.ForEach(node => {
-                CreateGraphNode(node, node.title);
-            });
+            Insert(0, new GridBackground());
+            this.AddManipulator(new ContentZoomer());
+            this.AddManipulator(new ContentDragger());
+            this.AddManipulator(new SelectionDragger());
+            this.AddManipulator(new RectangleSelector());
+            this.AddManipulator(new DragAndDropManipulator());
 
-            // Create all connections based on the children of the nodes in the graph
-            graph.nodes.ForEach(p => {
-                var children = Helpers.GetChildren(p);
-                foreach (var c in children) {
-                    // Returns node by its guid and cast it back to a ReanimatorGraphNode
-                    var parent = GetNodeByGuid(p.guid) as ReanimatorGraphNode;
-                    var child = GetNodeByGuid(c.guid) as ReanimatorGraphNode;
-
-                    // If it is a new graph, check if the root has a child or not
-                    if (parent?.node is BaseNode && child?.node == null)
-                        continue;
-
-                    // Connect each parents output to the saved children
-                    var edge = parent?.output.ConnectTo(child?.input);
-                    AddElement(edge);
-                }
-            });
-
-            // Load all comment blocks and contained nodes
-            foreach (GroupBlock commentBlockData in graph.SaveData.CommentBlockData) {
-                var block = CreateCommentBlock(new Rect(commentBlockData.Position, BlockSize),
-                    commentBlockData);
-                block.AddElements(GraphNodes.Where(x => commentBlockData.ChildNodes.Contains(x.node.guid)));
-            }
+            Undo.undoRedoPerformed += UndoRedo;
+            EditorApplication.update += PlayAnimationPreview;
         }
 
         public ResolutionGraph graph;
         private ReanimatorGraphEditor editorWindow;
         private ReanimatorSearchWindowProvider searchWindowProvider;
         public Action<ReanimatorGraphNode> onNodeSelected;
-
-        private IEnumerable<ReanimatorGroup> CommentBlocks => graphElements
-            .ToList()
-            .Where(x => x is ReanimatorGroup)
-            .Cast<ReanimatorGroup>().ToList();
-
+        
         private List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
 
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
-        private readonly Vector2 BlockSize = new Vector2(300, 200);
+        public readonly Vector2 BlockSize = new Vector2(300, 200);
     }
 }

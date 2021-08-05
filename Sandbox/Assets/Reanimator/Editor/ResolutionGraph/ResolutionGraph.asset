@@ -85,28 +85,8 @@ MonoBehaviour:
   - {fileID: -6749794517442224632}
   currentTrace: []
   SaveData:
-    NodeLinks:
-    - BaseNodeGUID: 7a2bb84e27baa104fa077cfe6069db74
-      TargetNodeGUID: f0491f65172583448bb092a4b22e9296
-    - BaseNodeGUID: f0491f65172583448bb092a4b22e9296
-      TargetNodeGUID: f3b175a540fa3e8479f4c017722fe5fe
-    - BaseNodeGUID: f0491f65172583448bb092a4b22e9296
-      TargetNodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
-    - BaseNodeGUID: f0491f65172583448bb092a4b22e9296
-      TargetNodeGUID: 6592cfd25ef75554ba7011a35657443f
-    ReanimatorNodeData:
-    - ReanimatorNode: {fileID: -6689801868859213147}
-      NodeGUID: f3b175a540fa3e8479f4c017722fe5fe
-      Position: {x: 482, y: -130}
-    - ReanimatorNode: {fileID: 4075698059609802293}
-      NodeGUID: f0491f65172583448bb092a4b22e9296
-      Position: {x: 246, y: -24}
-    - ReanimatorNode: {fileID: 5215725629504640835}
-      NodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
-      Position: {x: 482, y: -50}
-    - ReanimatorNode: {fileID: -6749794517442224632}
-      NodeGUID: 6592cfd25ef75554ba7011a35657443f
-      Position: {x: 482, y: 26}
+    NodeLinks: []
+    ReanimatorNodeData: []
     CommentBlockData: []
 --- !u!114 &4075698059609802293
 MonoBehaviour:
