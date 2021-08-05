@@ -37,7 +37,7 @@ namespace Aarthificial.Reanimation {
                 });
             }
 
-            foreach (var graphNode in Nodes.Where(node => !(node.node is BaseNode))) {
+            foreach (var graphNode in Nodes) {
                 saveData.ReanimatorNodeData.Add(new ReanimatorNodeData {
                     ReanimatorNode = graphNode.node,
                     NodeGUID = graphNode.node.guid,

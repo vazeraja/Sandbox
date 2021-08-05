@@ -30,7 +30,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 6592cfd25ef75554ba7011a35657443f
   title: JumpAnimation
-  position: {x: 482, y: 26}
+  position: {x: 487, y: 71}
   cels: []
   controlDriver:
     name: 
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f3b175a540fa3e8479f4c017722fe5fe
   title: RunAnimation
-  position: {x: 482, y: -130}
+  position: {x: 487, y: -85}
   cels: []
   controlDriver:
     name: 
@@ -84,9 +84,36 @@ MonoBehaviour:
   - {fileID: 5215725629504640835}
   - {fileID: -6749794517442224632}
   currentTrace: []
-  SaveData:
-    NodeLinks: []
-    ReanimatorNodeData: []
+  saveData:
+    NodeLinks:
+    - BaseNode: {fileID: 4075698059609802293}
+      BaseNodeGUID: f0491f65172583448bb092a4b22e9296
+      TargetNode: {fileID: -6689801868859213147}
+      TargetNodeGUID: f3b175a540fa3e8479f4c017722fe5fe
+    - BaseNode: {fileID: 4075698059609802293}
+      BaseNodeGUID: f0491f65172583448bb092a4b22e9296
+      TargetNode: {fileID: 5215725629504640835}
+      TargetNodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
+    - BaseNode: {fileID: 4075698059609802293}
+      BaseNodeGUID: f0491f65172583448bb092a4b22e9296
+      TargetNode: {fileID: -6749794517442224632}
+      TargetNodeGUID: 6592cfd25ef75554ba7011a35657443f
+    ReanimatorNodeData:
+    - ReanimatorNode: {fileID: -6689801868859213147}
+      NodeGUID: f3b175a540fa3e8479f4c017722fe5fe
+      Position: {x: 487, y: -85}
+    - ReanimatorNode: {fileID: 4075698059609802293}
+      NodeGUID: f0491f65172583448bb092a4b22e9296
+      Position: {x: 230, y: -24}
+    - ReanimatorNode: {fileID: 5215725629504640835}
+      NodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
+      Position: {x: 487, y: -5}
+    - ReanimatorNode: {fileID: -6749794517442224632}
+      NodeGUID: 6592cfd25ef75554ba7011a35657443f
+      Position: {x: 487, y: 71}
+    - ReanimatorNode: {fileID: 0}
+      NodeGUID: 450dc966fba605c48a6de1959ac281cc
+      Position: {x: 516, y: -169}
     CommentBlockData: []
 --- !u!114 &4075698059609802293
 MonoBehaviour:
@@ -102,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f0491f65172583448bb092a4b22e9296
   title: SwitchNode
-  position: {x: 246, y: -24}
+  position: {x: 230, y: -24}
   nodes:
   - {fileID: -6689801868859213147}
   - {fileID: 5215725629504640835}
@@ -129,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8548e3ac443cdf444820bd4ae0d3c84a
   title: IdleAnimation
-  position: {x: 482, y: -50}
+  position: {x: 487, y: -5}
   cels: []
   controlDriver:
     name: 

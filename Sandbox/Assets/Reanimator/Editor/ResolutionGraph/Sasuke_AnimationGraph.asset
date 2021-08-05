@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 6a86ea4d07dbf3c4b894895c0ec70bdf
   title: JumpToIdleAnimation
-  position: {x: 1236.9999, y: -147.99994}
+  position: {x: 1350.9681, y: -110.999985}
   cels:
   - sprite: {fileID: 8494806145318214075, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 2643a84ec0dc3714d87a7f2a30034df5
   title: RunNJumpAnimation
-  position: {x: 1237, y: -495}
+  position: {x: 1351, y: -496}
   cels:
   - sprite: {fileID: 6612509912714155400, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f385209e995b2b24d9b8172f40eaf3f7
   title: RootMovement_AirJump
-  position: {x: 966, y: -552}
+  position: {x: 1080, y: -553}
   nodes:
   - {fileID: -1620949668163360245}
   - {fileID: -7861671682695949504}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 9b2fc9b1233627f4485f3ae8af27b699
   title: RunAnimation
-  position: {x: 966, y: -121.99994}
+  position: {x: 1079.9681, y: -84.00002}
   cels:
   - sprite: {fileID: -3434879642533976785, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 7cc164ab5cb9354428846ef421b16096
   title: JumpAnimation
-  position: {x: 1237, y: -578}
+  position: {x: 1351, y: -579}
   cels:
   - sprite: {fileID: 3298105886585063087, guid: 7cf92fcfe9147d94e961ea8384f393f7, type: 3}
     drivers:
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8888fbbc40ce6ee45b940373ac11a8dc
   title: RootMovement_Idle
-  position: {x: 965.9999, y: -272.99994}
+  position: {x: 1079.9681, y: -236.00002}
   nodes:
   - {fileID: 4121047940114990893}
   - {fileID: 5145656718631313926}
@@ -344,9 +344,124 @@ MonoBehaviour:
   - {fileID: 5145656718631313926}
   - {fileID: -9130189663412503569}
   currentTrace: []
-  SaveData:
-    NodeLinks: []
-    ReanimatorNodeData: []
+  saveData:
+    NodeLinks:
+    - BaseNode: {fileID: 4312978999189567477}
+      BaseNodeGUID: afe91bd7c62d4d14b889a31a301a9e8c
+      TargetNode: {fileID: 1210843896723939208}
+      TargetNodeGUID: 03a8d36fe19192847a85245d70db13e3
+    - BaseNode: {fileID: 4312978999189567477}
+      BaseNodeGUID: afe91bd7c62d4d14b889a31a301a9e8c
+      TargetNode: {fileID: 8972811193946634867}
+      TargetNodeGUID: 507b8f188e86fb14bb82149f7db9a599
+    - BaseNode: {fileID: 4312978999189567477}
+      BaseNodeGUID: afe91bd7c62d4d14b889a31a301a9e8c
+      TargetNode: {fileID: -2775684605514432316}
+      TargetNodeGUID: a6fdbe8ddecc6634b9ae9322c24e2641
+    - BaseNode: {fileID: 8972811193946634867}
+      BaseNodeGUID: 507b8f188e86fb14bb82149f7db9a599
+      TargetNode: {fileID: -7553571759567474767}
+      TargetNodeGUID: 49314c2948ac77549a7cb8197c565163
+    - BaseNode: {fileID: 8972811193946634867}
+      BaseNodeGUID: 507b8f188e86fb14bb82149f7db9a599
+      TargetNode: {fileID: -2859016246121784277}
+      TargetNodeGUID: 67259735e9c78d0429e7aad1f0d3f525
+    - BaseNode: {fileID: 1210843896723939208}
+      BaseNodeGUID: 03a8d36fe19192847a85245d70db13e3
+      TargetNode: {fileID: 4773496542237128343}
+      TargetNodeGUID: 2ecd64fc9442d22479371d890e162ebd
+    - BaseNode: {fileID: 1210843896723939208}
+      BaseNodeGUID: 03a8d36fe19192847a85245d70db13e3
+      TargetNode: {fileID: 7835456377009927491}
+      TargetNodeGUID: cbdb7e6637779c04cb883e5786835887
+    - BaseNode: {fileID: 4773496542237128343}
+      BaseNodeGUID: 2ecd64fc9442d22479371d890e162ebd
+      TargetNode: {fileID: -7832042094402424365}
+      TargetNodeGUID: f385209e995b2b24d9b8172f40eaf3f7
+    - BaseNode: {fileID: 4773496542237128343}
+      BaseNodeGUID: 2ecd64fc9442d22479371d890e162ebd
+      TargetNode: {fileID: 1700534619507601169}
+      TargetNodeGUID: 4c81fdd4ff18f8f41a57d94ed6f9d667
+    - BaseNode: {fileID: 7835456377009927491}
+      BaseNodeGUID: cbdb7e6637779c04cb883e5786835887
+      TargetNode: {fileID: -347048784571739294}
+      TargetNodeGUID: 8888fbbc40ce6ee45b940373ac11a8dc
+    - BaseNode: {fileID: 7835456377009927491}
+      BaseNodeGUID: cbdb7e6637779c04cb883e5786835887
+      TargetNode: {fileID: -3296058019168418609}
+      TargetNodeGUID: 9b2fc9b1233627f4485f3ae8af27b699
+    - BaseNode: {fileID: -7832042094402424365}
+      BaseNodeGUID: f385209e995b2b24d9b8172f40eaf3f7
+      TargetNode: {fileID: -1620949668163360245}
+      TargetNodeGUID: 7cc164ab5cb9354428846ef421b16096
+    - BaseNode: {fileID: -7832042094402424365}
+      BaseNodeGUID: f385209e995b2b24d9b8172f40eaf3f7
+      TargetNode: {fileID: -7861671682695949504}
+      TargetNodeGUID: 2643a84ec0dc3714d87a7f2a30034df5
+    - BaseNode: {fileID: -347048784571739294}
+      BaseNodeGUID: 8888fbbc40ce6ee45b940373ac11a8dc
+      TargetNode: {fileID: 4121047940114990893}
+      TargetNodeGUID: 069c5c17a9493314ab6769232ad1bbbb
+    - BaseNode: {fileID: -347048784571739294}
+      BaseNodeGUID: 8888fbbc40ce6ee45b940373ac11a8dc
+      TargetNode: {fileID: 5145656718631313926}
+      TargetNodeGUID: 4952adb04b154de4aae3eb644e108fc7
+    - BaseNode: {fileID: -347048784571739294}
+      BaseNodeGUID: 8888fbbc40ce6ee45b940373ac11a8dc
+      TargetNode: {fileID: -9130189663412503569}
+      TargetNodeGUID: 6a86ea4d07dbf3c4b894895c0ec70bdf
+    ReanimatorNodeData:
+    - ReanimatorNode: {fileID: 4312978999189567477}
+      NodeGUID: afe91bd7c62d4d14b889a31a301a9e8c
+      Position: {x: 233, y: -26}
+    - ReanimatorNode: {fileID: -2775684605514432316}
+      NodeGUID: a6fdbe8ddecc6634b9ae9322c24e2641
+      Position: {x: 505, y: 284}
+    - ReanimatorNode: {fileID: 8972811193946634867}
+      NodeGUID: 507b8f188e86fb14bb82149f7db9a599
+      Position: {x: 521, y: 50}
+    - ReanimatorNode: {fileID: -7553571759567474767}
+      NodeGUID: 49314c2948ac77549a7cb8197c565163
+      Position: {x: 795, y: 36}
+    - ReanimatorNode: {fileID: -2859016246121784277}
+      NodeGUID: 67259735e9c78d0429e7aad1f0d3f525
+      Position: {x: 795, y: 126}
+    - ReanimatorNode: {fileID: 1210843896723939208}
+      NodeGUID: 03a8d36fe19192847a85245d70db13e3
+      Position: {x: 521, y: -293}
+    - ReanimatorNode: {fileID: 4773496542237128343}
+      NodeGUID: 2ecd64fc9442d22479371d890e162ebd
+      Position: {x: 795, y: -496}
+    - ReanimatorNode: {fileID: 7835456377009927491}
+      NodeGUID: cbdb7e6637779c04cb883e5786835887
+      Position: {x: 792, y: -179}
+    - ReanimatorNode: {fileID: -7832042094402424365}
+      NodeGUID: f385209e995b2b24d9b8172f40eaf3f7
+      Position: {x: 1080, y: -553}
+    - ReanimatorNode: {fileID: 1700534619507601169}
+      NodeGUID: 4c81fdd4ff18f8f41a57d94ed6f9d667
+      Position: {x: 1080, y: -408}
+    - ReanimatorNode: {fileID: -1620949668163360245}
+      NodeGUID: 7cc164ab5cb9354428846ef421b16096
+      Position: {x: 1351, y: -579}
+    - ReanimatorNode: {fileID: -7861671682695949504}
+      NodeGUID: 2643a84ec0dc3714d87a7f2a30034df5
+      Position: {x: 1351, y: -496}
+    - ReanimatorNode: {fileID: -347048784571739294}
+      NodeGUID: 8888fbbc40ce6ee45b940373ac11a8dc
+      Position: {x: 1080, y: -236}
+    - ReanimatorNode: {fileID: -3296058019168418609}
+      NodeGUID: 9b2fc9b1233627f4485f3ae8af27b699
+      Position: {x: 1080, y: -84}
+    - ReanimatorNode: {fileID: 4121047940114990893}
+      NodeGUID: 069c5c17a9493314ab6769232ad1bbbb
+      Position: {x: 1351, y: -276}
+    - ReanimatorNode: {fileID: 5145656718631313926}
+      NodeGUID: 4952adb04b154de4aae3eb644e108fc7
+      Position: {x: 1351, y: -198}
+    - ReanimatorNode: {fileID: -9130189663412503569}
+      NodeGUID: 6a86ea4d07dbf3c4b894895c0ec70bdf
+      Position: {x: 1351, y: -111}
     CommentBlockData: []
 --- !u!114 &1210843896723939208
 MonoBehaviour:
@@ -362,7 +477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 03a8d36fe19192847a85245d70db13e3
   title: RootMovement
-  position: {x: 462.50006, y: -311.00003}
+  position: {x: 521, y: -292.753}
   nodes:
   - {fileID: 4773496542237128343}
   - {fileID: 7835456377009927491}
@@ -388,7 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 4c81fdd4ff18f8f41a57d94ed6f9d667
   title: FlipAnimation
-  position: {x: 966, y: -407.00006}
+  position: {x: 1080, y: -408}
   cels:
   - sprite: {fileID: -14635915900717176, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:
@@ -432,7 +547,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 069c5c17a9493314ab6769232ad1bbbb
   title: IdleAnimation
-  position: {x: 1236.9999, y: -312.9999}
+  position: {x: 1350.9681, y: -276}
   cels:
   - sprite: {fileID: -2937644175521846342, guid: f31e889de574c78499d5df74639f2b86, type: 3}
     drivers:
@@ -499,7 +614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 2ecd64fc9442d22479371d890e162ebd
   title: RootMovement_Air
-  position: {x: 704.5, y: -495}
+  position: {x: 795, y: -496}
   nodes:
   - {fileID: -7832042094402424365}
   - {fileID: 1700534619507601169}
@@ -526,7 +641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 4952adb04b154de4aae3eb644e108fc7
   title: RunToIdleAnimation
-  position: {x: 1236.9999, y: -234.99992}
+  position: {x: 1350.9681, y: -198.00002}
   cels:
   - sprite: {fileID: 6171374375413776551, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
@@ -559,7 +674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: cbdb7e6637779c04cb883e5786835887
   title: RootMovement_Ground
-  position: {x: 701.9998, y: -196.99995}
+  position: {x: 791.99994, y: -179.00002}
   nodes:
   - {fileID: -347048784571739294}
   - {fileID: -3296058019168418609}
