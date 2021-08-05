@@ -1,5 +1,6 @@
 ﻿
 using UnityEditor;
+using UnityEngine;
 
 namespace Aarthificial.Reanimation {
     
@@ -13,7 +14,6 @@ namespace Aarthificial.Reanimation {
         private SerializedProperty _reanimatorNodeData;
         private SerializedProperty _nodeLinks;
         private SerializedProperty _commentBlockData;
-
         
         private ResolutionGraph _resolutionGraph;
 
@@ -42,7 +42,6 @@ namespace Aarthificial.Reanimation {
                 EditorGUILayout.PropertyField(_currentTrace);
             }
             
-            EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Save Data");
             using (new EditorGUI.IndentLevelScope())
             {

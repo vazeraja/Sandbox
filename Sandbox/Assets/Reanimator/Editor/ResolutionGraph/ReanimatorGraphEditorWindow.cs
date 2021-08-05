@@ -58,7 +58,10 @@ namespace Aarthificial.Reanimation {
             resolutionGraphs.ForEach(graph => {
                 toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
                     Selection.activeObject = graph;
-                    OnSelectionChange();
+                    resolutionGraph = Selection.activeObject as ResolutionGraph;
+                    editorGraph.Initialize(this, resolutionGraph);
+                    EditorGUIUtility.PingObject(graph);
+                    EditorApplication.delayCall += () => { editorGraph.FrameAll(); };
                 });
             });
 
@@ -66,17 +69,10 @@ namespace Aarthificial.Reanimation {
                 resolutionGraph.saveData = Helpers.SaveService(editorGraph);
             };
             loadButton.clicked += () => {
-                Debug.Log("Reload the graph");
+                Helpers.SaveService(editorGraph).LoadFromSubAssets();
             };
             
             editorGraph.onNodeSelected = DrawNodeProperties;
-
-            if (resolutionGraph == null) {
-                OnSelectionChange();
-            }
-            else {
-                SelectTree(resolutionGraph);
-            }
         }
 
         private void DrawNodeProperties(ReanimatorGraphNode graphNode)
@@ -87,33 +83,16 @@ namespace Aarthificial.Reanimation {
 
         private void OnSelectionChange()
         {
-            EditorApplication.delayCall += () => {
-                ResolutionGraph graph = Selection.activeObject as ResolutionGraph;
-                SelectTree(graph);
-            };
+            //EditorApplication.delayCall += () => {
+            //    ResolutionGraph graph = Selection.activeObject as ResolutionGraph;
+            //    SelectTree(graph);
+            //};
         }
 
         private void OnDisable()
         {
-            resolutionGraph.saveData = Helpers.SaveService(editorGraph);
+            //resolutionGraph.saveData = Helpers.SaveService(editorGraph);
         }
-
-        private void SelectTree(ResolutionGraph newGraph)
-        {
-            if (editorGraph == null || !newGraph) {
-                return;
-            }
-
-            resolutionGraph = newGraph;
-
-            if (Application.isPlaying) {
-                editorGraph.Initialize(this, resolutionGraph);
-            }
-            else {
-                editorGraph.Initialize(this, resolutionGraph);
-            }
-
-            EditorApplication.delayCall += () => { editorGraph.FrameAll(); };
-        }
+        
     }
 }

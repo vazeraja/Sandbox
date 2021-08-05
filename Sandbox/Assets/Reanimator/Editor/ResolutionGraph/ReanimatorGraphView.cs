@@ -7,13 +7,14 @@ using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
 
-        public void Initialize(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph, bool useSaveData = true)
+        public void Initialize(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
@@ -26,14 +27,8 @@ namespace Aarthificial.Reanimation {
             CreateMiniMap();
 
             // TODO: Implement secondary load if initial load fails 
-            ReanimatorSaveService.GetInstance(this).LoadFromSubAssets();
+            //ReanimatorSaveService.GetInstance(this).LoadFromSubAssets();
             //ReanimatorSaveService.GetInstance(this).LoadFromSaveData();
-        }
-
-        private void UndoRedo()
-        {
-            Initialize(editorWindow, graph);
-            AssetDatabase.SaveAssets();
         }
 
         /// <summary>
@@ -270,18 +265,18 @@ namespace Aarthificial.Reanimation {
                         DeleteSubAsset(nodeDisplay.node);
                         break;
                     case Edge edge:
-                        var parent = edge.output.node as ReanimatorGraphNode;
-                        var child = edge.input.node as ReanimatorGraphNode;
-                        RemoveChild(parent?.node, child?.node);
+                        var parentNode = edge.output.node as ReanimatorGraphNode;
+                        var childNode = edge.input.node as ReanimatorGraphNode;
+                        RemoveChild(parentNode?.node, childNode?.node);
                         break;
                 }
             });
 
             graphViewChange.edgesToCreate?.ForEach(edge => {
-                var parent = edge.output.node as ReanimatorGraphNode;
-                var child = edge.input.node as ReanimatorGraphNode;
+                var parentNode = edge.output.node as ReanimatorGraphNode;
+                var childNode = edge.input.node as ReanimatorGraphNode;
 
-                AddChild(parent?.node, child?.node);
+                AddChild(parentNode?.node, childNode?.node);
             });
 
             return graphViewChange;
@@ -312,7 +307,7 @@ namespace Aarthificial.Reanimation {
         public ResolutionGraph graph;
         private ReanimatorGraphEditorWindow editorWindow;
         private ReanimatorSearchWindowProvider searchWindowProvider;
-        public Action<ReanimatorGraphNode> onNodeSelected;
+        public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
         private List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
 

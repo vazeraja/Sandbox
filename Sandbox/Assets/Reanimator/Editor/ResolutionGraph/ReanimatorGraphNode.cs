@@ -5,12 +5,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation {
     public sealed class ReanimatorGraphNode : Node {
 
-        public Action<ReanimatorGraphNode> onNodeSelected;
+        public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
         private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
         
@@ -62,7 +63,6 @@ namespace Aarthificial.Reanimation {
             style.left = node.position.x;
             style.top = node.position.y;
             
-            
             switch (node) {
                 case SimpleAnimationNode _:
                     input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
@@ -105,6 +105,7 @@ namespace Aarthificial.Reanimation {
             }
             
             Label description = this.Q<Label>("title-label");
+            description.AddToClassList("custom-title");
             description.bindingPath = "title";
             description.Bind(new SerializedObject(node));
 
