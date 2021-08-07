@@ -25,12 +25,24 @@ namespace Aarthificial.Reanimation {
 
             CreateSearchWindow(editorWindow);
             CreateMiniMap();
-
-            // TODO: Implement secondary load if initial load fails 
-            //ReanimatorSaveService.GetInstance(this).LoadFromSubAssets();
-            //ReanimatorSaveService.GetInstance(this).LoadFromSaveData();
         }
+        
+        public void SaveGraphToDisk()
+        {
+            if (graph == null)
+                return;
 
+            EditorUtility.SetDirty(graph);
+            AssetDatabase.SaveAssets();
+        }
+        public void SaveToDisk(ScriptableObject obj)
+        {
+            if (obj == null)
+                return;
+
+            EditorUtility.SetDirty(obj);
+        }
+        
         /// <summary>
         /// Creates a Search Window as seen in Unity graph tools such as Shader Graph
         /// </summary>
@@ -54,20 +66,22 @@ namespace Aarthificial.Reanimation {
             miniMap.SetPosition(new Rect(10, 30, 200, 140));
             Add(miniMap);
         }
-
-        /// <summary>
-        /// Creates a group block to contain and organize sections of related nodes
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="groupBlock"></param>
-        /// <returns></returns>
-        public ReanimatorGroup CreateCommentBlock(Rect rect, GroupBlock groupBlock = null)
+        
+        public ReanimatorGroup AddGroup(Group block)
         {
-            groupBlock ??= new GroupBlock();
-            var group = new ReanimatorGroup(this, groupBlock);
-            AddElement(group);
-            group.SetPosition(rect);
-            return group;
+            Undo.RecordObject(graph, "Resolution Tree");
+            graph.AddGroup(block);
+            block.OnCreated();
+            return AddGroupView(block);
+        }
+
+        public ReanimatorGroup AddGroupView(Group block)
+        {
+            var c = new ReanimatorGroup(this, block);
+            AddElement(c);
+
+            // groupViews.Add(c);
+            return c;
         }
 
         /// <summary>
@@ -171,8 +185,7 @@ namespace Aarthificial.Reanimation {
 
             Undo.RegisterCreatedObjectUndo(node, "Resolution Tree");
 
-            EditorUtility.SetDirty(graph);
-            AssetDatabase.SaveAssets();
+            SaveGraphToDisk();
             return node;
         }
 
@@ -187,8 +200,7 @@ namespace Aarthificial.Reanimation {
             graph.nodes.Remove(node);
             Undo.DestroyObjectImmediate(node);
 
-            EditorUtility.SetDirty(graph);
-            AssetDatabase.SaveAssets();
+            SaveGraphToDisk();
         }
 
         /// <summary>
@@ -203,20 +215,20 @@ namespace Aarthificial.Reanimation {
                     Undo.RecordObject(rootNode, "Resolution Tree");
                     graph.root = child;
                     rootNode.root = child;
-                    EditorUtility.SetDirty(graph);
-                    EditorUtility.SetDirty(rootNode);
+                    SaveGraphToDisk();
+                    SaveToDisk(rootNode);
                     break;
                 case OverrideNode overrideNode:
                     Undo.RecordObject(overrideNode, "Resolution Tree");
                     overrideNode.next = child;
-                    EditorUtility.SetDirty(graph);
-                    EditorUtility.SetDirty(overrideNode);
+                    SaveGraphToDisk();
+                    SaveToDisk(overrideNode);
                     break;
                 case SwitchNode switchNode:
                     Undo.RecordObject(switchNode, "Resolution Tree");
                     switchNode.nodes.Add(child);
-                    EditorUtility.SetDirty(graph);
-                    EditorUtility.SetDirty(switchNode);
+                    SaveGraphToDisk();
+                    SaveToDisk(switchNode);
                     break;
             }
         }
@@ -233,20 +245,20 @@ namespace Aarthificial.Reanimation {
                     Undo.RecordObject(rootNode, "Resolution Tree");
                     graph.root = null;
                     rootNode.root = null;
-                    EditorUtility.SetDirty(graph);
-                    EditorUtility.SetDirty(rootNode);
+                    SaveGraphToDisk();
+                    SaveToDisk(rootNode);
                     break;
                 case OverrideNode overrideNode:
                     Undo.RecordObject(overrideNode, "Resolution Tree");
                     overrideNode.next = null;
-                    EditorUtility.SetDirty(graph);
-                    EditorUtility.SetDirty(overrideNode);
+                    SaveGraphToDisk();
+                    SaveToDisk(overrideNode);
                     break;
                 case SwitchNode switchNode:
                     Undo.RecordObject(switchNode, "Resolution Tree");
                     switchNode.nodes.Remove(child);
-                    EditorUtility.SetDirty(graph);
-                    EditorUtility.SetDirty(switchNode);
+                    SaveGraphToDisk();
+                    SaveToDisk(switchNode);
                     break;
             }
         }
@@ -261,13 +273,17 @@ namespace Aarthificial.Reanimation {
         {
             graphViewChange.elementsToRemove?.ForEach(elem => {
                 switch (elem) {
-                    case ReanimatorGraphNode nodeDisplay:
-                        DeleteSubAsset(nodeDisplay.node);
+                    case ReanimatorGraphNode graphNode:
+                        DeleteSubAsset(graphNode.node);
                         break;
                     case Edge edge:
                         var parentNode = edge.output.node as ReanimatorGraphNode;
                         var childNode = edge.input.node as ReanimatorGraphNode;
                         RemoveChild(parentNode?.node, childNode?.node);
+                        break;
+                    case ReanimatorGroup group:
+                        graph.RemoveGroup(group.group);
+                        RemoveElement(group);
                         break;
                 }
             });
@@ -305,7 +321,7 @@ namespace Aarthificial.Reanimation {
         }
 
         public ResolutionGraph graph;
-        private ReanimatorGraphEditorWindow editorWindow;
+        public ReanimatorGraphEditorWindow editorWindow;
         private ReanimatorSearchWindowProvider searchWindowProvider;
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
 

@@ -8,9 +8,8 @@ namespace Aarthificial.Reanimation {
     public class ResolutionGraphEditor : UnityEditor.Editor {
         private SerializedProperty _root;
         private SerializedProperty _nodes;
-        private SerializedProperty _currentTrace;
-        private SerializedProperty _SaveData;
-        
+        private SerializedProperty _groups;
+
         private SerializedProperty _reanimatorNodeData;
         private SerializedProperty _nodeLinks;
         private SerializedProperty _commentBlockData;
@@ -21,13 +20,8 @@ namespace Aarthificial.Reanimation {
         {
             _root = serializedObject.FindProperty(nameof(ResolutionGraph.root));
             _nodes = serializedObject.FindProperty(nameof(ResolutionGraph.nodes));
-            _currentTrace = serializedObject.FindProperty(nameof(ResolutionGraph.currentTrace));
-            _SaveData = serializedObject.FindProperty(nameof(ResolutionGraph.saveData));
+            _groups = serializedObject.FindProperty(nameof(ResolutionGraph.groups));
 
-            _reanimatorNodeData = _SaveData.FindPropertyRelative("ReanimatorNodeData");
-            _nodeLinks = _SaveData.FindPropertyRelative("NodeLinks");
-            _commentBlockData = _SaveData.FindPropertyRelative("CommentBlockData");
-            
             _resolutionGraph = (ResolutionGraph)serializedObject.targetObject;
         }
 
@@ -39,17 +33,7 @@ namespace Aarthificial.Reanimation {
             using (new EditorGUI.DisabledGroupScope(true)) {
                 EditorGUILayout.PropertyField(_root);
                 EditorGUILayout.PropertyField(_nodes);
-                EditorGUILayout.PropertyField(_currentTrace);
-            }
-            
-            EditorGUILayout.LabelField("Save Data");
-            using (new EditorGUI.IndentLevelScope())
-            {
-                using (new EditorGUI.DisabledGroupScope(true)) {
-                    EditorGUILayout.PropertyField(_reanimatorNodeData);
-                    EditorGUILayout.PropertyField(_nodeLinks);
-                    EditorGUILayout.PropertyField(_commentBlockData);
-                }
+                EditorGUILayout.PropertyField(_groups);
             }
 
             serializedObject.ApplyModifiedProperties();

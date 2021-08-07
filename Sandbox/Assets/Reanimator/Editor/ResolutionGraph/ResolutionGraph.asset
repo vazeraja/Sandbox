@@ -15,31 +15,7 @@ MonoBehaviour:
   guid: 7a2bb84e27baa104fa077cfe6069db74
   title: BaseNode
   position: {x: 0, y: 0}
-  root: {fileID: 4075698059609802293}
---- !u!114 &-6749794517442224632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38410541ac5f4ea48c5cdb5f1d957b6f, type: 3}
-  m_Name: JumpAnimation
-  m_EditorClassIdentifier: 
-  guid: 6592cfd25ef75554ba7011a35657443f
-  title: JumpAnimation
-  position: {x: 496, y: 105}
-  cels: []
-  controlDriver:
-    name: 
-    autoIncrement: 0
-    percentageBased: 0
-    guid: 27101681-11d6-42f4-8e97-83e1986405f7
-  drivers:
-    keys: []
-    values: 
+  root: {fileID: -5118886999789705270}
 --- !u!114 &-6689801868859213147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,13 +30,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f3b175a540fa3e8479f4c017722fe5fe
   title: RunAnimation
-  position: {x: 496, y: -63}
+  position: {x: 562.02704, y: 94.37842}
   cels: []
   controlDriver:
     name: 
     autoIncrement: 1
     percentageBased: 0
     guid: 8db5b647-52fe-45e5-a5ad-9635d9831429
+  drivers:
+    keys: []
+    values: 
+--- !u!114 &-5118886999789705270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a331ab63864df5b568b41a2c1738c4, type: 3}
+  m_Name: SwitchNode
+  m_EditorClassIdentifier: 
+  guid: af3cb4ddfc4c73d49bb4d680e2a8957b
+  title: SwitchNode
+  position: {x: 281.40536, y: 0.000015258789}
+  nodes:
+  - {fileID: 5215725629504640835}
+  - {fileID: -6689801868859213147}
+  controlDriver:
+    name: 
+    autoIncrement: 0
+    percentageBased: 0
+    guid: 98cafc18-5d1e-4146-8bb7-7e668762db1d
   drivers:
     keys: []
     values: 
@@ -76,76 +78,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec083b8678648e496376b01594506fa, type: 3}
   m_Name: ResolutionGraph
   m_EditorClassIdentifier: 
-  root: {fileID: 4075698059609802293}
+  root: {fileID: -5118886999789705270}
   nodes:
   - {fileID: -6966010986285571502}
   - {fileID: -6689801868859213147}
-  - {fileID: 4075698059609802293}
   - {fileID: 5215725629504640835}
-  - {fileID: -6749794517442224632}
-  currentTrace: []
-  saveData:
-    NodeLinks:
-    - BaseNode: {fileID: -6966010986285571502}
-      BaseNodeGUID: 7a2bb84e27baa104fa077cfe6069db74
-      TargetNode: {fileID: 4075698059609802293}
-      TargetNodeGUID: f0491f65172583448bb092a4b22e9296
-    - BaseNode: {fileID: 4075698059609802293}
-      BaseNodeGUID: f0491f65172583448bb092a4b22e9296
-      TargetNode: {fileID: -6689801868859213147}
-      TargetNodeGUID: f3b175a540fa3e8479f4c017722fe5fe
-    - BaseNode: {fileID: 4075698059609802293}
-      BaseNodeGUID: f0491f65172583448bb092a4b22e9296
-      TargetNode: {fileID: 5215725629504640835}
-      TargetNodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
-    - BaseNode: {fileID: 4075698059609802293}
-      BaseNodeGUID: f0491f65172583448bb092a4b22e9296
-      TargetNode: {fileID: -6749794517442224632}
-      TargetNodeGUID: 6592cfd25ef75554ba7011a35657443f
-    ReanimatorNodeData:
-    - ReanimatorNode: {fileID: -6966010986285571502}
-      NodeGUID: 7a2bb84e27baa104fa077cfe6069db74
-      Position: {x: 0, y: 0}
-    - ReanimatorNode: {fileID: -6689801868859213147}
-      NodeGUID: f3b175a540fa3e8479f4c017722fe5fe
-      Position: {x: 496, y: -63}
-    - ReanimatorNode: {fileID: 4075698059609802293}
-      NodeGUID: f0491f65172583448bb092a4b22e9296
-      Position: {x: 227, y: 0}
-    - ReanimatorNode: {fileID: 5215725629504640835}
-      NodeGUID: 8548e3ac443cdf444820bd4ae0d3c84a
-      Position: {x: 496, y: 26}
-    - ReanimatorNode: {fileID: -6749794517442224632}
-      NodeGUID: 6592cfd25ef75554ba7011a35657443f
-      Position: {x: 496, y: 105}
-    CommentBlockData: []
---- !u!114 &4075698059609802293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5a331ab63864df5b568b41a2c1738c4, type: 3}
-  m_Name: SwitchNode
-  m_EditorClassIdentifier: 
-  guid: f0491f65172583448bb092a4b22e9296
-  title: SwitchNode
-  position: {x: 227, y: 0}
-  nodes:
-  - {fileID: -6689801868859213147}
-  - {fileID: 5215725629504640835}
-  - {fileID: -6749794517442224632}
-  controlDriver:
-    name: 
-    autoIncrement: 0
-    percentageBased: 0
-    guid: d177d131-62bc-4543-8106-c50bd3effeef
-  drivers:
-    keys: []
-    values: 
+  - {fileID: -5118886999789705270}
+  groups:
+  - innerNodeGUIDs:
+    - f3b175a540fa3e8479f4c017722fe5fe
+    - 8548e3ac443cdf444820bd4ae0d3c84a
+    title: Group Block
+    position:
+      serializedVersion: 2
+      x: 537.02704
+      y: -112.621605
+      width: 231
+      height: 284
+    color: {r: 0.93725497, g: 0.69803923, b: 0.30980393, a: 0.21176471}
+    size: {x: 400, y: 200}
 --- !u!114 &5215725629504640835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8548e3ac443cdf444820bd4ae0d3c84a
   title: IdleAnimation
-  position: {x: 496, y: 26}
+  position: {x: 562.02704, y: -53.621582}
   cels: []
   controlDriver:
     name: 

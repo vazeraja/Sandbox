@@ -69,6 +69,7 @@ namespace Aarthificial.Reanimation {
                         typeof(SimpleAnimationNode));
                     input.portName = "";
                     inputContainer.Add(input);
+                    node.needsAnimationPreview = true;
                     AddToClassList("simpleAnimation");
                     break;
                 case SwitchNode _:
@@ -80,6 +81,7 @@ namespace Aarthificial.Reanimation {
                     inputContainer.Add(input);
                     output.portName = "";
                     outputContainer.Add(output);
+                    node.needsAnimationPreview = false;
                     AddToClassList("switch");
                     break;
                 case OverrideNode _:
@@ -91,6 +93,7 @@ namespace Aarthificial.Reanimation {
                     inputContainer.Add(input);
                     output.portName = "";
                     outputContainer.Add(output);
+                    node.needsAnimationPreview = false;
                     AddToClassList("override");
                     break;
                 case BaseNode _:
@@ -100,6 +103,7 @@ namespace Aarthificial.Reanimation {
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;
                     capabilities &= ~Capabilities.Deletable;
+                    node.needsAnimationPreview = false;
                     AddToClassList("base");
                     break;
             }

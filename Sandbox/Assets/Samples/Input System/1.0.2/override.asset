@@ -16,4 +16,6 @@ MonoBehaviour:
   title: 
   position: {x: 0, y: 0}
   next: {fileID: 0}
-  overrides: []
+  overrides:
+  - fromNode: {fileID: 0}
+    toNode: {fileID: 0}

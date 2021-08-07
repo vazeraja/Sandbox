@@ -1,8 +1,11 @@
+using System;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Aarthificial.Reanimation {
 
@@ -55,19 +58,13 @@ namespace Aarthificial.Reanimation {
             loadButton = root.Q<ToolbarButton>("load-button");
             
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
+            Select(resolutionGraphs.First());
             resolutionGraphs.ForEach(graph => {
                 toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
-                    Selection.activeObject = graph;
-                    resolutionGraph = Selection.activeObject as ResolutionGraph;
-                    editorGraph.Initialize(this, resolutionGraph);
-                    EditorGUIUtility.PingObject(graph);
-                    EditorApplication.delayCall += () => { editorGraph.FrameAll(); };
+                    Select(graph);
                 });
             });
-
-            saveButton.clicked += () => {
-                resolutionGraph.saveData = Helpers.SaveService(editorGraph);
-            };
+            
             loadButton.clicked += () => {
                 Helpers.SaveService(editorGraph).LoadFromSubAssets();
             };
@@ -81,18 +78,15 @@ namespace Aarthificial.Reanimation {
             twoPanelInspector.DrawNodeProperties(graphNode);
         }
 
-        private void OnSelectionChange()
+        private void Select(Object graph)
         {
-            //EditorApplication.delayCall += () => {
-            //    ResolutionGraph graph = Selection.activeObject as ResolutionGraph;
-            //    SelectTree(graph);
-            //};
+            Selection.activeObject = graph;
+            resolutionGraph = Selection.activeObject as ResolutionGraph;
+            editorGraph.Initialize(this, resolutionGraph);
+            EditorGUIUtility.PingObject(graph);
+            EditorApplication.delayCall += () => { editorGraph.FrameAll(); };
         }
-
-        private void OnDisable()
-        {
-            //resolutionGraph.saveData = Helpers.SaveService(editorGraph);
-        }
+        
         
     }
 }
