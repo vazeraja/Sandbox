@@ -38,9 +38,24 @@ namespace Aarthificial.Reanimation
             GUI.DrawTextureWithTexCoords(position, sprite.texture, coords);
         }
         internal static ReanimatorSaveService SaveService(ReanimatorGraphView graphView) => new ReanimatorSaveService(graphView);
-
-        internal static void SetDirty(IEnumerable<UnityEngine.Object> targets) => targets.ForEach(EditorUtility.SetDirty);
-
+        
+        public static void Call(Action a)
+        {
+#if UNITY_EDITOR
+            try
+            {
+#endif
+                a?.Invoke();
+                
+#if UNITY_EDITOR
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+#endif
+        }
+        
         private static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             foreach (var item in source)

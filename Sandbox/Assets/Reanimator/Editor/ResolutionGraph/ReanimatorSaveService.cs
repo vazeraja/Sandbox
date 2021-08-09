@@ -11,11 +11,10 @@ using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorSaveService {
-
         public void LoadFromSubAssets()
         {
             _graphView.Initialize(_graphView.editorWindow, _graphView.graph);
-            
+
             // Create root node if graph is empty
             if (GraphSubAssets.Count == 0) {
                 _graphView.graph.root = _graphView.CreateSubAsset(typeof(BaseNode)) as BaseNode;
@@ -49,13 +48,13 @@ namespace Aarthificial.Reanimation {
                 block.AddElements(Nodes.Where(x => group.innerNodeGUIDs.Contains(x.node.guid)));
             });
         }
+
         public ReanimatorSaveService(ReanimatorGraphView graphView)
         {
             _graphView = graphView;
         }
 
-        private ReanimatorSaveService()
-        { }
+        private ReanimatorSaveService() { }
 
         public static ReanimatorSaveService GetInstance(ReanimatorGraphView graphView)
             => new ReanimatorSaveService {_graphView = graphView};
@@ -64,11 +63,9 @@ namespace Aarthificial.Reanimation {
 
         private List<ReanimatorNode> GraphSubAssets => _graphView.graph.nodes;
         private List<Edge> Edges => _graphView.edges.ToList();
-
-        private List<ReanimatorGraphNode> Nodes =>
-            _graphView.nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-
+        private List<ReanimatorGraphNode> Nodes => _graphView.nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
         private IEnumerable<UnityEditor.Experimental.GraphView.Group> CommentBlocks =>
-            _graphView.graphElements.ToList().Where(x => x is UnityEditor.Experimental.GraphView.Group).Cast<UnityEditor.Experimental.GraphView.Group>().ToList();
+            _graphView.graphElements.ToList().Where(x => x is UnityEditor.Experimental.GraphView.Group)
+                .Cast<UnityEditor.Experimental.GraphView.Group>().ToList();
     }
 }

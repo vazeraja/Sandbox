@@ -68,7 +68,6 @@ namespace Aarthificial.Reanimation {
                     graphView.CreateNode(typeof(OverrideNode), graphMousePosition);
                     return true;
                 case Group group:
-                    //graphView.CreateCommentBlock(new Rect(graphMousePosition, new Vector2(300, 200)));
                     graphView.AddGroup(new Group("Group Block", graphMousePosition));
                     return true;
             }

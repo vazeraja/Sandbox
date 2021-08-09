@@ -14,43 +14,11 @@ namespace Aarthificial.Reanimation {
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
         private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
-        
         public ReanimatorNode node { get; }
         public Port input { get; }
         public Port output { get; }
-        
-        public void PlayAnimationPreview()
-        {
-            if (Application.isPlaying) return;
-
-            RemoveFromClassList("--- selected ---");
-            RemoveFromClassList("not-selected");
-
-            switch (selected) {
-                case true:
-                    AddToClassList("--- selected ---");
-                    break;
-                case false:
-                    AddToClassList("not-selected");
-                    break;
-            }
-        }
-        
-        public override void SetPosition(Rect newPos)
-        {
-            base.SetPosition(newPos);
-
-            Undo.RecordObject(node, "ResolutionGraph");
-            node.position.x = newPos.xMin;
-            node.position.y = newPos.yMin;
-            EditorUtility.SetDirty(node);
-        }
-
-        public override void OnSelected()
-        {
-            base.OnSelected();
-            onNodeSelected?.Invoke(this);
-        }
+        public void OnCreated() {}
+        public void OnRemoved() {}
         
         public ReanimatorGraphNode(ReanimatorNode node) : base(nodeStyleSheetPath)
         {
@@ -116,6 +84,40 @@ namespace Aarthificial.Reanimation {
             var textField = new TextField();
             extensionContainer.Add(textField);
         }
+        
+        public void PlayAnimationPreview()
+        {
+            if (Application.isPlaying) return;
+
+            RemoveFromClassList("--- selected ---");
+            RemoveFromClassList("not-selected");
+
+            switch (selected) {
+                case true:
+                    AddToClassList("--- selected ---");
+                    break;
+                case false:
+                    AddToClassList("not-selected");
+                    break;
+            }
+        }
+        
+        public override void SetPosition(Rect newPos)
+        {
+            base.SetPosition(newPos);
+
+            Undo.RecordObject(node, "ResolutionGraph");
+            node.position.x = newPos.xMin;
+            node.position.y = newPos.yMin;
+            EditorUtility.SetDirty(node);
+        }
+
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            onNodeSelected?.Invoke(this);
+        }
+        
 
     }
 }

@@ -29,13 +29,22 @@ namespace Aarthificial.Reanimation {
 
         private ResolutionGraph resolutionGraph;
         
-        private ReanimatorGraphView editorGraph;
+        private ReanimatorGraphView graphView;
         private ToolbarMenu toolbarMenu;
         private InspectorCustomControl inspectorPanel;
         private VisualElement animationPreviewPanel;
         private TwoPanelInspector twoPanelInspector;
         private ToolbarButton saveButton;
         private ToolbarButton loadButton;
+
+        private void Update()
+        {
+            // if (graphView != null) {
+            //     Debug.Log("Count of GraphNodes: " + graphView.GraphNodes.Count);
+            //     Debug.Log("Count of GraphNodesByNode Dict: " + graphView.GraphNodesPerNode.Count);
+            //     Debug.Log("Count of GroupViews: " + graphView.groupViews.Count);
+            // }
+        }
 
         public void CreateGUI()
         {
@@ -47,7 +56,7 @@ namespace Aarthificial.Reanimation {
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
             root.styleSheets.Add(styleSheet);
 
-            editorGraph = root.Q<ReanimatorGraphView>();
+            graphView = root.Q<ReanimatorGraphView>();
             
             inspectorPanel = root.Q<InspectorCustomControl>();
             animationPreviewPanel = root.Q<VisualElement>("animation-preview");
@@ -66,10 +75,10 @@ namespace Aarthificial.Reanimation {
             });
             
             loadButton.clicked += () => {
-                Helpers.SaveService(editorGraph).LoadFromSubAssets();
+                Helpers.SaveService(graphView).LoadFromSubAssets();
             };
             
-            editorGraph.onNodeSelected = DrawNodeProperties;
+            graphView.onNodeSelected = DrawNodeProperties;
         }
 
         private void DrawNodeProperties(ReanimatorGraphNode graphNode)
@@ -82,9 +91,9 @@ namespace Aarthificial.Reanimation {
         {
             Selection.activeObject = graph;
             resolutionGraph = Selection.activeObject as ResolutionGraph;
-            editorGraph.Initialize(this, resolutionGraph);
+            graphView.Initialize(this, resolutionGraph);
             EditorGUIUtility.PingObject(graph);
-            EditorApplication.delayCall += () => { editorGraph.FrameAll(); };
+            EditorApplication.delayCall += () => { graphView.FrameAll(); };
         }
         
         

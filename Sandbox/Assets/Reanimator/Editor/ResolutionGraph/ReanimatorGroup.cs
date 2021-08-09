@@ -32,10 +32,12 @@ namespace Aarthificial.Reanimation {
             headerContainer.Q<TextField>().RegisterCallback<ChangeEvent<string>>(TitleChangedCallback);
             titleLabel = headerContainer.Q<Label>();
 
-            colorField = new ColorField {value = group.color, name = "headerColorPicker"};
+            colorField = new ColorField {
+                value = group.color, 
+                name = "headerColorPicker"
+            };
             colorField.RegisterValueChangedCallback(e => { UpdateGroupColor(e.newValue); });
             UpdateGroupColor(group.color);
-
             headerContainer.Add(colorField);
 
             InitializeInnerNodes();
@@ -45,7 +47,6 @@ namespace Aarthificial.Reanimation {
 
         private void InitializeInnerNodes()
         {
-            Debug.Log("Initialize inner nodes");
             // foreach (var nodeGUID in group.ChildNodes.ToList()) {
             //     if (!graphView.graph.nodesPerGUID.ContainsKey(nodeGUID)) {
             //         Debug.LogWarning("Node GUID not found: " + nodeGUID);
@@ -62,7 +63,8 @@ namespace Aarthificial.Reanimation {
 
         protected override void OnElementsAdded(IEnumerable<GraphElement> elements)
         {
-            foreach (var element in elements) {
+            var graphElements = elements as GraphElement[] ?? elements.ToArray();
+            foreach (var element in graphElements) {
                 var node = element as ReanimatorGraphNode;
 
                 // Adding an element that is not a node currently supported
@@ -73,21 +75,22 @@ namespace Aarthificial.Reanimation {
                     group.innerNodeGUIDs.Add(node.node.guid);
             }
 
-            base.OnElementsAdded(elements);
+            base.OnElementsAdded(graphElements);
         }
 
         protected override void OnElementsRemoved(IEnumerable<GraphElement> elements)
         {
             // Only remove the nodes when the group exists in the hierarchy
+            var graphElements = elements as GraphElement[] ?? elements.ToArray();
             if (parent != null) {
-                foreach (var elem in elements) {
+                foreach (var elem in graphElements) {
                     if (elem is ReanimatorGraphNode nodeView) {
                         group.innerNodeGUIDs.Remove(nodeView.node.guid);
                     }
                 }
             }
 
-            base.OnElementsRemoved(elements);
+            base.OnElementsRemoved(graphElements);
         }
 
         private void UpdateGroupColor(Color newColor)

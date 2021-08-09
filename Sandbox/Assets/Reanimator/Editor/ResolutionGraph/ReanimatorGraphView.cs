@@ -14,11 +14,26 @@ namespace Aarthificial.Reanimation {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
 
+        public ResolutionGraph graph;
+        public ReanimatorGraphEditorWindow editorWindow;
+        private ReanimatorSearchWindowProvider searchWindowProvider;
+        public UnityAction<ReanimatorGraphNode> onNodeSelected;
+
+        public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
+        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode = new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
+        
+        public List<ReanimatorGroup> groupViews = new List<ReanimatorGroup>();
+
+        private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
+
         public void Initialize(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
 
+            GraphNodesPerNode.Clear();
+            groupViews.Clear();
+            
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
             graphViewChanged += OnGraphViewChanged;
@@ -26,7 +41,7 @@ namespace Aarthificial.Reanimation {
             CreateSearchWindow(editorWindow);
             CreateMiniMap();
         }
-        
+
         public void SaveGraphToDisk()
         {
             if (graph == null)
@@ -35,6 +50,7 @@ namespace Aarthificial.Reanimation {
             EditorUtility.SetDirty(graph);
             AssetDatabase.SaveAssets();
         }
+
         public void SaveToDisk(ScriptableObject obj)
         {
             if (obj == null)
@@ -42,7 +58,7 @@ namespace Aarthificial.Reanimation {
 
             EditorUtility.SetDirty(obj);
         }
-        
+
         /// <summary>
         /// Creates a Search Window as seen in Unity graph tools such as Shader Graph
         /// </summary>
@@ -66,7 +82,12 @@ namespace Aarthificial.Reanimation {
             miniMap.SetPosition(new Rect(10, 30, 200, 140));
             Add(miniMap);
         }
-        
+
+        /// <summary>
+        /// Create group and add it into stored list on the graph
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
         public ReanimatorGroup AddGroup(Group block)
         {
             Undo.RecordObject(graph, "Resolution Tree");
@@ -75,12 +96,17 @@ namespace Aarthificial.Reanimation {
             return AddGroupView(block);
         }
 
+        /// <summary>
+        /// Create group graph element and add it into the graph
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
         public ReanimatorGroup AddGroupView(Group block)
         {
             var c = new ReanimatorGroup(this, block);
             AddElement(c);
 
-            // groupViews.Add(c);
+            groupViews.Add(c);
             return c;
         }
 
@@ -104,7 +130,8 @@ namespace Aarthificial.Reanimation {
         {
             ReanimatorNode node = CreateSubAsset(type);
             node.position = nodePosition;
-            CreateGraphNode(node);
+            var graphNode = CreateGraphNode(node);
+            Helpers.Call(() => graphNode.OnCreated());
             return node;
         }
 
@@ -120,8 +147,10 @@ namespace Aarthificial.Reanimation {
             var graphNode = new ReanimatorGraphNode(node) {
                 onNodeSelected = onNodeSelected
             };
-
             AddElement(graphNode);
+            
+            GraphNodesPerNode[node] = graphNode;
+            
             return graphNode;
         }
 
@@ -274,6 +303,8 @@ namespace Aarthificial.Reanimation {
             graphViewChange.elementsToRemove?.ForEach(elem => {
                 switch (elem) {
                     case ReanimatorGraphNode graphNode:
+                        Helpers.Call(() => graphNode.OnRemoved()); 
+                        GraphNodesPerNode.Remove(graphNode.node);
                         DeleteSubAsset(graphNode.node);
                         break;
                     case Edge edge:
@@ -283,6 +314,7 @@ namespace Aarthificial.Reanimation {
                         break;
                     case ReanimatorGroup group:
                         graph.RemoveGroup(group.group);
+                        groupViews.Remove(group);
                         RemoveElement(group);
                         break;
                 }
@@ -298,9 +330,18 @@ namespace Aarthificial.Reanimation {
             return graphViewChange;
         }
 
-        private void PlayAnimationPreview() => GraphNodes.ForEach(node => {
-            if (node.node is SimpleAnimationNode) node.PlayAnimationPreview();
-        });
+        private void PlayAnimationPreview()
+        {
+            nodes
+                .ToList()
+                .Cast<ReanimatorGraphNode>()
+                .ToList()
+                .ForEach(node => {
+                    if (node.node is SimpleAnimationNode) {
+                        node.PlayAnimationPreview();
+                    }
+                });
+        }
 
         public ReanimatorGraphView()
         {
@@ -319,15 +360,5 @@ namespace Aarthificial.Reanimation {
             };
             EditorApplication.update += PlayAnimationPreview;
         }
-
-        public ResolutionGraph graph;
-        public ReanimatorGraphEditorWindow editorWindow;
-        private ReanimatorSearchWindowProvider searchWindowProvider;
-        public UnityAction<ReanimatorGraphNode> onNodeSelected;
-
-        private List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-
-        private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
-        public readonly Vector2 BlockSize = new Vector2(300, 200);
     }
 }
