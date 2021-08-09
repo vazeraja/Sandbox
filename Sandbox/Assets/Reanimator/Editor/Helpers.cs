@@ -1,15 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Aarthificial.Reanimation.Nodes;
+using UnityEditor;
+using UnityEngine;
 
-namespace Aarthificial.Reanimation.Editor
+namespace Aarthificial.Reanimation
 {
-    static internal class Helpers
+    internal static class Helpers
     {
         /// <summary>
         /// Shamelessly stolen from <a href="https://forum.unity.com/threads/drawing-a-sprite-in-editor-window.419199/#post-3059891">Woofy</a>
         /// </summary>
         /// <param name="position"></param>
         /// <param name="sprite"></param>
-        public static void DrawTexturePreview(Rect position, Sprite sprite)
+        internal static void DrawTexturePreview(Rect position, Sprite sprite)
         {
             var fullSize = new Vector2(sprite.texture.width, sprite.texture.height);
             var size = new Vector2(sprite.textureRect.width, sprite.textureRect.height);
@@ -31,6 +36,64 @@ namespace Aarthificial.Reanimation.Editor
             position.center = center;
 
             GUI.DrawTextureWithTexCoords(position, sprite.texture, coords);
+        }
+        internal static ReanimatorSaveService SaveService(ReanimatorGraphView graphView) => new ReanimatorSaveService(graphView);
+        
+        public static void Call(Action a)
+        {
+#if UNITY_EDITOR
+            try
+            {
+#endif
+                a?.Invoke();
+                
+#if UNITY_EDITOR
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+#endif
+        }
+        
+        private static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (var item in source)
+                action(item);
+        }
+
+        internal static List<T> LoadAssetsOfType<T>() where T : UnityEngine.Object {
+            return AssetDatabase
+                .FindAssets($"t:{typeof(T).Name}")
+                .ToList()
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(AssetDatabase.LoadAssetAtPath<T>)
+                .ToList();
+        }
+        internal static List<ReanimatorNode> GetChildren(ReanimatorNode parent)
+        {
+            List<ReanimatorNode> children = new List<ReanimatorNode>();
+            
+            switch (parent) {
+                case BaseNode rootNode when rootNode.root != null:
+                    children.Add(rootNode.root);
+                    break;
+                case OverrideNode overrideNode when overrideNode.next != null:
+                    children.Add(overrideNode.next);
+                    break;
+                case SwitchNode switchNode:
+                    return switchNode.nodes;
+            }
+
+            return children;
+        }
+
+        internal static void Traverse(ReanimatorNode node, Action<ReanimatorNode> visitor)
+        {
+            if (!node) return;
+            visitor.Invoke(node);
+            var children = GetChildren(node);
+            children.ForEach(n => Traverse(n, visitor));
         }
     }
 }

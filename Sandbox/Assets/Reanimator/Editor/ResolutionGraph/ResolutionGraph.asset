@@ -15,7 +15,7 @@ MonoBehaviour:
   guid: 7a2bb84e27baa104fa077cfe6069db74
   title: BaseNode
   position: {x: 0, y: 0}
-  root: {fileID: 4075698059609802293}
+  root: {fileID: -5118886999789705270}
 --- !u!114 &-6689801868859213147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,43 +30,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f3b175a540fa3e8479f4c017722fe5fe
   title: RunAnimation
-  position: {x: 503, y: -15}
-  cels:
-  - sprite: {fileID: 8562431805029759849, guid: d907cee78eda0484e9ed0c704dd5ac50,
-      type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: -8898711724394727108, guid: d907cee78eda0484e9ed0c704dd5ac50,
-      type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: 1419535152013476003, guid: d907cee78eda0484e9ed0c704dd5ac50,
-      type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: -874605140446810071, guid: d907cee78eda0484e9ed0c704dd5ac50,
-      type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: 4496215235596873431, guid: d907cee78eda0484e9ed0c704dd5ac50,
-      type: 3}
-    drivers:
-      keys: []
-      values: 
-  - sprite: {fileID: 5915515978982725832, guid: d907cee78eda0484e9ed0c704dd5ac50,
-      type: 3}
-    drivers:
-      keys: []
-      values: 
+  position: {x: 562.02704, y: 94.37842}
+  cels: []
   controlDriver:
     name: 
     autoIncrement: 1
     percentageBased: 0
     guid: 8db5b647-52fe-45e5-a5ad-9635d9831429
+  drivers:
+    keys: []
+    values: 
+--- !u!114 &-5118886999789705270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a331ab63864df5b568b41a2c1738c4, type: 3}
+  m_Name: SwitchNode
+  m_EditorClassIdentifier: 
+  guid: af3cb4ddfc4c73d49bb4d680e2a8957b
+  title: SwitchNode
+  position: {x: 281.40536, y: 0.000015258789}
+  nodes:
+  - {fileID: 5215725629504640835}
+  - {fileID: -6689801868859213147}
+  controlDriver:
+    name: 
+    autoIncrement: 0
+    percentageBased: 0
+    guid: 98cafc18-5d1e-4146-8bb7-7e668762db1d
   drivers:
     keys: []
     values: 
@@ -82,17 +78,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec083b8678648e496376b01594506fa, type: 3}
   m_Name: ResolutionGraph
   m_EditorClassIdentifier: 
-  sprite: {fileID: -4337030984175252958, guid: 1e9c17df720c0ba4f90f4102589b69c1, type: 3}
-  root: {fileID: 4075698059609802293}
+  root: {fileID: -5118886999789705270}
   nodes:
   - {fileID: -6966010986285571502}
   - {fileID: -6689801868859213147}
-  - {fileID: 4075698059609802293}
-  - {fileID: 1587955294285367223}
-  currentTrace: []
-  SaveData:
-    CommentBlockData: []
---- !u!114 &1587955294285367223
+  - {fileID: 5215725629504640835}
+  - {fileID: -5118886999789705270}
+  groups:
+  - innerNodeGUIDs:
+    - f3b175a540fa3e8479f4c017722fe5fe
+    - 8548e3ac443cdf444820bd4ae0d3c84a
+    title: Group Block
+    position:
+      serializedVersion: 2
+      x: 537.02704
+      y: -112.621605
+      width: 231
+      height: 284
+    color: {r: 0.5660378, g: 0.41843742, b: 0.17888929, a: 0.21176471}
+    size: {x: 400, y: 200}
+--- !u!114 &5215725629504640835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,36 +106,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cd1e6768d7d47f2976614169efeebba, type: 3}
-  m_Name: OverrideNode
+  m_Script: {fileID: 11500000, guid: 38410541ac5f4ea48c5cdb5f1d957b6f, type: 3}
+  m_Name: IdleAnimation
   m_EditorClassIdentifier: 
-  guid: a2afc2d95c31ba448b969514d6b5636c
-  title: 
-  position: {x: 247, y: -107}
-  next: {fileID: 0}
-  overrides: []
---- !u!114 &4075698059609802293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5a331ab63864df5b568b41a2c1738c4, type: 3}
-  m_Name: SwitchNode
-  m_EditorClassIdentifier: 
-  guid: f0491f65172583448bb092a4b22e9296
-  title: 
-  position: {x: 247, y: 52}
-  nodes:
-  - {fileID: -6689801868859213147}
+  guid: 8548e3ac443cdf444820bd4ae0d3c84a
+  title: IdleAnimation
+  position: {x: 562.02704, y: -53.621582}
+  cels: []
   controlDriver:
     name: 
     autoIncrement: 0
     percentageBased: 0
-    guid: d177d131-62bc-4543-8106-c50bd3effeef
+    guid: 5e66d867-69bc-4175-a534-487b0a07c532
   drivers:
     keys: []
     values: 

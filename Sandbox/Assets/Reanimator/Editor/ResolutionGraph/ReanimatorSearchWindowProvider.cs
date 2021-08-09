@@ -5,7 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class ReanimatorSearchWindowProvider : ScriptableObject, ISearchWindowProvider {
         
         private EditorWindow window;
@@ -68,7 +68,7 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                     graphView.CreateNode(typeof(OverrideNode), graphMousePosition);
                     return true;
                 case Group group:
-                    graphView.CreateCommentBlock(new Rect(graphMousePosition, graphView.BlockSize));
+                    graphView.AddGroup(new Group("Group Block", graphMousePosition));
                     return true;
             }
             return false;

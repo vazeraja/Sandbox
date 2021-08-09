@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38410541ac5f4ea48c5cdb5f1d957b6f, type: 3}
+  m_Name: runNJump_animation
+  m_EditorClassIdentifier: 
+  cels:
+  - sprite: {fileID: 6612509912714155400, guid: 7cf92fcfe9147d94e961ea8384f393f7,
+      type: 3}
+    drivers:
+      keys:
+      - run
+      values: 02000000
+  - sprite: {fileID: 5560605583954493893, guid: 7cf92fcfe9147d94e961ea8384f393f7,
+      type: 3}
+    drivers:
+      keys: []
+      values: 
+  controlDriver:
+    name: jumpDirection
+    autoIncrement: 0
+    percentageBased: 0
+    guid: 8bf08024-8673-4ebd-9133-43aba934fcf8
+  drivers:
+    keys: []
+    values: 

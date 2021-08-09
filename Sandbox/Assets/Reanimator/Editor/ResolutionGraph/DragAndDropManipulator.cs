@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class DragAndDropManipulator : MouseManipulator {
         protected override void RegisterCallbacksOnTarget()
         {
@@ -38,19 +38,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                                 EditorApplication.delayCall += () => {
                                     graphView.CreateSimpleAnimationNode(node.GetType(), nodePosition, cels,
                                         controlDriver, drivers);
-                                };
-                                break;
-                            }
-                            case SwitchNode switchNode: {
-                                EditorApplication.delayCall += () => {
-                                    var nodes = switchNode.nodes;
-                                    graphView.CreateSwitchNode(switchNode.GetType(), nodePosition, nodes);
-                                };
-                                break;
-                            }
-                            case OverrideNode overrideNode: {
-                                EditorApplication.delayCall += () => {
-                                    graphView.CreateNode(overrideNode.GetType(), nodePosition);
                                 };
                                 break;
                             }

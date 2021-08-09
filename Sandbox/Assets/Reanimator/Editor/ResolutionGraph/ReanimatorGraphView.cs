@@ -7,71 +7,56 @@ using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
+namespace Aarthificial.Reanimation {
     public class ReanimatorGraphView : GraphView {
         public new class UxmlFactory : UxmlFactory<ReanimatorGraphView, UxmlTraits> { }
 
-        private ResolutionGraph graph;
+        public ResolutionGraph graph;
+        public ReanimatorGraphEditorWindow editorWindow;
         private ReanimatorSearchWindowProvider searchWindowProvider;
-        private ReanimatorGraphEditor editorWindow;
-        private InspectorCustomControl inspector;
+        public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
-        public Blackboard Blackboard;
-        public List<ExposedProperty> ExposedProperties = new List<ExposedProperty>();
-
-        private IEnumerable<ReanimatorGroup> CommentBlocks => graphElements.ToList().Where(x => x is ReanimatorGroup).Cast<ReanimatorGroup>().ToList();
-        private List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-        private IEnumerable<Edge> GraphEdges => edges.ToList();
-
-        public Action<ReanimatorGraphNode> OnNodeSelected;
+        public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
+        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode = new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
+        
+        public List<ReanimatorGroup> groupViews = new List<ReanimatorGroup>();
 
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
-        public readonly Vector2 BlockSize = new Vector2(300, 200);
 
-
-        public ReanimatorGraphView()
-        {
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
-            styleSheets.Add(styleSheet);
-
-            Insert(0, new GridBackground());
-            this.AddManipulator(new ContentZoomer());
-            this.AddManipulator(new ContentDragger());
-            this.AddManipulator(new SelectionDragger());
-            this.AddManipulator(new RectangleSelector());
-            this.AddManipulator(new DragAndDropManipulator());
-            
-        }
-
-        public void Initialize(ResolutionGraph graph, ReanimatorGraphEditor editorWindow, InspectorCustomControl inspector)
+        public void Initialize(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
-            this.inspector = inspector;
+
+            GraphNodesPerNode.Clear();
+            groupViews.Clear();
             
-            Undo.undoRedoPerformed -= UndoRedo;
-            // TODO: Needs optimizing -- causes CPU to work a lot harder for some reason
-            EditorApplication.update -= PlayAnimationPreview;
             graphViewChanged -= OnGraphViewChanged;
-            
             DeleteElements(graphElements.ToList());
-            
             graphViewChanged += OnGraphViewChanged;
-            EditorApplication.update += PlayAnimationPreview;
-            Undo.undoRedoPerformed += UndoRedo;
-            
+
             CreateSearchWindow(editorWindow);
-            // CreateBlackboard();
             CreateMiniMap();
-            LoadGraph();
         }
 
-        private void UndoRedo()
+        public void SaveGraphToDisk()
         {
-            Initialize(graph, editorWindow, inspector);
+            if (graph == null)
+                return;
+
+            EditorUtility.SetDirty(graph);
             AssetDatabase.SaveAssets();
+        }
+
+        public void SaveToDisk(ScriptableObject obj)
+        {
+            if (obj == null)
+                return;
+
+            EditorUtility.SetDirty(obj);
         }
 
         /// <summary>
@@ -86,60 +71,43 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
                 SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindowProvider);
         }
 
-        private void CreateBlackboard()
-        {
-            var blackboard = new Blackboard(this);
-            blackboard.Add(new BlackboardSection{title = "Exposed Drivers"});
-            blackboard.addItemRequested = blackboard1 => {
-                AddBlackboardProperty(new ExposedProperty());
-            };
-            Blackboard = blackboard;
-            Add(blackboard);
-        }
-
-        [Serializable]
-        public class ExposedProperty {
-            public string propertyName = "new prop";
-        }
-        private void AddBlackboardProperty(ExposedProperty prop)
-        {
-            var property = new ExposedProperty();
-            property.propertyName = prop.propertyName;
-            ExposedProperties.Add(property);
-
-            var ve = new VisualElement();
-            var blackboardField = new BlackboardField {
-                text = property.propertyName,
-                typeText = "string prop"
-            };
-            ve.Add(blackboardField);
-            Blackboard.Add(ve);
-        }
-
         /// <summary>
         /// Creates a minimap on top left corner of the graphview
         /// </summary>
-        private void CreateMiniMap(){
+        private void CreateMiniMap()
+        {
             var miniMap = new MiniMap {
                 anchored = true
             };
             miniMap.SetPosition(new Rect(10, 30, 200, 140));
             Add(miniMap);
         }
-        
+
         /// <summary>
-        /// Creates a group block to contain and organize sections of related nodes
+        /// Create group and add it into stored list on the graph
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="groupBlock"></param>
+        /// <param name="block"></param>
         /// <returns></returns>
-        public ReanimatorGroup CreateCommentBlock(Rect rect, GroupBlock groupBlock = null)
+        public ReanimatorGroup AddGroup(Group block)
         {
-            groupBlock ??= new GroupBlock();
-            var group = new ReanimatorGroup(this, groupBlock);
-            AddElement(group);
-            group.SetPosition(rect);
-            return group;
+            Undo.RecordObject(graph, "Resolution Tree");
+            graph.AddGroup(block);
+            block.OnCreated();
+            return AddGroupView(block);
+        }
+
+        /// <summary>
+        /// Create group graph element and add it into the graph
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
+        public ReanimatorGroup AddGroupView(Group block)
+        {
+            var c = new ReanimatorGroup(this, block);
+            AddElement(c);
+
+            groupViews.Add(c);
+            return c;
         }
 
         /// <summary>
@@ -148,50 +116,44 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
         /// <param name="startPort"></param>
         /// <param name="nodeAdapter"></param>
         /// <returns></returns>
-        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter) 
-            => ports.ToList().Where(endPort => endPort.direction != startPort.direction && endPort.node != startPort.node).ToList();
-        
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+            => ports.ToList()
+                .Where(endPort => endPort.direction != startPort.direction && endPort.node != startPort.node).ToList();
+
         /// <summary>
-        /// Event listener to intercept the GraphView graphViewChanged delegate.
+        /// Create a sub asset of node when a node is requested to be created from the search window
         /// </summary>
-        /// <param name="graphViewChange"></param>
+        /// <param name="type"></param>
+        /// <param name="nodePosition"></param>
         /// <returns></returns>
-        private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
-        {
-            graphViewChange.elementsToRemove?.ForEach(elem => {
-                switch (elem) {
-                    case ReanimatorGraphNode nodeDisplay:
-                        graph.DeleteSubAsset(nodeDisplay.node);
-                        break;
-                    case Edge edge: 
-                        ReanimatorGraphNode parent = edge.output.node as ReanimatorGraphNode;
-                        ReanimatorGraphNode child = edge.input.node as ReanimatorGraphNode;
-                        graph.RemoveChild(parent?.node, child?.node);
-                        break;
-                    case ReanimatorGroup group:
-                        SaveToGraphSaveData();
-                        break;
-                }
-            });
-
-            graphViewChange.edgesToCreate?.ForEach(edge => {
-                ReanimatorGraphNode parent = edge.output.node as ReanimatorGraphNode;
-                ReanimatorGraphNode child = edge.input.node as ReanimatorGraphNode;
-
-                graph.AddChild(parent?.node, child?.node);
-                SaveToGraphSaveData();
-            });
-
-            return graphViewChange;
-        }
-
         public ReanimatorNode CreateNode(Type type, Vector2 nodePosition)
         {
-            ReanimatorNode node = graph.CreateSubAsset(type);
+            ReanimatorNode node = CreateSubAsset(type);
             node.position = nodePosition;
-            CreateGraphNode(node);
+            var graphNode = CreateGraphNode(node);
+            Helpers.Call(() => graphNode.OnCreated());
             return node;
         }
+
+        /// <summary>
+        /// Create a ReanimatorNode graph element and add it to the graph view 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="assetName"></param>
+        public ReanimatorGraphNode CreateGraphNode(ReanimatorNode node, string assetName = null)
+        {
+            node.name = string.IsNullOrEmpty(assetName) ? node.GetType().Name : assetName;
+
+            var graphNode = new ReanimatorGraphNode(node) {
+                onNodeSelected = onNodeSelected
+            };
+            AddElement(graphNode);
+            
+            GraphNodesPerNode[node] = graphNode;
+            
+            return graphNode;
+        }
+
 
         /// <summary>
         /// Creates a simple animation node on the graph
@@ -214,7 +176,6 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             simpleAnimationNode.sprites = nodeSprites;
             simpleAnimationNode.ControlDriver = controlDriver;
             simpleAnimationNode.Drivers = driverDictionary;
-
         }
 
         /// <summary>
@@ -230,86 +191,174 @@ namespace Aarthificial.Reanimation.ResolutionGraph.Editor {
             switchNode.nodes = reanimatorNodes;
         }
 
-        private void CreateGraphNode(ReanimatorNode node)
+        /// <summary>
+        /// Creates a scriptable object sub asset for the current resolution graph and adds it to the list
+        /// of nodes saved in the resolution graph
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="assetName"></param>
+        /// <returns></returns>
+        public ReanimatorNode CreateSubAsset(Type type, string assetName = null)
         {
-            var graphNode = new ReanimatorGraphNode(node,this, inspector);
-            graphNode.OnSelected();
-            AddElement(graphNode);
+            ReanimatorNode node = ScriptableObject.CreateInstance(type) as ReanimatorNode;
+
+            // ReSharper disable once PossibleNullReferenceException
+            node.name = string.IsNullOrEmpty(assetName) ? type.Name : assetName;
+            node.guid = GUID.Generate().ToString();
+
+            Undo.RecordObject(graph, "Resolution Tree");
+            graph.nodes.Add(node);
+            if (!Application.isPlaying) {
+                AssetDatabase.AddObjectToAsset(node, graph);
+            }
+
+            Undo.RegisterCreatedObjectUndo(node, "Resolution Tree");
+
+            SaveGraphToDisk();
+            return node;
         }
 
-        public void PlayAnimationPreview()
+        /// <summary>
+        /// Removes the scriptable object sub asset from the resolution graph and removes it from the list
+        /// of nodes saved in the resolution graph
+        /// </summary>
+        /// <param name="node"></param>
+        private void DeleteSubAsset(ReanimatorNode node)
         {
-            GraphNodes.ForEach(node => {
-                if (node.node is SimpleAnimationNode simpleAnimationNode) {
-                    node.PlayAnimationPreview();
+            Undo.RecordObject(graph, "Resolution Tree");
+            graph.nodes.Remove(node);
+            Undo.DestroyObjectImmediate(node);
+
+            SaveGraphToDisk();
+        }
+
+        /// <summary>
+        /// Adds appropriate child node(s) when an edge or node is created
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="child"></param>
+        private void AddChild(ReanimatorNode parent, ReanimatorNode child)
+        {
+            switch (parent) {
+                case BaseNode rootNode:
+                    Undo.RecordObject(rootNode, "Resolution Tree");
+                    graph.root = child;
+                    rootNode.root = child;
+                    SaveGraphToDisk();
+                    SaveToDisk(rootNode);
+                    break;
+                case OverrideNode overrideNode:
+                    Undo.RecordObject(overrideNode, "Resolution Tree");
+                    overrideNode.next = child;
+                    SaveGraphToDisk();
+                    SaveToDisk(overrideNode);
+                    break;
+                case SwitchNode switchNode:
+                    Undo.RecordObject(switchNode, "Resolution Tree");
+                    switchNode.nodes.Add(child);
+                    SaveGraphToDisk();
+                    SaveToDisk(switchNode);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Removes appropriate child node(s) when an edge or node is deleted
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="child"></param>
+        private void RemoveChild(ReanimatorNode parent, ReanimatorNode child)
+        {
+            switch (parent) {
+                case BaseNode rootNode:
+                    Undo.RecordObject(rootNode, "Resolution Tree");
+                    graph.root = null;
+                    rootNode.root = null;
+                    SaveGraphToDisk();
+                    SaveToDisk(rootNode);
+                    break;
+                case OverrideNode overrideNode:
+                    Undo.RecordObject(overrideNode, "Resolution Tree");
+                    overrideNode.next = null;
+                    SaveGraphToDisk();
+                    SaveToDisk(overrideNode);
+                    break;
+                case SwitchNode switchNode:
+                    Undo.RecordObject(switchNode, "Resolution Tree");
+                    switchNode.nodes.Remove(child);
+                    SaveGraphToDisk();
+                    SaveToDisk(switchNode);
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Event listener to intercept the GraphView graphViewChanged delegate.
+        /// </summary>
+        /// <param name="graphViewChange"></param>
+        /// <returns></returns>
+        private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
+        {
+            graphViewChange.elementsToRemove?.ForEach(elem => {
+                switch (elem) {
+                    case ReanimatorGraphNode graphNode:
+                        Helpers.Call(() => graphNode.OnRemoved()); 
+                        GraphNodesPerNode.Remove(graphNode.node);
+                        DeleteSubAsset(graphNode.node);
+                        break;
+                    case Edge edge:
+                        var parentNode = edge.output.node as ReanimatorGraphNode;
+                        var childNode = edge.input.node as ReanimatorGraphNode;
+                        RemoveChild(parentNode?.node, childNode?.node);
+                        break;
+                    case ReanimatorGroup group:
+                        graph.RemoveGroup(group.group);
+                        groupViews.Remove(group);
+                        RemoveElement(group);
+                        break;
                 }
             });
+
+            graphViewChange.edgesToCreate?.ForEach(edge => {
+                var parentNode = edge.output.node as ReanimatorGraphNode;
+                var childNode = edge.input.node as ReanimatorGraphNode;
+
+                AddChild(parentNode?.node, childNode?.node);
+            });
+
+            return graphViewChange;
         }
-        public void SaveToGraphSaveData()
+
+        private void PlayAnimationPreview()
         {
-            var saveData = new SaveData();
-
-            foreach (var block in CommentBlocks) {
-                var childNodes = block.containedElements
-                    .Where(x => x is ReanimatorGraphNode)
-                    .Cast<ReanimatorGraphNode>()
-                    .Select(x => x.node.guid)
-                    .ToList();
-
-               saveData.CommentBlockData.Add(new GroupBlock() {
-                   ChildNodes = childNodes,
-                   Title = block.title,
-                   Position = block.GetPosition().position
-               });
-            }
-
-            if (graph.SaveData == null) {
-                graph.SaveData = new SaveData();
-                EditorUtility.SetDirty(graph);
-            }
-            else {
-                graph.SaveData.CommentBlockData = saveData.CommentBlockData;
-                EditorUtility.SetDirty(graph);
-            }
+            nodes
+                .ToList()
+                .Cast<ReanimatorGraphNode>()
+                .ToList()
+                .ForEach(node => {
+                    if (node.node is SimpleAnimationNode) {
+                        node.PlayAnimationPreview();
+                    }
+                });
         }
-        private void LoadGraph()
+
+        public ReanimatorGraphView()
         {
-            // Create root node if graph is empty
-            if (graph.nodes.Count == 0) {
-                graph.root = graph.CreateSubAsset(typeof(BaseNode)) as BaseNode;
-                EditorUtility.SetDirty(graph);
+            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath));
+
+            Insert(0, new GridBackground());
+            this.AddManipulator(new ContentZoomer());
+            this.AddManipulator(new ContentDragger());
+            this.AddManipulator(new SelectionDragger());
+            this.AddManipulator(new RectangleSelector());
+            this.AddManipulator(new DragAndDropManipulator());
+
+            Undo.undoRedoPerformed += () => {
+                Initialize(editorWindow, graph);
                 AssetDatabase.SaveAssets();
-            }
-
-            // Create every graph node from the nodes in the graph
-            graph.nodes.ForEach(CreateGraphNode);
-
-            // Create all connections based on the children of the nodes in the graph
-            graph.nodes.ForEach(p => {
-                var children = ResolutionGraph.GetChildren(p);
-                foreach (var c in children) {
-                    
-                    // Returns node by its guid and cast it back to a ReanimatorGraphNode
-                    var parent = GetNodeByGuid(p.guid) as ReanimatorGraphNode;
-                    var child = GetNodeByGuid(c.guid) as ReanimatorGraphNode;
-                    
-                    // If it is a new graph, check if the root has a child or not
-                    if (parent?.node is BaseNode node && child?.node == null)
-                        continue;
-                    
-                    // Connect each parents output to the saved children
-                    var edge = parent?.output.ConnectTo(child?.input);
-                    AddElement(edge);
-                }
-            });
-            
-            // Load all comment blocks and contained nodes
-            foreach (var commentBlockData in graph.SaveData.CommentBlockData) {
-                var block = CreateCommentBlock(new Rect(commentBlockData.Position, BlockSize),
-                    commentBlockData);
-                block.AddElements(GraphNodes.Where(x => commentBlockData.ChildNodes.Contains(x.node.guid)));
-            }
+            };
+            EditorApplication.update += PlayAnimationPreview;
         }
-        
     }
 }

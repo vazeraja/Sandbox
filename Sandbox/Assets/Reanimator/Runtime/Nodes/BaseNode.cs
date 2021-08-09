@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Aarthificial.Reanimation.ResolutionGraph.Editor;
-
+﻿
 namespace Aarthificial.Reanimation.Nodes {
-    
-    [Serializable]
-    public class SaveData {
-        public List<GroupBlock> groupBlocks = new List<GroupBlock>();
-    }
     
     public class BaseNode : ReanimatorNode {
         
