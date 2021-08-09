@@ -140,20 +140,6 @@ namespace Aarthificial.Reanimation {
         public virtual void Initialize(ReanimatorGraphNode graphNode, string name)
         {
             this.owner = graphNode;
-            Debug.Log(owner.node.title);
-            // AddToClassList(fieldName);
-
-            // // Correct port type if port accept multiple values (and so is a container)
-            // if (direction == Direction.Input && portData.acceptMultipleEdges && portType == fieldType) // If the user haven't set a custom field type
-            // {
-            //     if (fieldType.GetGenericArguments().Length > 0)
-            //         portType = fieldType.GetGenericArguments()[0];
-            // }
-
-            // if (name != null)
-            //     portName = name;
-            // visualClass = "Port_" + portType.Name;
-            // tooltip = portData.tooltip;
         }
         public override void Connect(Edge edge)
         {
