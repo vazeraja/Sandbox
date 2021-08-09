@@ -244,7 +244,7 @@ namespace Aarthificial.Reanimation {
         private void AddChild(ReanimatorNode parent, ReanimatorNode child)
         {
             switch (parent) {
-                case RootNode rootNode:
+                case BaseNode rootNode:
                     Undo.RecordObject(rootNode, "Resolution Tree");
                     graph.root = child;
                     rootNode.root = child;
@@ -274,7 +274,7 @@ namespace Aarthificial.Reanimation {
         private void RemoveChild(ReanimatorNode parent, ReanimatorNode child)
         {
             switch (parent) {
-                case RootNode rootNode:
+                case BaseNode rootNode:
                     Undo.RecordObject(rootNode, "Resolution Tree");
                     graph.root = null;
                     rootNode.root = null;
