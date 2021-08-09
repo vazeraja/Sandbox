@@ -90,7 +90,7 @@ namespace Aarthificial.Reanimation {
                     node.needsAnimationPreview = false;
                     AddToClassList("override");
                     break;
-                case BaseNode _:
+                case RootNode _:
                     if (string.IsNullOrEmpty(node.title)) {
                         node.title = node.GetType().Name;
                     }

@@ -75,7 +75,7 @@ namespace Aarthificial.Reanimation
             List<ReanimatorNode> children = new List<ReanimatorNode>();
             
             switch (parent) {
-                case BaseNode rootNode when rootNode.root != null:
+                case RootNode rootNode when rootNode.root != null:
                     children.Add(rootNode.root);
                     break;
                 case OverrideNode overrideNode when overrideNode.next != null:

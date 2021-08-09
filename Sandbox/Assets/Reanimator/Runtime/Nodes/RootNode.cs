@@ -1,7 +1,7 @@
 ﻿
 namespace Aarthificial.Reanimation.Nodes {
     
-    public class BaseNode : ReanimatorNode {
+    public class RootNode : ReanimatorNode {
         
         public ReanimatorNode root;
 
@@ -11,7 +11,7 @@ namespace Aarthificial.Reanimation.Nodes {
         }
         public override ReanimatorNode Copy()
         {
-            BaseNode node = Instantiate(this);
+            RootNode node = Instantiate(this);
             node.root = root.Copy();
             return node;
         }

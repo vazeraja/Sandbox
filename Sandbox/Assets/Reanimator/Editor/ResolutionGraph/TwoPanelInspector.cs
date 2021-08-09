@@ -25,7 +25,7 @@ namespace Aarthificial.Reanimation {
             overrideNodeEditor = UnityEditor.Editor.CreateEditor(node.node) as OverrideNodeEditor;
 
             switch (node.node) {
-                case BaseNode _:
+                case RootNode _:
 
                     animationPreviewPanel.style.display = DisplayStyle.None;
                     inspectorContainer = new IMGUIContainer(() => {
