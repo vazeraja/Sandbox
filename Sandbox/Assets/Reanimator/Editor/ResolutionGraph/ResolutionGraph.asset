@@ -26,11 +26,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38410541ac5f4ea48c5cdb5f1d957b6f, type: 3}
-  m_Name: Switch Node
+  m_Name: Run Animation
   m_EditorClassIdentifier: 
   guid: f3b175a540fa3e8479f4c017722fe5fe
-  title: Switch Node
-  position: {x: 701.6756, y: 122}
+  title: Run Animation
+  position: {x: 712, y: 93.64865}
   cels: []
   controlDriver:
     name: 
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: af3cb4ddfc4c73d49bb4d680e2a8957b
   title: Switch Node
-  position: {x: 453.67563, y: 14.0000105}
+  position: {x: 449.9189, y: 0.000012874603}
   nodes:
   - {fileID: -6689801868859213147}
   - {fileID: 5215725629504640835}
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 661ea36cfa792714c922ea0490a3957d
   title: Override Node
-  position: {x: 234.05406, y: -12.000008}
+  position: {x: 230.75674, y: -0.0000104904175}
   next: {fileID: -5118886999789705270}
   overrides: []
 --- !u!114 &11400000
@@ -109,11 +109,11 @@ MonoBehaviour:
     title: Group Block
     position:
       serializedVersion: 2
-      x: 676.67554
-      y: -70.999985
-      width: 242
+      x: 687
+      y: -108.24323
+      width: 231
       height: 270
-    color: {r: 0.5660378, g: 0.41843742, b: 0.17888929, a: 0.21176471}
+    color: {r: 0.15686275, g: 0.3921569, b: 0.65882355, a: 0.20784314}
     size: {x: 400, y: 200}
 --- !u!114 &5215725629504640835
 MonoBehaviour:
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8548e3ac443cdf444820bd4ae0d3c84a
   title: Idle Animation
-  position: {x: 702, y: -11.999965}
+  position: {x: 712, y: -70.84999}
   cels: []
   controlDriver:
     name: 

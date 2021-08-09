@@ -15,8 +15,8 @@ namespace Aarthificial.Reanimation {
 
         private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
         public ReanimatorNode node { get; }
-        public NodePort input { get; }
-        public NodePort output { get; }
+        public ReanimatorPort input { get; }
+        public ReanimatorPort output { get; }
         public void OnCreated() {}
         public void OnRemoved() {}
         
@@ -34,30 +34,34 @@ namespace Aarthificial.Reanimation {
             switch (node) {
                 case SimpleAnimationNode _:
                     if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().ToString();
+                        node.title = node.GetType().Name;
                     }
 
-                    input = new NodePort(Direction.Input, Port.Capacity.Single) {
+                    input = new ReanimatorPort(Direction.Input, Port.Capacity.Single) {
                         portColor =  new Color(0.12f, 0.44f, 0.81f),
-                        portName = ""
+                        portName = "",
                     };
+                    input.Initialize(this, "");
                     inputContainer.Add(input);
                     node.needsAnimationPreview = true;
                     AddToClassList("simpleAnimation");
                     break;
                 case SwitchNode _:
                     if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().ToString();
+                        node.title = node.GetType().Name;
                     }
 
-                    input = new NodePort(Direction.Input, Port.Capacity.Single) {
+                    input = new ReanimatorPort(Direction.Input, Port.Capacity.Single) {
                         portColor = new Color(0.94f, 0.7f, 0.31f),
                         portName = "",
                     };
-                    output = new NodePort(Direction.Output, Port.Capacity.Multi){
+                    input.Initialize(this, "");
+                    
+                    output = new ReanimatorPort(Direction.Output, Port.Capacity.Multi){
                         portColor = new Color(0.94f, 0.7f, 0.31f),
                         portName = "",
                     };
+                    output.Initialize(this, "");
                     
                     inputContainer.Add(input);
                     outputContainer.Add(output);
@@ -66,17 +70,20 @@ namespace Aarthificial.Reanimation {
                     break;
                 case OverrideNode _:
                     if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().ToString();
+                        node.title = node.GetType().Name;
                     }
                     
-                    input = new NodePort(Direction.Input, Port.Capacity.Single){
+                    input = new ReanimatorPort(Direction.Input, Port.Capacity.Single){
                         portColor = new Color(0.81f, 0.29f, 0.28f),
                         portName = "",
                     };
-                    output = new NodePort(Direction.Output, Port.Capacity.Single){
+                    input.Initialize(this, "");
+                    
+                    output = new ReanimatorPort(Direction.Output, Port.Capacity.Single){
                         portColor = new Color(0.81f, 0.29f, 0.28f),
                         portName = "",
                     };
+                    output.Initialize(this, "");
                     
                     inputContainer.Add(input);
                     outputContainer.Add(output);
@@ -85,14 +92,15 @@ namespace Aarthificial.Reanimation {
                     break;
                 case BaseNode _:
                     if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().ToString();
+                        node.title = node.GetType().Name;
                     }
                     
-                    output = new NodePort(Direction.Output, Port.Capacity.Single){
+                    output = new ReanimatorPort(Direction.Output, Port.Capacity.Single){
                         portColor = new Color(0.98f, 1f, 0.98f),
                         portName = "",
                     };
-                    output.portName = "";
+                    output.Initialize(this, "");
+                    
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;
                     capabilities &= ~Capabilities.Deletable;
