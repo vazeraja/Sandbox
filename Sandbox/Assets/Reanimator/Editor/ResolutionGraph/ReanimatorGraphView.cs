@@ -20,8 +20,12 @@ namespace Aarthificial.Reanimation {
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
         public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode = new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
-        
+
+        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode =
+            new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
+        private IEnumerable<MiniMap> MiniMaps =>
+            graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
+
         public List<ReanimatorGroup> groupViews = new List<ReanimatorGroup>();
 
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
@@ -33,13 +37,13 @@ namespace Aarthificial.Reanimation {
 
             GraphNodesPerNode.Clear();
             groupViews.Clear();
-            
+
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
+            DeleteElements(MiniMaps);
             graphViewChanged += OnGraphViewChanged;
 
             CreateSearchWindow(editorWindow);
-            CreateMiniMap();
         }
 
         public void SaveGraphToDisk()
@@ -74,7 +78,7 @@ namespace Aarthificial.Reanimation {
         /// <summary>
         /// Creates a minimap on top left corner of the graphview
         /// </summary>
-        private void CreateMiniMap()
+        public void CreateMiniMap()
         {
             var miniMap = new MiniMap {
                 anchored = true
@@ -148,9 +152,9 @@ namespace Aarthificial.Reanimation {
                 onNodeSelected = onNodeSelected
             };
             AddElement(graphNode);
-            
+
             GraphNodesPerNode[node] = graphNode;
-            
+
             return graphNode;
         }
 
@@ -303,7 +307,7 @@ namespace Aarthificial.Reanimation {
             graphViewChange.elementsToRemove?.ForEach(elem => {
                 switch (elem) {
                     case ReanimatorGraphNode graphNode:
-                        Helpers.Call(() => graphNode.OnRemoved()); 
+                        Helpers.Call(() => graphNode.OnRemoved());
                         GraphNodesPerNode.Remove(graphNode.node);
                         DeleteSubAsset(graphNode.node);
                         break;

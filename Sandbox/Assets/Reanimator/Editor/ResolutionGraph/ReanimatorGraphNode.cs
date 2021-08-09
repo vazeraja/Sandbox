@@ -15,8 +15,8 @@ namespace Aarthificial.Reanimation {
 
         private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
         public ReanimatorNode node { get; }
-        public Port input { get; }
-        public Port output { get; }
+        public NodePort input { get; }
+        public NodePort output { get; }
         public void OnCreated() {}
         public void OnRemoved() {}
         
@@ -33,40 +33,65 @@ namespace Aarthificial.Reanimation {
             
             switch (node) {
                 case SimpleAnimationNode _:
-                    input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
-                        typeof(SimpleAnimationNode));
-                    input.portName = "";
+                    if (string.IsNullOrEmpty(node.title)) {
+                        node.title = node.GetType().ToString();
+                    }
+
+                    input = new NodePort(Direction.Input, Port.Capacity.Single) {
+                        portColor =  new Color(0.12f, 0.44f, 0.81f),
+                        portName = ""
+                    };
                     inputContainer.Add(input);
                     node.needsAnimationPreview = true;
                     AddToClassList("simpleAnimation");
                     break;
                 case SwitchNode _:
-                    input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
-                        typeof(SwitchNode));
-                    output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi,
-                        typeof(SwitchNode));
-                    input.portName = "";
+                    if (string.IsNullOrEmpty(node.title)) {
+                        node.title = node.GetType().ToString();
+                    }
+
+                    input = new NodePort(Direction.Input, Port.Capacity.Single) {
+                        portColor = new Color(0.94f, 0.7f, 0.31f),
+                        portName = "",
+                    };
+                    output = new NodePort(Direction.Output, Port.Capacity.Multi){
+                        portColor = new Color(0.94f, 0.7f, 0.31f),
+                        portName = "",
+                    };
+                    
                     inputContainer.Add(input);
-                    output.portName = "";
                     outputContainer.Add(output);
                     node.needsAnimationPreview = false;
                     AddToClassList("switch");
                     break;
                 case OverrideNode _:
-                    input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single,
-                        typeof(OverrideNode));
-                    output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single,
-                        typeof(OverrideNode));
-                    input.portName = "";
+                    if (string.IsNullOrEmpty(node.title)) {
+                        node.title = node.GetType().ToString();
+                    }
+                    
+                    input = new NodePort(Direction.Input, Port.Capacity.Single){
+                        portColor = new Color(0.81f, 0.29f, 0.28f),
+                        portName = "",
+                    };
+                    output = new NodePort(Direction.Output, Port.Capacity.Single){
+                        portColor = new Color(0.81f, 0.29f, 0.28f),
+                        portName = "",
+                    };
+                    
                     inputContainer.Add(input);
-                    output.portName = "";
                     outputContainer.Add(output);
                     node.needsAnimationPreview = false;
                     AddToClassList("override");
                     break;
                 case BaseNode _:
-                    output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single,
-                        typeof(BaseNode));
+                    if (string.IsNullOrEmpty(node.title)) {
+                        node.title = node.GetType().ToString();
+                    }
+                    
+                    output = new NodePort(Direction.Output, Port.Capacity.Single){
+                        portColor = new Color(0.98f, 1f, 0.98f),
+                        portName = "",
+                    };
                     output.portName = "";
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;

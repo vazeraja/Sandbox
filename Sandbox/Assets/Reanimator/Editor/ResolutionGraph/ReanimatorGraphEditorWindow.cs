@@ -66,6 +66,8 @@ namespace Aarthificial.Reanimation {
             saveButton = root.Q<ToolbarButton>("save-button");
             loadButton = root.Q<ToolbarButton>("load-button");
             
+            graphView.CreateMiniMap();
+            
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
             Select(resolutionGraphs.First());
             resolutionGraphs.ForEach(graph => {

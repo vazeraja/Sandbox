@@ -10,33 +10,16 @@ using UnityEditor;
 #endif
 
 namespace Aarthificial.Reanimation {
-    public class GraphChanges {
-        // public SerializableEdge removedEdge;
-        // public SerializableEdge addedEdge;
-        
-        public ReanimatorNode removedNode;
-        public ReanimatorNode addedNode;
-        public ReanimatorNode nodeChanged;
-        
-        public Group addedGroups;
-        public Group removedGroups;
-        
-        // public BaseStackNode	addedStackNode;
-        // public BaseStackNode	removedStackNode;
-        // public StickyNote addedStickyNotes;
-        // public StickyNote removedStickyNotes;
-    }
-
     [CreateAssetMenu(fileName = "ResolutionGraph", menuName = "Reanimator/ResolutionGraph", order = 400)]
     public class ResolutionGraph : ScriptableObject {
         public ReanimatorNode root;
-        public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
-        [SerializeField] public List<Group> groups = new List<Group>();
+        
+        
+        [SerializeReference] public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
+        //[NonSerialized] public Dictionary<string, BaseNode> nodesPerGUID = new Dictionary<string, BaseNode>();
+        
 
-        /// <summary>
-        /// Triggered when the graph is changed
-        /// </summary>
-        public event Action<GraphChanges> onGraphChanges;
+        [SerializeField] public List<Group> groups = new List<Group>();
 
         /// <summary>
         /// Add a group
@@ -45,8 +28,8 @@ namespace Aarthificial.Reanimation {
         public void AddGroup(Group block)
         {
             groups.Add(block);
-            onGraphChanges?.Invoke(new GraphChanges {addedGroups = block});
         }
+
         /// <summary>
         /// Removes a group
         /// </summary>
@@ -54,7 +37,6 @@ namespace Aarthificial.Reanimation {
         public void RemoveGroup(Group block)
         {
             groups.Remove(block);
-            onGraphChanges?.Invoke(new GraphChanges{ removedGroups = block });
         }
     }
 }
