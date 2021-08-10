@@ -15,7 +15,6 @@ MonoBehaviour:
   guid: 7a2bb84e27baa104fa077cfe6069db74
   title: Base Node
   position: {x: 0, y: 0}
-  needsAnimationPreview: 0
   root: {fileID: -4939339109384449277}
 --- !u!114 &-6689801868859213147
 MonoBehaviour:
@@ -32,7 +31,6 @@ MonoBehaviour:
   guid: f3b175a540fa3e8479f4c017722fe5fe
   title: Run Animation
   position: {x: 712, y: 93.64865}
-  needsAnimationPreview: 0
   cels: []
   controlDriver:
     name: 
@@ -57,7 +55,6 @@ MonoBehaviour:
   guid: af3cb4ddfc4c73d49bb4d680e2a8957b
   title: Switch Node
   position: {x: 449.9189, y: 0.000012874603}
-  needsAnimationPreview: 0
   nodes:
   - {fileID: -6689801868859213147}
   - {fileID: 5215725629504640835}
@@ -84,7 +81,6 @@ MonoBehaviour:
   guid: 661ea36cfa792714c922ea0490a3957d
   title: Override Node
   position: {x: 230.75674, y: -0.0000104904175}
-  needsAnimationPreview: 0
   next: {fileID: -5118886999789705270}
   overrides: []
 --- !u!114 &11400000
@@ -134,7 +130,6 @@ MonoBehaviour:
   guid: 8548e3ac443cdf444820bd4ae0d3c84a
   title: Idle Animation
   position: {x: 712, y: -70.84999}
-  needsAnimationPreview: 0
   cels: []
   controlDriver:
     name: 
