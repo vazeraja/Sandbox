@@ -16,25 +16,27 @@ namespace Aarthificial.Reanimation {
             _graphView.Initialize(_graphView.editorWindow, _graphView.graph);
 
             // Create root node if graph is empty
-            if (GraphSubAssets.Count == 0) {
-                _graphView.graph.root = _graphView.CreateSubAsset(typeof(BaseNode)) as BaseNode;
+            if (ResolutionGraphNodes.Count == 0) {
+                _graphView.graph.root = _graphView.CreateSubAsset(typeof(BaseNode)).node as BaseNode;
                 EditorUtility.SetDirty(_graphView.graph);
                 AssetDatabase.SaveAssets();
             }
 
             // Create every graph node from the nodes in the graph
-            GraphSubAssets.ForEach(node => { _graphView.CreateGraphNode(node, node.title); });
+            ResolutionGraphNodes.ForEach(node => { _graphView.CreateGraphNode(node, node.title); });
 
             // Create all connections based on the children of the nodes in the graph
-            GraphSubAssets.ForEach(p => {
-                var children = Helpers.GetChildren(p);
+            ResolutionGraphNodes.ForEach(p => {
+                var children = Helpers.GetChildren(p.node);
                 foreach (var c in children) {
                     // Returns node by its guid and cast it back to a ReanimatorGraphNode
                     var parent = _graphView.GetNodeByGuid(p.guid) as ReanimatorGraphNode;
-                    var child = _graphView.GetNodeByGuid(c.guid) as ReanimatorGraphNode;
+                    
+                    var childData = ResolutionGraphNodes.Find(data => data.node == c);
+                    var child = _graphView.GetNodeByGuid(childData.guid) as ReanimatorGraphNode;
 
                     // If it is a new graph, check if the root has a child or not
-                    if (parent?.node is BaseNode && child?.node == null)
+                    if (parent?.nodeData.node is BaseNode && child?.nodeData.node == null)
                         continue;
 
                     // Connect each parents output to the saved children
@@ -45,7 +47,7 @@ namespace Aarthificial.Reanimation {
 
             _graphView.graph.groups.ForEach(group => {
                 var block = _graphView.AddGroupView(group);
-                block.AddElements(Nodes.Where(x => group.innerNodeGUIDs.Contains(x.node.guid)));
+                block.AddElements(Nodes.Where(x => group.innerNodeGUIDs.Contains(x.nodeData.guid)));
             });
         }
 
@@ -61,7 +63,7 @@ namespace Aarthificial.Reanimation {
 
         private ReanimatorGraphView _graphView;
 
-        private List<ReanimatorNode> GraphSubAssets => _graphView.graph.nodes;
+        private List<NodeDTO> ResolutionGraphNodes => _graphView.graph.nodes;
         private List<Edge> Edges => _graphView.edges.ToList();
         private List<ReanimatorGraphNode> Nodes => _graphView.nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
         private IEnumerable<UnityEditor.Experimental.GraphView.Group> CommentBlocks =>

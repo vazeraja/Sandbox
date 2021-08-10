@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
@@ -83,10 +84,10 @@ namespace Aarthificial.Reanimation {
             graphView.onNodeSelected = DrawNodeProperties;
         }
 
-        private void DrawNodeProperties(ReanimatorGraphNode graphNode)
+        private void DrawNodeProperties(ReanimatorNode node)
         {
             twoPanelInspector.Initialize(inspectorPanel, animationPreviewPanel);
-            twoPanelInspector.DrawNodeProperties(graphNode);
+            twoPanelInspector.DrawNodeProperties(node);
         }
 
         private void Select(Object graph)

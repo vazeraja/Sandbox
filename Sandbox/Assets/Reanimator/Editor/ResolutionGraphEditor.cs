@@ -30,11 +30,11 @@ namespace Aarthificial.Reanimation {
             serializedObject.Update();
             _resolutionGraph = (ResolutionGraph)serializedObject.targetObject;
             
-            using (new EditorGUI.DisabledGroupScope(true)) {
+            //using (new EditorGUI.DisabledGroupScope(true)) {
                 EditorGUILayout.PropertyField(_root);
                 EditorGUILayout.PropertyField(_nodes);
                 EditorGUILayout.PropertyField(_groups);
-            }
+            //}
 
             serializedObject.ApplyModifiedProperties();
         }

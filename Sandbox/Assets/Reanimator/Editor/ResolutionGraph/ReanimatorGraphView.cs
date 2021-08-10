@@ -17,12 +17,13 @@ namespace Aarthificial.Reanimation {
         public ResolutionGraph graph;
         public ReanimatorGraphEditorWindow editorWindow;
         private ReanimatorSearchWindowProvider searchWindowProvider;
-        public UnityAction<ReanimatorGraphNode> onNodeSelected;
+        public UnityAction<ReanimatorNode> onNodeSelected;
 
         public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
 
-        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode =
-            new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
+        // public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode =
+        //     new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
+
         private IEnumerable<MiniMap> MiniMaps =>
             graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
 
@@ -35,7 +36,7 @@ namespace Aarthificial.Reanimation {
             this.graph = graph;
             this.editorWindow = editorWindow;
 
-            GraphNodesPerNode.Clear();
+            //GraphNodesPerNode.Clear();
             groupViews.Clear();
 
             graphViewChanged -= OnGraphViewChanged;
@@ -130,30 +131,30 @@ namespace Aarthificial.Reanimation {
         /// <param name="type"></param>
         /// <param name="nodePosition"></param>
         /// <returns></returns>
-        public ReanimatorNode CreateNode(Type type, Vector2 nodePosition)
+        public NodeDTO CreateNode(Type type, Vector2 nodePosition)
         {
-            ReanimatorNode node = CreateSubAsset(type);
-            node.position = nodePosition;
-            var graphNode = CreateGraphNode(node);
+            NodeDTO nodeDto = CreateSubAsset(type);
+            nodeDto.position = nodePosition;
+            var graphNode = CreateGraphNode(nodeDto);
             Helpers.Call(() => graphNode.OnCreated());
-            return node;
+            return nodeDto;
         }
 
         /// <summary>
         /// Create a ReanimatorNode graph element and add it to the graph view 
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="nodeDto"></param>
         /// <param name="assetName"></param>
-        public ReanimatorGraphNode CreateGraphNode(ReanimatorNode node, string assetName = null)
+        public ReanimatorGraphNode CreateGraphNode(NodeDTO nodeDto, string assetName = null)
         {
-            node.name = string.IsNullOrEmpty(assetName) ? node.GetType().Name : assetName;
+            nodeDto.node.name = string.IsNullOrEmpty(assetName) ? nodeDto.GetType().Name : assetName;
 
-            var graphNode = new ReanimatorGraphNode(node) {
+            var graphNode = new ReanimatorGraphNode(nodeDto) {
                 onNodeSelected = onNodeSelected
             };
             AddElement(graphNode);
 
-            GraphNodesPerNode[node] = graphNode;
+            //GraphNodesPerNode[nodeData] = graphNode;
 
             return graphNode;
         }
@@ -175,7 +176,7 @@ namespace Aarthificial.Reanimation {
             ControlDriver controlDriver,
             DriverDictionary driverDictionary)
         {
-            if (!(CreateNode(type, nodePosition) is SimpleAnimationNode simpleAnimationNode)) return;
+            if (!(CreateNode(type, nodePosition).node is SimpleAnimationNode simpleAnimationNode)) return;
             var nodeSprites = simpleCels as SimpleCel[] ?? simpleCels.ToArray();
             simpleAnimationNode.sprites = nodeSprites;
             simpleAnimationNode.ControlDriver = controlDriver;
@@ -191,7 +192,7 @@ namespace Aarthificial.Reanimation {
         /// <param name="reanimatorNodes"></param>
         public void CreateSwitchNode(Type type, Vector2 nodePosition, List<ReanimatorNode> reanimatorNodes)
         {
-            if (!(CreateNode(type, nodePosition) is SwitchNode switchNode)) return;
+            if (!(CreateNode(type, nodePosition).node is SwitchNode switchNode)) return;
             switchNode.nodes = reanimatorNodes;
         }
 
@@ -202,16 +203,21 @@ namespace Aarthificial.Reanimation {
         /// <param name="type"></param>
         /// <param name="assetName"></param>
         /// <returns></returns>
-        public ReanimatorNode CreateSubAsset(Type type, string assetName = null)
+        public NodeDTO CreateSubAsset(Type type, string assetName = null)
         {
             ReanimatorNode node = ScriptableObject.CreateInstance(type) as ReanimatorNode;
 
             // ReSharper disable once PossibleNullReferenceException
             node.name = string.IsNullOrEmpty(assetName) ? type.Name : assetName;
-            node.guid = GUID.Generate().ToString();
 
+            var nodeData = new NodeDTO {
+                node = node,
+                guid = GUID.Generate().ToString()
+            };
+            
             Undo.RecordObject(graph, "Resolution Tree");
-            graph.nodes.Add(node);
+            graph.nodes.Add(nodeData);
+
             if (!Application.isPlaying) {
                 AssetDatabase.AddObjectToAsset(node, graph);
             }
@@ -219,19 +225,19 @@ namespace Aarthificial.Reanimation {
             Undo.RegisterCreatedObjectUndo(node, "Resolution Tree");
 
             SaveGraphToDisk();
-            return node;
+            return nodeData;
         }
 
         /// <summary>
         /// Removes the scriptable object sub asset from the resolution graph and removes it from the list
         /// of nodes saved in the resolution graph
         /// </summary>
-        /// <param name="node"></param>
-        private void DeleteSubAsset(ReanimatorNode node)
+        /// <param name="nodeDto"></param>
+        private void DeleteSubAsset(NodeDTO nodeDto)
         {
             Undo.RecordObject(graph, "Resolution Tree");
-            graph.nodes.Remove(node);
-            Undo.DestroyObjectImmediate(node);
+            graph.nodes.Remove(nodeDto);
+            Undo.DestroyObjectImmediate(nodeDto.node);
 
             SaveGraphToDisk();
         }
@@ -308,13 +314,13 @@ namespace Aarthificial.Reanimation {
                 switch (elem) {
                     case ReanimatorGraphNode graphNode:
                         Helpers.Call(() => graphNode.OnRemoved());
-                        GraphNodesPerNode.Remove(graphNode.node);
-                        DeleteSubAsset(graphNode.node);
+                        // GraphNodesPerNode.Remove(graphNode.NodeData);
+                        DeleteSubAsset(graphNode.nodeData);
                         break;
                     case Edge edge:
                         var parentNode = edge.output.node as ReanimatorGraphNode;
                         var childNode = edge.input.node as ReanimatorGraphNode;
-                        RemoveChild(parentNode?.node, childNode?.node);
+                        RemoveChild(parentNode?.nodeData.node, childNode?.nodeData.node);
                         break;
                     case ReanimatorGroup group:
                         graph.RemoveGroup(group.group);
@@ -328,7 +334,7 @@ namespace Aarthificial.Reanimation {
                 var parentNode = edge.output.node as ReanimatorGraphNode;
                 var childNode = edge.input.node as ReanimatorGraphNode;
 
-                AddChild(parentNode?.node, childNode?.node);
+                AddChild(parentNode?.nodeData.node, childNode?.nodeData.node);
             });
 
             return graphViewChange;
@@ -340,9 +346,9 @@ namespace Aarthificial.Reanimation {
                 .ToList()
                 .Cast<ReanimatorGraphNode>()
                 .ToList()
-                .ForEach(node => {
-                    if (node.node is SimpleAnimationNode) {
-                        node.PlayAnimationPreview();
+                .ForEach(graphNode => {
+                    if (graphNode.nodeData.node is SimpleAnimationNode) {
+                        graphNode.PlayAnimationPreview();
                     }
                 });
         }

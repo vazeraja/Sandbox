@@ -1,6 +1,4 @@
-﻿using System;
-using Aarthificial.Reanimation.Editor.Nodes;
-using Aarthificial.Reanimation.Nodes;
+﻿using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
@@ -11,30 +9,32 @@ using UnityEngine.UIElements;
 namespace Aarthificial.Reanimation {
     public sealed class ReanimatorGraphNode : Node {
 
-        public UnityAction<ReanimatorGraphNode> onNodeSelected;
+        public UnityAction<ReanimatorNode> onNodeSelected;
 
         private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
-        public ReanimatorNode node { get; }
-        public ReanimatorPort input { get; }
-        public ReanimatorPort output { get; }
+        
+        public NodeDTO nodeData;
+        public readonly ReanimatorPort input;
+        public readonly ReanimatorPort output;
         public void OnCreated() {}
         public void OnRemoved() {}
         
-        public ReanimatorGraphNode(ReanimatorNode node) : base(nodeStyleSheetPath)
+        public ReanimatorGraphNode(NodeDTO nodeData) : base(nodeStyleSheetPath)
         {
             // UseDefaultStyling();
-            this.node = node;
-            this.node.name = node.title == string.Empty ? node.GetType().Name : node.title;
-            title = node.GetType().Name;
-            viewDataKey = node.guid;
+            this.nodeData = nodeData;
+            this.nodeData.node.name = nodeData.title == string.Empty ? nodeData.GetType().Name: nodeData.node.title;
+            this.nodeData.title = nodeData.title == string.Empty ? nodeData.GetType().Name : nodeData.node.title;
+            title = nodeData.GetType().Name;
+            viewDataKey = nodeData.guid;
 
-            style.left = node.position.x;
-            style.top = node.position.y;
+            style.left = nodeData.position.x;
+            style.top = nodeData.position.y;
             
-            switch (node) {
+            switch (nodeData.node) {
                 case SimpleAnimationNode _:
-                    if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().Name;
+                    if (string.IsNullOrEmpty(nodeData.title)) {
+                        nodeData.title = nodeData.GetType().Name;
                     }
 
                     input = new ReanimatorPort(Direction.Input, Port.Capacity.Single) {
@@ -43,12 +43,12 @@ namespace Aarthificial.Reanimation {
                     };
                     input.Initialize(this, "");
                     inputContainer.Add(input);
-                    node.needsAnimationPreview = true;
+                    nodeData.needsAnimationPreview = true;
                     AddToClassList("simpleAnimation");
                     break;
                 case SwitchNode _:
-                    if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().Name;
+                    if (string.IsNullOrEmpty(nodeData.title)) {
+                        nodeData.title = nodeData.GetType().Name;
                     }
 
                     input = new ReanimatorPort(Direction.Input, Port.Capacity.Single) {
@@ -65,12 +65,12 @@ namespace Aarthificial.Reanimation {
                     
                     inputContainer.Add(input);
                     outputContainer.Add(output);
-                    node.needsAnimationPreview = false;
+                    nodeData.needsAnimationPreview = false;
                     AddToClassList("switch");
                     break;
                 case OverrideNode _:
-                    if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().Name;
+                    if (string.IsNullOrEmpty(nodeData.title)) {
+                        nodeData.title = nodeData.GetType().Name;
                     }
                     
                     input = new ReanimatorPort(Direction.Input, Port.Capacity.Single){
@@ -87,12 +87,12 @@ namespace Aarthificial.Reanimation {
                     
                     inputContainer.Add(input);
                     outputContainer.Add(output);
-                    node.needsAnimationPreview = false;
+                    nodeData.needsAnimationPreview = false;
                     AddToClassList("override");
                     break;
                 case BaseNode _:
-                    if (string.IsNullOrEmpty(node.title)) {
-                        node.title = node.GetType().Name;
+                    if (string.IsNullOrEmpty(nodeData.title)) {
+                        nodeData.title = nodeData.GetType().Name;
                     }
                     
                     output = new ReanimatorPort(Direction.Output, Port.Capacity.Single){
@@ -104,7 +104,7 @@ namespace Aarthificial.Reanimation {
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;
                     capabilities &= ~Capabilities.Deletable;
-                    node.needsAnimationPreview = false;
+                    nodeData.needsAnimationPreview = false;
                     AddToClassList("base");
                     break;
             }
@@ -112,7 +112,7 @@ namespace Aarthificial.Reanimation {
             Label description = this.Q<Label>("title-label");
             description.AddToClassList("custom-title");
             description.bindingPath = "title";
-            description.Bind(new SerializedObject(node));
+            description.Bind(new SerializedObject(nodeData.node));
 
             var textField = new TextField();
             extensionContainer.Add(textField);
@@ -139,16 +139,16 @@ namespace Aarthificial.Reanimation {
         {
             base.SetPosition(newPos);
 
-            Undo.RecordObject(node, "ResolutionGraph");
-            node.position.x = newPos.xMin;
-            node.position.y = newPos.yMin;
-            EditorUtility.SetDirty(node);
+            //Undo.RecordObject(nodeData, "ResolutionGraph");
+            nodeData.position.x = newPos.xMin;
+            nodeData.position.y = newPos.yMin;
+            //EditorUtility.SetDirty(nodeData);
         }
 
         public override void OnSelected()
         {
             base.OnSelected();
-            onNodeSelected?.Invoke(this);
+            onNodeSelected?.Invoke(nodeData.node);
         }
         
 

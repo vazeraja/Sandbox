@@ -71,8 +71,8 @@ namespace Aarthificial.Reanimation {
                 if (node == null)
                     continue;
 
-                if (!group.innerNodeGUIDs.Contains(node.node.guid))
-                    group.innerNodeGUIDs.Add(node.node.guid);
+                if (!group.innerNodeGUIDs.Contains(node.nodeData.guid))
+                    group.innerNodeGUIDs.Add(node.nodeData.guid);
             }
 
             base.OnElementsAdded(graphElements);
@@ -85,7 +85,7 @@ namespace Aarthificial.Reanimation {
             if (parent != null) {
                 foreach (var elem in graphElements) {
                     if (elem is ReanimatorGraphNode nodeView) {
-                        group.innerNodeGUIDs.Remove(nodeView.node.guid);
+                        group.innerNodeGUIDs.Remove(nodeView.nodeData.guid);
                     }
                 }
             }

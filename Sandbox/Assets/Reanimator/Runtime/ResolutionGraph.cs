@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aarthificial.Reanimation.Common;
 using Aarthificial.Reanimation.Nodes;
 using UnityEngine;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
-
 #endif
 
 namespace Aarthificial.Reanimation {
+    
+    [Serializable]
+    public struct NodeDTO {
+        public ReanimatorNode node;
+        public string guid;
+        public string title;
+        public Vector2 position;
+        public bool needsAnimationPreview;
+    }
+    
     [CreateAssetMenu(fileName = "ResolutionGraph", menuName = "Reanimator/ResolutionGraph", order = 400)]
     public class ResolutionGraph : ScriptableObject {
-        public ReanimatorNode root;
-        
-        
-        [SerializeReference] public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
-        //[NonSerialized] public Dictionary<string, BaseNode> nodesPerGUID = new Dictionary<string, BaseNode>();
-        
-
+        [SerializeField] public ReanimatorNode root;
+        [SerializeField] public List<NodeDTO> nodes = new List<NodeDTO>();
         [SerializeField] public List<Group> groups = new List<Group>();
+        
+        
+        //[NonSerialized] public Dictionary<string, BaseNode> nodesPerGUID = new Dictionary<string, BaseNode>();
 
         /// <summary>
         /// Add a group
