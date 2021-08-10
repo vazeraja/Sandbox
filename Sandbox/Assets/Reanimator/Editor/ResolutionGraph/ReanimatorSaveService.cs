@@ -11,10 +11,10 @@ using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorSaveService {
-        public void LoadFromSubAssets()
+        public void LoadFromSubAssets(ResolutionGraph graph = null)
         {
-            _graphView.Initialize(_graphView.editorWindow, _graphView.graph);
-
+            _graphView.Initialize(_graphView.editorWindow, graph != null ? graph : _graphView.graph);
+            
             // Create root node if graph is empty
             if (GraphSubAssets.Count == 0) {
                 _graphView.graph.root = _graphView.CreateSubAsset(typeof(BaseNode)) as BaseNode;
