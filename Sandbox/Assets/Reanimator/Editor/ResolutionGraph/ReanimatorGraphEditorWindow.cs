@@ -67,14 +67,13 @@ namespace Aarthificial.Reanimation {
 
             loadButton.clicked += () => {
                 if (!(Selection.activeObject is ResolutionGraph)) {
-                    Debug.Log("Select a Resolution Graph");
+                    EditorUtility.DisplayDialog("Invalid", "Select a Resolution Graph", "OK");
                     return;
                 }
 
                 resolutionGraph = Selection.activeObject as ResolutionGraph;
-                EditorApplication.delayCall += () => {
-                    Helpers.SaveService(graphView).LoadFromSubAssets(resolutionGraph);
-                };
+                Helpers.SaveService(graphView).LoadFromSubAssets(resolutionGraph);
+                EditorApplication.delayCall += () => { graphView.FrameAll(); };
             };
 
             graphView.onNodeSelected = DrawNodeProperties;
