@@ -9,9 +9,7 @@ namespace Aarthificial.Reanimation.Nodes
         [HideInInspector] public string guid;
         [TextArea] public string title = string.Empty;
         [HideInInspector] public Vector2 position;
-
-        [field: NonSerialized]
-        public virtual bool needsAnimationPreview { get; set; } = false;
+        [HideInInspector] public bool needsAnimationPreview;
 
         public abstract TerminationNode Resolve(IReadOnlyReanimatorState previousState, ReanimatorState nextState);
 
