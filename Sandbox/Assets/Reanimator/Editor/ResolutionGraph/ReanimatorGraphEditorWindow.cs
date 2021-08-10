@@ -16,14 +16,7 @@ namespace Aarthificial.Reanimation {
             ReanimatorGraphEditorWindow wnd = GetWindow<ReanimatorGraphEditorWindow>();
             wnd.titleContent = new GUIContent("ReanimatorGraph");
         }
-
-        [OnOpenAsset]
-        public static bool OnOpenAsset(int instanceId, int line)
-        {
-            if (!(Selection.activeObject is ResolutionGraph)) return false;
-            ShowWindow();
-            return true;
-        }
+        
         private const string visualTreePath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uxml";
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
 

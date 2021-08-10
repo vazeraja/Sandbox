@@ -13,13 +13,12 @@ namespace Aarthificial.Reanimation {
     [CreateAssetMenu(fileName = "ResolutionGraph", menuName = "Reanimator/ResolutionGraph", order = 400)]
     public class ResolutionGraph : ScriptableObject {
         public ReanimatorNode root;
+        public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
+        public List<Group> groups = new List<Group>();
         
-        
-        [SerializeReference] public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
         //[NonSerialized] public Dictionary<string, BaseNode> nodesPerGUID = new Dictionary<string, BaseNode>();
         
 
-        [SerializeField] public List<Group> groups = new List<Group>();
 
         /// <summary>
         /// Add a group
