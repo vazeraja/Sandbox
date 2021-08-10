@@ -41,8 +41,8 @@ namespace Aarthificial.Reanimation {
                     userData = CreateInstance<OverrideNode>()
                 },
                 
-                new SearchTreeGroupEntry(new GUIContent("Comment Block"), 1),
-                new SearchTreeEntry(new GUIContent("Comment Block", indentationIcon)) {
+                new SearchTreeGroupEntry(new GUIContent("Create Group"), 1),
+                new SearchTreeEntry(new GUIContent("Group", indentationIcon)) {
                     level = 2,
                     userData = new Group()
                 },
@@ -53,6 +53,11 @@ namespace Aarthificial.Reanimation {
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
+            if (graphView.graph == null) {
+                EditorUtility.DisplayDialog("Invalid", "Resolution Graph has not been initialized yet", "OK");
+                return false;
+            }
+            
             var mousePosition = window.rootVisualElement.ChangeCoordinatesTo(window.rootVisualElement.parent, 
                 context.screenMousePosition - window.position.position);
             var graphMousePosition = graphView.contentViewContainer.WorldToLocal(mousePosition);

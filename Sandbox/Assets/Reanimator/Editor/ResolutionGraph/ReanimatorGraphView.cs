@@ -42,8 +42,6 @@ namespace Aarthificial.Reanimation {
             DeleteElements(graphElements.ToList());
             DeleteElements(MiniMaps);
             graphViewChanged += OnGraphViewChanged;
-
-            CreateSearchWindow(editorWindow);
         }
 
         public void SaveGraphToDisk()
@@ -67,7 +65,7 @@ namespace Aarthificial.Reanimation {
         /// Creates a Search Window as seen in Unity graph tools such as Shader Graph
         /// </summary>
         /// <param name="window"></param>
-        private void CreateSearchWindow(EditorWindow window)
+        public void CreateSearchWindow(EditorWindow window)
         {
             searchWindowProvider = ScriptableObject.CreateInstance<ReanimatorSearchWindowProvider>();
             searchWindowProvider.Initialize(window, this);

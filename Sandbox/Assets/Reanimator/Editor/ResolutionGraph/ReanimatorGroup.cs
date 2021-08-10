@@ -19,26 +19,27 @@ namespace Aarthificial.Reanimation {
 
         public ReanimatorGroup(ReanimatorGraphView graphView, Group group)
         {
+            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
             styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(groupStyle));
 
             this.group = group;
             this.graphView = graphView;
-
             title = group.title;
+            autoUpdateGeometry = true;
+            
             SetPosition(group.position);
-
-            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
+            UpdateGroupColor(group.color);
 
             headerContainer.Q<TextField>().RegisterCallback<ChangeEvent<string>>(TitleChangedCallback);
-            titleLabel = headerContainer.Q<Label>();
+            headerContainer.Q<Label>().style.color = new Color(1f, 1f, 1f, 0.61f);
 
             colorField = new ColorField {
                 value = group.color, 
                 name = "headerColorPicker"
             };
             colorField.RegisterValueChangedCallback(e => { UpdateGroupColor(e.newValue); });
-            UpdateGroupColor(group.color);
             headerContainer.Add(colorField);
+            this.
 
             InitializeInnerNodes();
         }

@@ -59,6 +59,7 @@ namespace Aarthificial.Reanimation {
             loadButton = root.Q<ToolbarButton>("load-button");
 
             graphView.CreateMiniMap();
+            graphView.CreateSearchWindow(this);
 
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
             resolutionGraphs.ForEach(graph => {
