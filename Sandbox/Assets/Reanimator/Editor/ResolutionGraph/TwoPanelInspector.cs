@@ -15,16 +15,16 @@ namespace Aarthificial.Reanimation {
             this.animationPreviewPanel = animationPreviewPanel;
         }
 
-        public void DrawNodeProperties(ReanimatorNode node)
+        public void DrawNodeProperties(ReanimatorGraphNode node)
         {
             ClearAll();
 
-            editor = UnityEditor.Editor.CreateEditor(node);
-            animationEditor = UnityEditor.Editor.CreateEditor(node) as AnimationNodeEditor;
-            switchNodeEditor = UnityEditor.Editor.CreateEditor(node) as SwitchNodeEditor;
-            overrideNodeEditor = UnityEditor.Editor.CreateEditor(node) as OverrideNodeEditor;
+            editor = UnityEditor.Editor.CreateEditor(node.node);
+            animationEditor = UnityEditor.Editor.CreateEditor(node.node) as AnimationNodeEditor;
+            switchNodeEditor = UnityEditor.Editor.CreateEditor(node.node) as SwitchNodeEditor;
+            overrideNodeEditor = UnityEditor.Editor.CreateEditor(node.node) as OverrideNodeEditor;
 
-            switch (node) {
+            switch (node.node) {
                 case BaseNode _:
 
                     animationPreviewPanel.style.display = DisplayStyle.None;
