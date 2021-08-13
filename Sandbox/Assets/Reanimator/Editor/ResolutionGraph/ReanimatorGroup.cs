@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aarthificial.Reanimation.Common;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Group = Aarthificial.Reanimation.Common.Group;
 
 namespace Aarthificial.Reanimation {
     public sealed class ReanimatorGroup : UnityEditor.Experimental.GraphView.Group {

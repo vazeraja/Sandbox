@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Group = Aarthificial.Reanimation.Common.Group;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorSearchWindowProvider : ScriptableObject, ISearchWindowProvider {

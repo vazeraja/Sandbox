@@ -9,6 +9,8 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
+using Group = Aarthificial.Reanimation.Common.Group;
+using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorGraphView : GraphView {
@@ -20,13 +22,15 @@ namespace Aarthificial.Reanimation {
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
         public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-
-        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode =
-            new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
-        private IEnumerable<MiniMap> MiniMaps =>
-            graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
-
+        private IEnumerable<MiniMap> MiniMaps => graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
+        public FloatingAnimationPreview FloatingAnimationPreview;
+        
+        
+        
+        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode = new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
         public List<ReanimatorGroup> groupViews = new List<ReanimatorGroup>();
+        
+        // Dictionary<Type, FloatingGraphElement> pinnedElements = new Dictionary<Type, FloatingGraphElement>();
 
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
 
@@ -60,7 +64,7 @@ namespace Aarthificial.Reanimation {
 
             EditorUtility.SetDirty(obj);
         }
-
+        
         /// <summary>
         /// Creates a Search Window as seen in Unity graph tools such as Shader Graph
         /// </summary>
@@ -110,6 +114,28 @@ namespace Aarthificial.Reanimation {
 
             groupViews.Add(c);
             return c;
+        }
+        public FloatingAnimationPreview AddFloatingElement(FloatingElement floatingElement)
+        {
+            Undo.RecordObject(graph, "Resolution Tree");
+            graph.AddFloatingElement(floatingElement);
+            return AddFloatingGraphElement(floatingElement);
+        }
+
+        public FloatingAnimationPreview AddFloatingGraphElement(FloatingElement floatingElement)
+        {
+            var f = new FloatingAnimationPreview();
+            f.InitializeGraphView(floatingElement, this);
+            FloatingAnimationPreview = f;
+            Add(f);
+
+            return f;
+        }
+
+        public void RemoveFloatingGraphElement()
+        {
+            graph.RemoveFloatingElement(FloatingAnimationPreview.FloatingElement);
+            Remove(FloatingAnimationPreview);
         }
 
         /// <summary>

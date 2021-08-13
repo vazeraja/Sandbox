@@ -113,8 +113,9 @@ MonoBehaviour:
       y: -108.24323
       width: 231
       height: 270
-    color: {r: 0.15686275, g: 0.3921569, b: 0.65882355, a: 0.20784314}
+    color: {r: 0.1721698, g: 0.4142836, b: 0.6886792, a: 0.20784314}
     size: {x: 400, y: 200}
+  floatingElements: []
 --- !u!114 &5215725629504640835
 MonoBehaviour:
   m_ObjectHideFlags: 0

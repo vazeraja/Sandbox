@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Aarthificial.Reanimation.Nodes;
 using UnityEngine;
 
-namespace Aarthificial.Reanimation {
+namespace Aarthificial.Reanimation.Common {
 
 
     [Serializable]

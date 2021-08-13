@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
+using Aarthificial.Reanimation.Common;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
+using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorGraphEditorWindow : EditorWindow {
@@ -26,8 +28,8 @@ namespace Aarthificial.Reanimation {
         private InspectorCustomControl inspectorPanel;
         private VisualElement animationPreviewPanel;
         private TwoPanelInspector twoPanelInspector;
-        private ToolbarButton saveButton;
         private ToolbarButton loadButton;
+        private ExtendedToolbarToggle toggle;
 
         private void Update()
         {
@@ -55,11 +57,12 @@ namespace Aarthificial.Reanimation {
             twoPanelInspector = root.Q<TwoPanelInspector>("TwoPanelInspector");
 
             toolbarMenu = root.Q<ToolbarMenu>();
-            saveButton = root.Q<ToolbarButton>("save-button");
             loadButton = root.Q<ToolbarButton>("load-button");
+            toggle = root.Q<ExtendedToolbarToggle>();
 
             graphView.CreateMiniMap();
             graphView.CreateSearchWindow(this);
+            graphView.onNodeSelected = DrawNodeProperties;
 
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
             resolutionGraphs.ForEach(graph => {
@@ -76,8 +79,23 @@ namespace Aarthificial.Reanimation {
                 Helpers.SaveService(graphView).LoadFromSubAssets(resolutionGraph);
                 EditorApplication.delayCall += () => { graphView.FrameAll(); };
             };
+            
+            toggle.Initialize();
+            toggle.enabled += () => {
+                if (!resolutionGraph || graphView == null) return;
+                if (resolutionGraph.floatingElements.Any()) {
+                    Debug.LogError("Animation Window is already open");
+                    return;
+                }
+                
+                //if(resolutionGraph.floatingElements)
+                graphView.AddFloatingElement(new FloatingElement());
+            };
+            toggle.disabled += () => {
+                if (!resolutionGraph || !resolutionGraph.floatingElements.Any() ||graphView == null) return;
 
-            graphView.onNodeSelected = DrawNodeProperties;
+                graphView.RemoveFloatingGraphElement();
+            };
         }
 
         private void DrawNodeProperties(ReanimatorGraphNode graphNode)

@@ -47,6 +47,10 @@ namespace Aarthificial.Reanimation {
                 var block = _graphView.AddGroupView(group);
                 block.AddElements(Nodes.Where(x => group.innerNodeGUIDs.Contains(x.node.guid)));
             });
+            _graphView.graph.floatingElements.ForEach(elem => {
+                var floatingGraphElement = _graphView.AddFloatingGraphElement(elem);
+                floatingGraphElement.ResetPosition();
+            });
         }
 
         public ReanimatorSaveService(ReanimatorGraphView graphView)

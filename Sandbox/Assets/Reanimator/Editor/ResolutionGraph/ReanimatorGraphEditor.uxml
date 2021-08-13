@@ -2,8 +2,8 @@
     <Style src="ReanimatorGraphEditor.uss" />
     <uie:Toolbar style="height: 20px;">
         <uie:ToolbarMenu display-tooltip-when-elided="false" text="Assets" />
-        <uie:ToolbarButton text="Save" display-tooltip-when-elided="true" enable-rich-text="true" name="save-button" style="-unity-text-align: middle-center; margin-left: -1px; padding-right: 2px; padding-top: 0; flex-direction: row; align-items: center; margin-right: 0; min-width: 50px;" />
         <uie:ToolbarButton text="Load" display-tooltip-when-elided="true" enable-rich-text="true" name="load-button" style="-unity-text-align: middle-center; margin-left: -1px; padding-right: 2px; padding-top: 0; flex-direction: row; align-items: center; margin-right: 0; min-width: 50px;" />
+        <Aarthificial.Reanimation.ExtendedToolbarToggle focusable="false" name="ExtendedToolbarToggle" text="Show Animation Preview" />
     </uie:Toolbar>
     <Aarthificial.Reanimation.TwoPanelCustomControl fixed-pane-initial-dimension="800">
         <ui:VisualElement name="left-panel">
