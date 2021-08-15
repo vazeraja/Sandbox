@@ -2,15 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using Dialogue;
+using TMPro;
 using UnityEngine;
 
 public class DialogueParser : MonoBehaviour {
+   public DialogueObject dialogueObject;
+   public TMP_Text tmpText;
    public string mInput;
 
    private void Start() {
       // mInput = "<tag>hello</tag>";
       mInput = "<root><tag>amazing <yeehaw>yeehaw </yeehaw></tag><cock>nice cock</cock></root>";
       Parser(mInput);
+      dialogueObject.textAnimationGraph = new TextAnimationGraph(tmpText);
+      dialogueObject.Animate();
    }
 
    private void Parser(string input) {
