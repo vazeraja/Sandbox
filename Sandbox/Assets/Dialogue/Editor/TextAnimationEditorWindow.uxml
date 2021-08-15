@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="TextAnimationEditorWindow.uss" />
+    <uie:Toolbar style="height: 69px;">
+        <uie:ToolbarMenu display-tooltip-when-elided="true" text="Yeehaw" style="width: 144px;" />
+    </uie:Toolbar>
+    <Aarthificial.Reanimation.TwoPanelCustomControl orientation="Horizontal" fixed-pane-initial-dimension="900">
+        <ui:VisualElement name="RightPanel">
+            <TextAnimationGraphView focusable="true" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="LeftPanel">
+            <Aarthificial.Reanimation.InspectorCustomControl />
+        </ui:VisualElement>
+    </Aarthificial.Reanimation.TwoPanelCustomControl>
+</ui:UXML>
