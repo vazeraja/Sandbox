@@ -87,8 +87,6 @@ namespace Aarthificial.Reanimation {
                     Debug.LogError("Animation Window is already open");
                     return;
                 }
-                
-                //if(resolutionGraph.floatingElements)
                 graphView.AddFloatingElement(new FloatingElement());
             };
             toggle.disabled += () => {

@@ -15,7 +15,7 @@ namespace Aarthificial.Reanimation {
         public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
         
         public List<Group> groups = new List<Group>();
-        [ItemCanBeNull] public List<FloatingElement> floatingElements = new List<FloatingElement>();
+        public List<FloatingElement> floatingElements = new List<FloatingElement>();
         //[NonSerialized] public Dictionary<string, BaseNode> nodesPerGUID = new Dictionary<string, BaseNode>();
         
 

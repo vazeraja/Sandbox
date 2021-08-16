@@ -1,10 +1,11 @@
-<UXML xmlns:ui="UnityEngine.Experimental.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="FloatingElement.uss" />
     <ui:VisualElement name="content" picking-mode="Ignore">
         <ui:VisualElement name="header" picking-mode="Ignore">
-            <ui:VisualElement name="labelContainer" picking-mode="Ignore">
-                <ui:Label name="titleLabel" text="" />
+            <ui:VisualElement name="labelContainer" picking-mode="Ignore" style="border-left-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; font-size: 7px; -unity-font-style: normal; -unity-text-align: upper-center;">
+                <ui:Label name="titleLabel" style="-unity-font-style: bold; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="contentContainer" picking-mode="Ignore" />
     </ui:VisualElement>
-</UXML>
+</ui:UXML>

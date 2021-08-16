@@ -57,16 +57,14 @@ namespace Aarthificial.Reanimation {
         protected FloatingGraphElement()
         {
             var tpl = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(pinnedElementTree);
-            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(pinnedElementStyle));
+            //styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(pinnedElementStyle));
 
             main = tpl.CloneTree();
             main.AddToClassList("mainContainer");
             scrollView = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
 
             root = main.Q("content");
-
             header = main.Q("header");
-
             titleLabel = main.Q<Label>(name: "titleLabel");
             content = main.Q<VisualElement>(name: "contentContainer");
 

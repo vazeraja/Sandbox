@@ -115,7 +115,15 @@ MonoBehaviour:
       height: 270
     color: {r: 0.1721698, g: 0.4142836, b: 0.6886792, a: 0.20784314}
     size: {x: 400, y: 200}
-  floatingElements: []
+  floatingElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 401
+      width: 226
+      height: 217
+    title: Animation Preview
+    opened: 0
 --- !u!114 &5215725629504640835
 MonoBehaviour:
   m_ObjectHideFlags: 0
