@@ -11,18 +11,19 @@ using UnityEngine.UIElements;
 namespace Aarthificial.Reanimation {
     public sealed class ReanimatorGraphNode : Node {
 
-        public UnityAction<ReanimatorGraphNode> onNodeSelected;
-
         private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
+        public UnityAction<ReanimatorGraphNode> onNodeSelected;
+        private ReanimatorGraphView reanimatorGraphView;
         public ReanimatorNode node { get; }
         public ReanimatorPort input { get; }
         public ReanimatorPort output { get; }
         public void OnCreated() {}
         public void OnRemoved() {}
         
-        public ReanimatorGraphNode(ReanimatorNode node) : base(nodeStyleSheetPath)
+        public ReanimatorGraphNode(ReanimatorGraphView reanimatorGraphView, ReanimatorNode node) : base(nodeStyleSheetPath)
         {
             // UseDefaultStyling();
+            this.reanimatorGraphView = reanimatorGraphView;
             this.node = node;
             this.node.name = node.title == string.Empty ? node.GetType().Name : node.title;
             title = node.GetType().Name;
@@ -150,7 +151,5 @@ namespace Aarthificial.Reanimation {
             base.OnSelected();
             onNodeSelected?.Invoke(this);
         }
-        
-
     }
 }

@@ -17,7 +17,7 @@ namespace Aarthificial.Reanimation {
             
             // Create root node if graph is empty
             if (GraphSubAssets.Count == 0) {
-                _graphView.graph.root = _graphView.CreateSubAsset(typeof(BaseNode)) as BaseNode;
+                _graphView.graph.root = _graphView.graph.CreateSubAsset(typeof(BaseNode)) as BaseNode;
                 EditorUtility.SetDirty(_graphView.graph);
                 AssetDatabase.SaveAssets();
             }

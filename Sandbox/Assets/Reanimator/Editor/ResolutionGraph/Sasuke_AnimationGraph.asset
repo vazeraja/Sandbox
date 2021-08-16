@@ -344,7 +344,15 @@ MonoBehaviour:
   - {fileID: 5145656718631313926}
   - {fileID: -9130189663412503569}
   groups: []
-  floatingElements: []
+  floatingElements:
+  - position:
+      serializedVersion: 2
+      x: 559
+      y: 285
+      width: 315
+      height: 165
+    title: Animation Preview
+    opened: 0
 --- !u!114 &1210843896723939208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 4c81fdd4ff18f8f41a57d94ed6f9d667
   title: FlipAnimation
-  position: {x: 1080, y: -408}
+  position: {x: 1080, y: -419.99994}
   cels:
   - sprite: {fileID: -14635915900717176, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:

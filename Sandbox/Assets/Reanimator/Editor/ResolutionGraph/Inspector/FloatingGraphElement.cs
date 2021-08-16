@@ -8,17 +8,21 @@ using UnityEngine.UIElements;
 namespace Aarthificial.Reanimation {
     public abstract class FloatingGraphElement : GraphElement {
         public FloatingElement FloatingElement;
+        
+        private VisualElement main;
         protected readonly VisualElement root;
         protected readonly VisualElement content;
         protected readonly VisualElement header;
 
-        protected event Action onResized;
 
-        private VisualElement main;
-        private Label titleLabel;
+        protected readonly ScrollView scrollView;
+        private readonly Label titleLabel;
+        
         private bool _scrollable;
-        private ScrollView scrollView;
+        private bool _resizable;
 
+        protected event Action onResized;
+        
         private static readonly string pinnedElementStyle =
             "Assets/Reanimator/Editor/ResolutionGraph/Inspector/FloatingElement.uss";
 
@@ -28,6 +32,24 @@ namespace Aarthificial.Reanimation {
         public sealed override string title {
             get => titleLabel.text;
             set => titleLabel.text = value;
+        }
+
+        private readonly Resizer resizer;
+        protected bool resizable {
+            get => _resizable;
+            set {
+                if (_resizable == value)
+                    return;
+
+                _resizable = value;
+
+                if (_resizable) {
+                    this.hierarchy.Add(resizer);
+                }
+                else {
+                    this.hierarchy.Remove(resizer);
+                }
+            }
         }
 
         protected bool scrollable {
@@ -61,7 +83,6 @@ namespace Aarthificial.Reanimation {
 
             main = tpl.CloneTree();
             main.AddToClassList("mainContainer");
-            scrollView = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
 
             root = main.Q("content");
             header = main.Q("header");
@@ -79,8 +100,9 @@ namespace Aarthificial.Reanimation {
             this.AddManipulator(new Dragger {clampToParentEdges = true});
 
             scrollable = false;
-
-            hierarchy.Add(new Resizer(() => onResized?.Invoke()));
+            scrollView = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
+            resizer = new Resizer(() => onResized?.Invoke());
+            resizable = true;
 
             RegisterCallback<DragUpdatedEvent>(e => { e.StopPropagation(); });
 

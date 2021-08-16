@@ -33,11 +33,11 @@ namespace Aarthificial.Reanimation {
 
         private void Update()
         {
-            // if (graphView != null) {
-            //     Debug.Log("Count of GraphNodes: " + graphView.GraphNodes.Count);
-            //     Debug.Log("Count of GraphNodesByNode Dict: " + graphView.GraphNodesPerNode.Count);
-            //     Debug.Log("Count of GroupViews: " + graphView.groupViews.Count);
-            // }
+            if (graphView != null) {
+                //Debug.Log("Count of GraphNodes: " + graphView.GraphNodes.Count);
+                //Debug.Log("Count of GraphNodesByNode Dict: " + graphView.GraphNodesPerNode.Count);
+                //Debug.Log("Count of GroupViews: " + graphView.groupViews.Count);
+            }
         }
 
         public void CreateGUI()
@@ -63,6 +63,11 @@ namespace Aarthificial.Reanimation {
             graphView.CreateMiniMap();
             graphView.CreateSearchWindow(this);
             graphView.onNodeSelected = DrawNodeProperties;
+            graphView.onNodeSelected = node => {
+                if (root.Q<FloatingAnimationPreview>() != null) {
+                    graphView.FloatingAnimationPreview.DrawNodeProperties(node);
+                }
+            };
 
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
             resolutionGraphs.ForEach(graph => {

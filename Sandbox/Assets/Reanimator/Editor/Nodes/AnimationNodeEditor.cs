@@ -67,6 +67,8 @@ namespace Aarthificial.Reanimation.Editor.Nodes
             EditorGUILayout.EndHorizontal();
         }
 
+        public void UpdateSprites() => this.UpdateSpritesCache();
+
         protected virtual void UpdateSpritesCache()
         {
             Sprites.Clear();

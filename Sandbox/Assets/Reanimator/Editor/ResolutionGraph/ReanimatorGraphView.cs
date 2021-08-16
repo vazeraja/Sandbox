@@ -33,7 +33,25 @@ namespace Aarthificial.Reanimation {
         // Dictionary<Type, FloatingGraphElement> pinnedElements = new Dictionary<Type, FloatingGraphElement>();
 
         private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
+        
+        public ReanimatorGraphView()
+        {
+            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath));
 
+            Insert(0, new GridBackground());
+            this.AddManipulator(new ContentZoomer());
+            this.AddManipulator(new ContentDragger());
+            this.AddManipulator(new SelectionDragger());
+            this.AddManipulator(new RectangleSelector());
+            this.AddManipulator(new DragAndDropManipulator());
+
+            Undo.undoRedoPerformed += () => {
+                Initialize(editorWindow, graph);
+                AssetDatabase.SaveAssets();
+            };
+            EditorApplication.update += PlayAnimationPreview;
+        }
+        
         public void Initialize(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph)
         {
             this.graph = graph;
@@ -48,23 +66,6 @@ namespace Aarthificial.Reanimation {
             graphViewChanged += OnGraphViewChanged;
         }
 
-        public void SaveGraphToDisk()
-        {
-            if (graph == null)
-                return;
-
-            EditorUtility.SetDirty(graph);
-            AssetDatabase.SaveAssets();
-        }
-
-        public void SaveToDisk(ScriptableObject obj)
-        {
-            if (obj == null)
-                return;
-
-            EditorUtility.SetDirty(obj);
-        }
-        
         /// <summary>
         /// Creates a Search Window as seen in Unity graph tools such as Shader Graph
         /// </summary>
@@ -156,7 +157,7 @@ namespace Aarthificial.Reanimation {
         /// <returns></returns>
         public ReanimatorNode CreateNode(Type type, Vector2 nodePosition)
         {
-            ReanimatorNode node = CreateSubAsset(type);
+            ReanimatorNode node = graph.CreateSubAsset(type);
             node.position = nodePosition;
             var graphNode = CreateGraphNode(node);
             Helpers.Call(() => graphNode.OnCreated());
@@ -172,7 +173,7 @@ namespace Aarthificial.Reanimation {
         {
             node.name = string.IsNullOrEmpty(assetName) ? node.GetType().Name : assetName;
 
-            var graphNode = new ReanimatorGraphNode(node) {
+            var graphNode = new ReanimatorGraphNode(this, node) {
                 onNodeSelected = onNodeSelected
             };
             AddElement(graphNode);
@@ -219,106 +220,6 @@ namespace Aarthificial.Reanimation {
             switchNode.nodes = reanimatorNodes;
         }
 
-        /// <summary>
-        /// Creates a scriptable object sub asset for the current resolution graph and adds it to the list
-        /// of nodes saved in the resolution graph
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="assetName"></param>
-        /// <returns></returns>
-        public ReanimatorNode CreateSubAsset(Type type, string assetName = null)
-        {
-            ReanimatorNode node = ScriptableObject.CreateInstance(type) as ReanimatorNode;
-
-            // ReSharper disable once PossibleNullReferenceException
-            node.name = string.IsNullOrEmpty(assetName) ? type.Name : assetName;
-            node.guid = GUID.Generate().ToString();
-
-            Undo.RecordObject(graph, "Resolution Tree");
-            graph.nodes.Add(node);
-            if (!Application.isPlaying) {
-                AssetDatabase.AddObjectToAsset(node, graph);
-            }
-
-            Undo.RegisterCreatedObjectUndo(node, "Resolution Tree");
-
-            SaveGraphToDisk();
-            return node;
-        }
-
-        /// <summary>
-        /// Removes the scriptable object sub asset from the resolution graph and removes it from the list
-        /// of nodes saved in the resolution graph
-        /// </summary>
-        /// <param name="node"></param>
-        private void DeleteSubAsset(ReanimatorNode node)
-        {
-            Undo.RecordObject(graph, "Resolution Tree");
-            graph.nodes.Remove(node);
-            Undo.DestroyObjectImmediate(node);
-
-            SaveGraphToDisk();
-        }
-
-        /// <summary>
-        /// Adds appropriate child node(s) when an edge or node is created
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="child"></param>
-        private void AddChild(ReanimatorNode parent, ReanimatorNode child)
-        {
-            switch (parent) {
-                case BaseNode rootNode:
-                    Undo.RecordObject(rootNode, "Resolution Tree");
-                    graph.root = child;
-                    rootNode.root = child;
-                    SaveGraphToDisk();
-                    SaveToDisk(rootNode);
-                    break;
-                case OverrideNode overrideNode:
-                    Undo.RecordObject(overrideNode, "Resolution Tree");
-                    overrideNode.next = child;
-                    SaveGraphToDisk();
-                    SaveToDisk(overrideNode);
-                    break;
-                case SwitchNode switchNode:
-                    Undo.RecordObject(switchNode, "Resolution Tree");
-                    switchNode.nodes.Add(child);
-                    SaveGraphToDisk();
-                    SaveToDisk(switchNode);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Removes appropriate child node(s) when an edge or node is deleted
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="child"></param>
-        private void RemoveChild(ReanimatorNode parent, ReanimatorNode child)
-        {
-            switch (parent) {
-                case BaseNode rootNode:
-                    Undo.RecordObject(rootNode, "Resolution Tree");
-                    graph.root = null;
-                    rootNode.root = null;
-                    SaveGraphToDisk();
-                    SaveToDisk(rootNode);
-                    break;
-                case OverrideNode overrideNode:
-                    Undo.RecordObject(overrideNode, "Resolution Tree");
-                    overrideNode.next = null;
-                    SaveGraphToDisk();
-                    SaveToDisk(overrideNode);
-                    break;
-                case SwitchNode switchNode:
-                    Undo.RecordObject(switchNode, "Resolution Tree");
-                    switchNode.nodes.Remove(child);
-                    SaveGraphToDisk();
-                    SaveToDisk(switchNode);
-                    break;
-            }
-        }
 
 
         /// <summary>
@@ -333,12 +234,12 @@ namespace Aarthificial.Reanimation {
                     case ReanimatorGraphNode graphNode:
                         Helpers.Call(() => graphNode.OnRemoved());
                         GraphNodesPerNode.Remove(graphNode.node);
-                        DeleteSubAsset(graphNode.node);
+                        graph.DeleteSubAsset(graphNode.node);
                         break;
                     case Edge edge:
                         var parentNode = edge.output.node as ReanimatorGraphNode;
                         var childNode = edge.input.node as ReanimatorGraphNode;
-                        RemoveChild(parentNode?.node, childNode?.node);
+                        graph.RemoveChild(parentNode?.node, childNode?.node);
                         break;
                     case ReanimatorGroup group:
                         graph.RemoveGroup(group.group);
@@ -352,7 +253,7 @@ namespace Aarthificial.Reanimation {
                 var parentNode = edge.output.node as ReanimatorGraphNode;
                 var childNode = edge.input.node as ReanimatorGraphNode;
 
-                AddChild(parentNode?.node, childNode?.node);
+                graph.AddChild(parentNode?.node, childNode?.node);
             });
 
             return graphViewChange;
@@ -369,24 +270,6 @@ namespace Aarthificial.Reanimation {
                         node.PlayAnimationPreview();
                     }
                 });
-        }
-
-        public ReanimatorGraphView()
-        {
-            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath));
-
-            Insert(0, new GridBackground());
-            this.AddManipulator(new ContentZoomer());
-            this.AddManipulator(new ContentDragger());
-            this.AddManipulator(new SelectionDragger());
-            this.AddManipulator(new RectangleSelector());
-            this.AddManipulator(new DragAndDropManipulator());
-
-            Undo.undoRedoPerformed += () => {
-                Initialize(editorWindow, graph);
-                AssetDatabase.SaveAssets();
-            };
-            EditorApplication.update += PlayAnimationPreview;
         }
     }
 }

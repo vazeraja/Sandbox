@@ -42,14 +42,7 @@ namespace Aarthificial.Reanimation {
                         if (!animationEditor || !animationEditor.target) return;
                         animationEditor.OnInspectorGUI();
                     });
-
-                    animationContainer = new IMGUIContainer(() => {
-                        if (!animationEditor || !animationEditor.target) return;
-                        animationEditor.RequiresConstantRepaint();
-                        animationEditor.HasPreviewGUI();
-                        animationEditor.OnPreviewGUI(GUILayoutUtility.GetRect(150, 150), new GUIStyle());
-                    });
-
+                    
                     break;
                 case SwitchNode _:
 
