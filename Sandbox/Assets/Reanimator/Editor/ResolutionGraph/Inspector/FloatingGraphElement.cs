@@ -26,8 +26,7 @@ namespace Aarthificial.Reanimation {
         private static readonly string pinnedElementStyle =
             "Assets/Reanimator/Editor/ResolutionGraph/Inspector/FloatingElement.uss";
 
-        private static readonly string pinnedElementTree =
-            "Assets/Reanimator/Editor/ResolutionGraph/Inspector/FloatingElement.uxml";
+        private static readonly string UXMLName = "FloatingElement";
 
         public sealed override string title {
             get => titleLabel.text;
@@ -78,7 +77,7 @@ namespace Aarthificial.Reanimation {
 
         protected FloatingGraphElement()
         {
-            var tpl = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(pinnedElementTree);
+            var tpl = Resources.Load<VisualTreeAsset>($"UXML/{UXMLName}");
             //styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(pinnedElementStyle));
 
             main = tpl.CloneTree();

@@ -344,15 +344,7 @@ MonoBehaviour:
   - {fileID: 5145656718631313926}
   - {fileID: -9130189663412503569}
   groups: []
-  floatingElements:
-  - position:
-      serializedVersion: 2
-      x: 559
-      y: 285
-      width: 315
-      height: 165
-    title: Animation Preview
-    opened: 0
+  floatingElements: []
 --- !u!114 &1210843896723939208
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,9 +11,9 @@ using UnityEngine.UIElements;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorSaveService {
-        public void LoadFromSubAssets(ResolutionGraph graph = null)
+        public void LoadFromSubAssets()
         {
-            _graphView.Initialize(_graphView.editorWindow, graph != null ? graph : _graphView.graph);
+            _graphView.ClearGraphElements();
             
             // Create root node if graph is empty
             if (GraphSubAssets.Count == 0) {

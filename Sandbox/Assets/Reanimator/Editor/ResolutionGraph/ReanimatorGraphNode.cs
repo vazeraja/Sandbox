@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 namespace Aarthificial.Reanimation {
     public sealed class ReanimatorGraphNode : Node {
 
-        private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphNode.uxml";
+        private const string nodeStyleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/Resources/UXML/ReanimatorGraphNode.uxml";
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
         private ReanimatorGraphView reanimatorGraphView;
         public ReanimatorNode node { get; }

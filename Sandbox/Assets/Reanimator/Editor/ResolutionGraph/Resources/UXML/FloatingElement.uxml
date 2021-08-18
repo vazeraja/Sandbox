@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="FloatingElement.uss" />
+    <Style src="/Assets/Reanimator/Editor/ResolutionGraph/Resources/Styles/FloatingElement.uss" />
     <ui:VisualElement name="content" picking-mode="Ignore">
         <ui:VisualElement name="header" picking-mode="Ignore">
             <ui:VisualElement name="labelContainer" picking-mode="Ignore" style="border-left-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; font-size: 7px; -unity-font-style: normal; -unity-text-align: upper-center;">

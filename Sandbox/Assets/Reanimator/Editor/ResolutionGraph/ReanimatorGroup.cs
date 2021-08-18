@@ -15,12 +15,12 @@ namespace Aarthificial.Reanimation {
         private Label titleLabel;
         private ColorField colorField;
 
-        private readonly string groupStyle = "Assets/Reanimator/Editor/ResolutionGraph/Styles/ReanimatorGroup.uss";
+        private readonly string groupStyle = "ReanimatorGroup";
 
         public ReanimatorGroup(ReanimatorGraphView graphView, Group group)
         {
             this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
-            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(groupStyle));
+            styleSheets.Add(Resources.Load<StyleSheet>($"Styles/{groupStyle}"));
 
             this.group = group;
             this.graphView = graphView;

@@ -18,8 +18,8 @@ namespace Aarthificial.Reanimation {
             wnd.titleContent = new GUIContent("ReanimatorGraph");
         }
 
-        private const string visualTreePath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uxml";
-        private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
+        private static string styleName => "ReanimatorGraphEditor";
+        private static string UxmlName => "ReanimatorGraphEditor";
 
         private ResolutionGraph resolutionGraph;
 
@@ -44,10 +44,10 @@ namespace Aarthificial.Reanimation {
         {
             VisualElement root = rootVisualElement;
 
-            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(visualTreePath);
+            var visualTree = Resources.Load<VisualTreeAsset>($"UXML/{UxmlName}");
             visualTree.CloneTree(root);
 
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
+            var styleSheet = Resources.Load<StyleSheet>($"Styles/{styleName}");
             root.styleSheets.Add(styleSheet);
 
             graphView = root.Q<ReanimatorGraphView>();
@@ -62,12 +62,14 @@ namespace Aarthificial.Reanimation {
 
             graphView.CreateMiniMap();
             graphView.CreateSearchWindow(this);
-            graphView.onNodeSelected = DrawNodeProperties;
-            graphView.onNodeSelected = node => {
+            graphView.onNodeSelected += DrawNodeProperties;
+            graphView.onNodeSelected += node => {
                 if (root.Q<FloatingAnimationPreview>() != null) {
-                    graphView.FloatingAnimationPreview.DrawNodeProperties(node);
+                    graphView.FloatingAnimationPreview.PlayAnimationPreview(node);
                 }
             };
+
+            #region Toolbar Setup
 
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
             resolutionGraphs.ForEach(graph => {
@@ -80,11 +82,11 @@ namespace Aarthificial.Reanimation {
                     return;
                 }
 
-                resolutionGraph = Selection.activeObject as ResolutionGraph;
-                Helpers.SaveService(graphView).LoadFromSubAssets(resolutionGraph);
+                Select(Selection.activeObject);
+                Helpers.SaveService(graphView).LoadFromSubAssets();
                 EditorApplication.delayCall += () => { graphView.FrameAll(); };
             };
-            
+
             toggle.Initialize();
             toggle.enabled += () => {
                 if (!resolutionGraph || graphView == null) return;
@@ -92,13 +94,16 @@ namespace Aarthificial.Reanimation {
                     Debug.LogError("Animation Window is already open");
                     return;
                 }
+
                 graphView.AddFloatingElement(new FloatingElement());
             };
             toggle.disabled += () => {
-                if (!resolutionGraph || !resolutionGraph.floatingElements.Any() ||graphView == null) return;
+                if (!resolutionGraph || !resolutionGraph.floatingElements.Any() || graphView == null) return;
 
                 graphView.RemoveFloatingGraphElement();
             };
+
+            #endregion
         }
 
         private void DrawNodeProperties(ReanimatorGraphNode graphNode)
@@ -111,7 +116,10 @@ namespace Aarthificial.Reanimation {
         {
             Selection.activeObject = graph;
             resolutionGraph = Selection.activeObject as ResolutionGraph;
-            graphView.Initialize(this, resolutionGraph);
+            graphView.Init(this, resolutionGraph);
+
+            toggle.value = resolutionGraph && resolutionGraph.floatingElements.Any();
+
             EditorGUIUtility.PingObject(graph);
             EditorApplication.delayCall += () => { graphView.FrameAll(); };
         }

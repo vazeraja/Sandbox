@@ -22,7 +22,7 @@ namespace Aarthificial.Reanimation {
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
         public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-        private IEnumerable<MiniMap> MiniMaps => graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
+        private IEnumerable<MiniMap> miniMaps => graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
         public FloatingAnimationPreview FloatingAnimationPreview;
         
         
@@ -32,11 +32,11 @@ namespace Aarthificial.Reanimation {
         
         // Dictionary<Type, FloatingGraphElement> pinnedElements = new Dictionary<Type, FloatingGraphElement>();
 
-        private const string styleSheetPath = "Assets/Reanimator/Editor/ResolutionGraph/ReanimatorGraphEditor.uss";
+        private const string styleName = "ReanimatorGraphEditor";
         
         public ReanimatorGraphView()
         {
-            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath));
+            styleSheets.Add(Resources.Load<StyleSheet>($"Styles/{styleName}"));
 
             Insert(0, new GridBackground());
             this.AddManipulator(new ContentZoomer());
@@ -46,23 +46,29 @@ namespace Aarthificial.Reanimation {
             this.AddManipulator(new DragAndDropManipulator());
 
             Undo.undoRedoPerformed += () => {
-                Initialize(editorWindow, graph);
+                ClearGraphElements();
                 AssetDatabase.SaveAssets();
             };
             EditorApplication.update += PlayAnimationPreview;
         }
-        
-        public void Initialize(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph)
+
+        public void Init(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
-
+            
+            CreateMiniMap();
+            CreateSearchWindow(editorWindow);
+        }
+        public void ClearGraphElements()
+        {
             GraphNodesPerNode.Clear();
             groupViews.Clear();
 
             graphViewChanged -= OnGraphViewChanged;
-            DeleteElements(graphElements.ToList());
-            DeleteElements(MiniMaps);
+            DeleteElements(graphElements);
+            DeleteElements(miniMaps);
+            if(FloatingAnimationPreview != null) Remove(FloatingAnimationPreview);
             graphViewChanged += OnGraphViewChanged;
         }
 

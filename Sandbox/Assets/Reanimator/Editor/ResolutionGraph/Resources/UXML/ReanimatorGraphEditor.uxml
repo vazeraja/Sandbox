@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="ReanimatorGraphEditor.uss" />
+    <Style src="/Assets/Reanimator/Editor/ResolutionGraph/Resources/Styles/ReanimatorGraphEditor.uss" />
     <uie:Toolbar style="height: 20px;">
         <uie:ToolbarMenu display-tooltip-when-elided="false" text="Assets" />
         <uie:ToolbarButton text="Load" display-tooltip-when-elided="true" enable-rich-text="true" name="load-button" style="-unity-text-align: middle-center; margin-left: -1px; padding-right: 2px; padding-top: 0; flex-direction: row; align-items: center; margin-right: 0; min-width: 50px;" />

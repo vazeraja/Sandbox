@@ -23,7 +23,7 @@ namespace Aarthificial.Reanimation {
             resizable = false;
         }
         
-        public void DrawNodeProperties(ReanimatorGraphNode node)
+        public void PlayAnimationPreview(ReanimatorGraphNode node)
         {
             content.Clear();
             Object.DestroyImmediate(animationEditor);

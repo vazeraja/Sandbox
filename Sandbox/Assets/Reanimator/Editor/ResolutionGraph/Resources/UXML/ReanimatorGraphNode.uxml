@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="ReanimatorGraphNode.uss" />
+    <Style src="/Assets/Reanimator/Editor/ResolutionGraph/Resources/Styles/ReanimatorGraphNode.uss" />
     <ui:VisualElement name="node-border">
         <ui:VisualElement name="title">
             <ui:Label name="title-label" text="RootDash" class="unity-text-element unity-label" />

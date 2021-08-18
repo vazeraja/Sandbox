@@ -118,7 +118,7 @@ namespace Aarthificial.Reanimation {
             }
         }
 
-        private const string portStyle = "Assets/Reanimator/Editor/ResolutionGraph/Styles/PortView.uss";
+        private const string styleName = "PortView";
 
         private ReanimatorGraphNode owner;
         public event UnityAction<ReanimatorPort, Edge> OnConnected;
@@ -135,7 +135,7 @@ namespace Aarthificial.Reanimation {
             m_EdgeConnector = new EdgeConnector<Edge>(connectorListener);
             this.AddManipulator(m_EdgeConnector);
 
-            styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(portStyle));
+            styleSheets.Add(Resources.Load<StyleSheet>($"Styles/{styleName}"));
         }
         public virtual void Initialize(ReanimatorGraphNode graphNode, string name)
         {
