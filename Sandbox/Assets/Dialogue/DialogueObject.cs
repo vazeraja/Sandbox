@@ -1,46 +1,45 @@
 ﻿using System;
+using System.Threading;
 using CharTweener.Assets.CharTween.Scripts;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
 namespace Dialogue {
     [CreateAssetMenu(fileName = "NewDialogueObject", menuName = "Text Animator/Dialogue Object")]
     public class DialogueObject : ScriptableObject {
-        [TextArea(10, 5)]
-        public string text;
+        [TextArea(10, 5)] public string text;
         public TextAnimationGraph textAnimationGraph;
 
-        public void Animate() {
-            var tmpText = textAnimationGraph.m_TMPText;
-            tmpText.text = text;
-            var start = 0;
-            var end = text.Length-1;
+        public void Animate(int start, int end) {
+            if (textAnimationGraph == null) {
+                Debug.LogError("Text Animation Graph is null");
+                return;
+            }
+
+            textAnimationGraph.text = text;
             textAnimationGraph.Animate(start, end);
-            Debug.Log(start + " " + end);
         }
     }
 
     [Serializable]
     public class TextAnimationGraph {
-        public TMP_Text m_TMPText;
+        private TMP_Text m_TMPText;
+        private Action<CharTweener.Assets.CharTween.Scripts.CharTweener, int, int> m_AnimationMethod;
         private CharTweener.Assets.CharTween.Scripts.CharTweener m_Tweener;
 
-        public TextAnimationGraph(TMP_Text tmpText) {
+        public string text {
+            set { m_TMPText.text = value; }
+        }
+
+        public TextAnimationGraph(TMP_Text tmpText,
+            Action<CharTweener.Assets.CharTween.Scripts.CharTweener, int, int> animationMethod) {
             m_TMPText = tmpText;
-            // m_Tweener = m_TMPText.GetCharTweener();
+            m_AnimationMethod = animationMethod;
+            m_Tweener = m_TMPText.GetCharTweener();
         }
 
         public void Animate(int start, int end) {
-            m_Tweener = m_TMPText.GetCharTweener();
-            for (var i = start; i <= end; ++i) {
-                var timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start + 1));
-                var rotationTween = m_Tweener
-                    .DOLocalRotate(i, UnityEngine.Random.onUnitSphere * 360, 2, RotateMode.FastBeyond360)
-                    .SetEase(Ease.Linear)
-                    .SetLoops(-1, LoopType.Incremental);
-                rotationTween.fullPosition = timeOffset;
-            }
+            m_AnimationMethod(m_Tweener, start, end);
         }
     }
 }
