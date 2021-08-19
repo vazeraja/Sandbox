@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Group = Aarthificial.Reanimation.Common.Group;
-using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorGraphView : GraphView {
@@ -26,12 +25,6 @@ namespace Aarthificial.Reanimation {
         public FloatingAnimationPreview FloatingAnimationPreview;
         
         
-        
-        public Dictionary<ReanimatorNode, ReanimatorGraphNode> GraphNodesPerNode = new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
-        public List<ReanimatorGroup> groupViews = new List<ReanimatorGroup>();
-        
-        // Dictionary<Type, FloatingGraphElement> pinnedElements = new Dictionary<Type, FloatingGraphElement>();
-
         private const string styleName = "ReanimatorGraphEditor";
         
         public ReanimatorGraphView()
@@ -46,28 +39,25 @@ namespace Aarthificial.Reanimation {
             this.AddManipulator(new DragAndDropManipulator());
 
             Undo.undoRedoPerformed += () => {
-                ClearGraphElements();
+                Reload(graph, editorWindow);
                 Helpers.SaveService(this).LoadFromSubAssets();
                 AssetDatabase.SaveAssets();
             };
             EditorApplication.update += PlayAnimationPreview;
         }
-
-        public void Init(ReanimatorGraphEditorWindow editorWindow, ResolutionGraph graph)
+        
+        public void Reload(ResolutionGraph graph, ReanimatorGraphEditorWindow editorWindow)
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
-        }
-        public void ClearGraphElements()
-        {
-            GraphNodesPerNode.Clear();
-            groupViews.Clear();
 
             graphViewChanged -= OnGraphViewChanged;
-            DeleteElements(graphElements);
-            DeleteElements(miniMaps);
-            if(FloatingAnimationPreview != null) Remove(FloatingAnimationPreview);
+            DeleteElements(graphElements.ToList());
+            // if(FloatingAnimationPreview != null)
+            //     RemoveFloatingGraphElement();
             graphViewChanged += OnGraphViewChanged;
+            
+            Helpers.SaveService(this).LoadFromSubAssets();
         }
 
         /// <summary>
@@ -116,8 +106,6 @@ namespace Aarthificial.Reanimation {
         {
             var c = new ReanimatorGroup(this, block);
             AddElement(c);
-
-            groupViews.Add(c);
             return c;
         }
         public FloatingAnimationPreview AddFloatingElement(FloatingElement floatingElement)
@@ -132,7 +120,7 @@ namespace Aarthificial.Reanimation {
             var f = new FloatingAnimationPreview();
             f.InitializeGraphView(floatingElement, this);
             FloatingAnimationPreview = f;
-            Add(f);
+            AddElement(f);
 
             return f;
         }
@@ -140,7 +128,7 @@ namespace Aarthificial.Reanimation {
         public void RemoveFloatingGraphElement()
         {
             graph.RemoveFloatingElement(FloatingAnimationPreview.FloatingElement);
-            Remove(FloatingAnimationPreview);
+            RemoveElement(FloatingAnimationPreview);
         }
 
         /// <summary>
@@ -181,9 +169,6 @@ namespace Aarthificial.Reanimation {
                 onNodeSelected = onNodeSelected
             };
             AddElement(graphNode);
-
-            GraphNodesPerNode[node] = graphNode;
-
             return graphNode;
         }
 
@@ -224,8 +209,6 @@ namespace Aarthificial.Reanimation {
             switchNode.nodes = reanimatorNodes;
         }
 
-
-
         /// <summary>
         /// Event listener to intercept the GraphView graphViewChanged delegate.
         /// </summary>
@@ -237,7 +220,6 @@ namespace Aarthificial.Reanimation {
                 switch (elem) {
                     case ReanimatorGraphNode graphNode:
                         Helpers.Call(() => graphNode.OnRemoved());
-                        GraphNodesPerNode.Remove(graphNode.node);
                         graph.DeleteSubAsset(graphNode.node);
                         break;
                     case Edge edge:
@@ -247,7 +229,6 @@ namespace Aarthificial.Reanimation {
                         break;
                     case ReanimatorGroup group:
                         graph.RemoveGroup(group.group);
-                        groupViews.Remove(group);
                         RemoveElement(group);
                         break;
                 }

@@ -13,8 +13,6 @@ namespace Aarthificial.Reanimation {
     public class ReanimatorSaveService {
         public void LoadFromSubAssets()
         {
-            _graphView.ClearGraphElements();
-            
             // Create root node if graph is empty
             if (GraphSubAssets.Count == 0) {
                 _graphView.graph.root = _graphView.graph.CreateSubAsset(typeof(BaseNode)) as BaseNode;
@@ -47,10 +45,11 @@ namespace Aarthificial.Reanimation {
                 var block = _graphView.AddGroupView(group);
                 block.AddElements(Nodes.Where(x => group.innerNodeGUIDs.Contains(x.node.guid)));
             });
-            _graphView.graph.floatingElements.ForEach(elem => {
-                var floatingGraphElement = _graphView.AddFloatingGraphElement(elem);
-                floatingGraphElement.ResetPosition();
-            });
+            
+            // _graphView.graph.floatingElements.ForEach(elem => {
+            //     var floatingGraphElement = _graphView.AddFloatingGraphElement(elem);
+            //     floatingGraphElement.ResetPosition();
+            // });
         }
 
         public ReanimatorSaveService(ReanimatorGraphView graphView)

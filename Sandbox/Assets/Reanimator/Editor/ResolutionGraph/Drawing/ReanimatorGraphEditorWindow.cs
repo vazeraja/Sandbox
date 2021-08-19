@@ -93,12 +93,10 @@ namespace Aarthificial.Reanimation {
                     Debug.LogError("Animation Window is already open");
                     return;
                 }
-
                 graphView.AddFloatingElement(new FloatingElement());
             };
             toggle.disabled += () => {
                 if (!resolutionGraph || !resolutionGraph.floatingElements.Any() || graphView == null) return;
-
                 graphView.RemoveFloatingGraphElement();
             };
 
@@ -115,9 +113,9 @@ namespace Aarthificial.Reanimation {
         {
             Selection.activeObject = graph;
             resolutionGraph = Selection.activeObject as ResolutionGraph;
-            graphView.Init(this, resolutionGraph);
+            graphView.Reload(resolutionGraph, this);
 
-            toggle.value = resolutionGraph && resolutionGraph.floatingElements.Any();
+            //toggle.value = resolutionGraph && resolutionGraph.floatingElements.Any();
 
             EditorGUIUtility.PingObject(graph);
             EditorApplication.delayCall += () => { graphView.FrameAll(); };
