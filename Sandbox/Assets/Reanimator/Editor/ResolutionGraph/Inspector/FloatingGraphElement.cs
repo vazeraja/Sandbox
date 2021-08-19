@@ -13,8 +13,7 @@ namespace Aarthificial.Reanimation {
         protected readonly VisualElement root;
         protected readonly VisualElement content;
         protected readonly VisualElement header;
-
-
+        
         protected readonly ScrollView scrollView;
         private readonly Label titleLabel;
         
@@ -23,8 +22,7 @@ namespace Aarthificial.Reanimation {
 
         protected event Action onResized;
         
-        private static readonly string pinnedElementStyle =
-            "Assets/Reanimator/Editor/ResolutionGraph/Inspector/FloatingElement.uss";
+        private static readonly string StyleName = "FloatingElement";
 
         private static readonly string UXMLName = "FloatingElement";
 
@@ -78,7 +76,7 @@ namespace Aarthificial.Reanimation {
         protected FloatingGraphElement()
         {
             var tpl = Resources.Load<VisualTreeAsset>($"UXML/{UXMLName}");
-            //styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(pinnedElementStyle));
+            //styleSheets.Add(Resources.Load<StyleSheet>($"Styles/{StyleName}"));
 
             main = tpl.CloneTree();
             main.AddToClassList("mainContainer");

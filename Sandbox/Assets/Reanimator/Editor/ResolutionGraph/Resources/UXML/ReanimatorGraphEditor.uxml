@@ -7,13 +7,11 @@
     </uie:Toolbar>
     <Aarthificial.Reanimation.TwoPanelCustomControl fixed-pane-initial-dimension="800">
         <ui:VisualElement name="left-panel">
-            <ui:Label text="Resolution Graph" display-tooltip-when-elided="true" style="border-left-color: rgb(56, 56, 56); border-right-color: rgb(56, 56, 56); border-top-color: rgb(56, 56, 56); border-bottom-color: rgb(56, 56, 56); background-color: rgb(13, 55, 58);" />
             <Aarthificial.Reanimation.ReanimatorGraphView focusable="true" style="flex-grow: 1;">
                 <ui:VisualElement />
             </Aarthificial.Reanimation.ReanimatorGraphView>
         </ui:VisualElement>
         <ui:VisualElement name="right-panel" style="flex-direction: column; flex-wrap: nowrap; align-items: stretch; justify-content: flex-end;">
-            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(13, 55, 58); border-left-width: 2px; border-left-color: rgb(33, 32, 32); border-right-color: rgb(33, 32, 32); border-top-color: rgb(33, 32, 32); border-bottom-color: rgb(33, 32, 32); border-right-width: 1px;" />
             <Aarthificial.Reanimation.TwoPanelInspector orientation="Vertical" fixed-pane-initial-dimension="400" name="TwoPanelInspector">
                 <ui:VisualElement name="inspector-panel">
                     <Aarthificial.Reanimation.InspectorCustomControl style="flex-grow: 1; border-left-color: rgb(26, 26, 26); border-right-color: rgb(26, 26, 26); border-top-color: rgb(26, 26, 26); border-bottom-color: rgb(26, 26, 26); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />

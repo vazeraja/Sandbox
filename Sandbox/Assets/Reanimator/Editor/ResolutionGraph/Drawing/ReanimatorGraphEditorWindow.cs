@@ -86,8 +86,7 @@ namespace Aarthificial.Reanimation {
                 Helpers.SaveService(graphView).LoadFromSubAssets();
                 EditorApplication.delayCall += () => { graphView.FrameAll(); };
             };
-
-            toggle.Initialize();
+            
             toggle.enabled += () => {
                 if (!resolutionGraph || graphView == null) return;
                 if (resolutionGraph.floatingElements.Any()) {

@@ -47,6 +47,7 @@ namespace Aarthificial.Reanimation {
 
             Undo.undoRedoPerformed += () => {
                 ClearGraphElements();
+                Helpers.SaveService(this).LoadFromSubAssets();
                 AssetDatabase.SaveAssets();
             };
             EditorApplication.update += PlayAnimationPreview;
@@ -56,9 +57,6 @@ namespace Aarthificial.Reanimation {
         {
             this.graph = graph;
             this.editorWindow = editorWindow;
-            
-            CreateMiniMap();
-            CreateSearchWindow(editorWindow);
         }
         public void ClearGraphElements()
         {

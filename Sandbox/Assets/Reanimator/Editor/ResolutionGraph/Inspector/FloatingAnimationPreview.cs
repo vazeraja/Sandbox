@@ -23,13 +23,13 @@ namespace Aarthificial.Reanimation {
             resizable = false;
         }
         
-        public void PlayAnimationPreview(ReanimatorGraphNode node)
+        public void PlayAnimationPreview(ReanimatorGraphNode graphNode)
         {
             content.Clear();
             Object.DestroyImmediate(animationEditor);
             
-            animationEditor = UnityEditor.Editor.CreateEditor(node.node) as AnimationNodeEditor;
-            animationContainer = node.node switch {
+            animationEditor = UnityEditor.Editor.CreateEditor(graphNode.node) as AnimationNodeEditor;
+            animationContainer = graphNode.node switch {
                 SimpleAnimationNode _ => new IMGUIContainer(() => {
                     if (!animationEditor || !animationEditor.target) return;
 

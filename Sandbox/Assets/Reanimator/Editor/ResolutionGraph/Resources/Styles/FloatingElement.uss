@@ -1,3 +1,7 @@
+.pinnedElement > .mainContainer {
+    background-color: rgba(46, 46, 46, 255);
+}
+
 .pinnedElement.scrollable > .mainContainer {
     position: absolute;
     left: 0;
@@ -16,7 +20,7 @@
 }
 
 .pinnedElement > .mainContainer > #content > #header {
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(57, 57, 57);
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;

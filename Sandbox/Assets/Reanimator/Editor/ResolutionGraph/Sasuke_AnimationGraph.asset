@@ -82,8 +82,8 @@ MonoBehaviour:
   title: RootMovement_AirJump
   position: {x: 1080, y: -553}
   nodes:
-  - {fileID: -1620949668163360245}
   - {fileID: -7861671682695949504}
+  - {fileID: -1620949668163360245}
   controlDriver:
     name: isMoving
     autoIncrement: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 9b2fc9b1233627f4485f3ae8af27b699
   title: RunAnimation
-  position: {x: 1079.9681, y: -84.00002}
+  position: {x: 1080.0002, y: -85.00004}
   cels:
   - sprite: {fileID: -3434879642533976785, guid: 96c42d47a44319a49a6f5c769ee74b73, type: 3}
     drivers:
@@ -344,7 +344,15 @@ MonoBehaviour:
   - {fileID: 5145656718631313926}
   - {fileID: -9130189663412503569}
   groups: []
-  floatingElements: []
+  floatingElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 297
+      width: 315
+      height: 165
+    title: Animation Preview
+    opened: 0
 --- !u!114 &1210843896723939208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 4c81fdd4ff18f8f41a57d94ed6f9d667
   title: FlipAnimation
-  position: {x: 1080, y: -419.99994}
+  position: {x: 1080, y: -420}
   cels:
   - sprite: {fileID: -14635915900717176, guid: 70334b78acba2ad4db16b9e6a5515a8d, type: 3}
     drivers:

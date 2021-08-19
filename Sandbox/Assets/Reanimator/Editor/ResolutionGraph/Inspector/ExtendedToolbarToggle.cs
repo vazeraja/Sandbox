@@ -30,6 +30,12 @@ namespace Aarthificial.Reanimation {
 
         private ToggleButton m_ToggleToggleButton;
 
+        public ExtendedToolbarToggle()
+        {
+            m_ToggleToggleButton = new ToggleButton();
+            AddToClassList("extendedToolbarToggle");
+        }
+
         public string buttonText {
             get => this.text;
             set => this.text = value;
@@ -59,20 +65,21 @@ namespace Aarthificial.Reanimation {
                 m_ToggleToggleButton.disabled -= value;
             }
         }
-        
-        public void Initialize()
-        {
-            m_ToggleToggleButton = new ToggleButton();
-        }
 
         protected override void ToggleValue()
         {
             base.ToggleValue();
             switch (value) {
                 case true:
+                    RemoveFromClassList("un-selected");
+                    AddToClassList("selected");
+                    
                     m_ToggleToggleButton.Enabled();
                     break;
                 case false:
+                    RemoveFromClassList("selected");
+                    AddToClassList("un-selected");
+                    
                     m_ToggleToggleButton.Disabled();
                     break;
             }

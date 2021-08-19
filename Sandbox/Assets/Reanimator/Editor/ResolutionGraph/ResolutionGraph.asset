@@ -54,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: af3cb4ddfc4c73d49bb4d680e2a8957b
   title: Switch Node
-  position: {x: 448.75946, y: -0.0000046491623}
+  position: {x: 447.85007, y: 0.000009059906}
   nodes:
   - {fileID: -6689801868859213147}
   - {fileID: 5215725629504640835}
@@ -115,15 +115,7 @@ MonoBehaviour:
       height: 270
     color: {r: 0.1721698, g: 0.4142836, b: 0.6886792, a: 0.20784314}
     size: {x: 400, y: 200}
-  floatingElements:
-  - position:
-      serializedVersion: 2
-      x: 221
-      y: 212
-      width: 250
-      height: 250
-    title: Animation Preview
-    opened: 0
+  floatingElements: []
 --- !u!114 &5215725629504640835
 MonoBehaviour:
   m_ObjectHideFlags: 0
