@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using CharTweener.Assets.CharTween.Scripts;
 using TMPro;
 using UnityEngine;
