@@ -46,10 +46,10 @@ namespace Aarthificial.Reanimation {
                 block.AddElements(Nodes.Where(x => group.innerNodeGUIDs.Contains(x.node.guid)));
             });
             
-            // _graphView.graph.floatingElements.ForEach(elem => {
-            //     var floatingGraphElement = _graphView.AddFloatingGraphElement(elem);
-            //     floatingGraphElement.ResetPosition();
-            // });
+            _graphView.graph.floatingElements.ForEach(elem => {
+                var floatingGraphElement = _graphView.AddFloatingGraphElement(elem);
+                floatingGraphElement.ResetPosition();
+            });
         }
 
         public ReanimatorSaveService(ReanimatorGraphView graphView)

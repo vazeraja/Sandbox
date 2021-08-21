@@ -359,7 +359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 03a8d36fe19192847a85245d70db13e3
   title: RootMovement
-  position: {x: 521, y: -292.753}
+  position: {x: 521, y: -299.33243}
   nodes:
   - {fileID: 4773496542237128343}
   - {fileID: 7835456377009927491}

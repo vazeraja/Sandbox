@@ -21,12 +21,15 @@ namespace Aarthificial.Reanimation {
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
         public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
-        private IEnumerable<MiniMap> miniMaps => graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
+
+        private IEnumerable<MiniMap> miniMaps =>
+            graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
+
         public FloatingAnimationPreview FloatingAnimationPreview;
-        
-        
+
+
         private const string styleName = "ReanimatorGraphEditor";
-        
+
         public ReanimatorGraphView()
         {
             styleSheets.Add(Resources.Load<StyleSheet>($"Styles/{styleName}"));
@@ -45,7 +48,8 @@ namespace Aarthificial.Reanimation {
             };
             EditorApplication.update += PlayAnimationPreview;
         }
-        
+
+
         public void Reload(ResolutionGraph graph, ReanimatorGraphEditorWindow editorWindow)
         {
             this.graph = graph;
@@ -53,10 +57,10 @@ namespace Aarthificial.Reanimation {
 
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
-            // if(FloatingAnimationPreview != null)
-            //     RemoveFloatingGraphElement();
+            if(FloatingAnimationPreview != null)
+                RemoveFloatingGraphElement();
             graphViewChanged += OnGraphViewChanged;
-            
+
             Helpers.SaveService(this).LoadFromSubAssets();
         }
 
@@ -108,6 +112,7 @@ namespace Aarthificial.Reanimation {
             AddElement(c);
             return c;
         }
+
         public FloatingAnimationPreview AddFloatingElement(FloatingElement floatingElement)
         {
             Undo.RecordObject(graph, "Resolution Tree");
@@ -120,7 +125,7 @@ namespace Aarthificial.Reanimation {
             var f = new FloatingAnimationPreview();
             f.InitializeGraphView(floatingElement, this);
             FloatingAnimationPreview = f;
-            AddElement(f);
+            Add(f);
 
             return f;
         }
@@ -128,7 +133,7 @@ namespace Aarthificial.Reanimation {
         public void RemoveFloatingGraphElement()
         {
             graph.RemoveFloatingElement(FloatingAnimationPreview.FloatingElement);
-            RemoveElement(FloatingAnimationPreview);
+            Remove(FloatingAnimationPreview);
         }
 
         /// <summary>
@@ -182,12 +187,8 @@ namespace Aarthificial.Reanimation {
         /// <param name="simpleCels"></param>
         /// <param name="controlDriver"></param>
         /// <param name="driverDictionary"></param>
-        public void CreateSimpleAnimationNode(
-            Type type,
-            Vector2 nodePosition,
-            IEnumerable<SimpleCel> simpleCels,
-            ControlDriver controlDriver,
-            DriverDictionary driverDictionary)
+        public void CreateSimpleAnimationNode(Type type, Vector2 nodePosition, 
+            IEnumerable<SimpleCel> simpleCels, ControlDriver controlDriver, DriverDictionary driverDictionary)
         {
             if (!(CreateNode(type, nodePosition) is SimpleAnimationNode simpleAnimationNode)) return;
             var nodeSprites = simpleCels as SimpleCel[] ?? simpleCels.ToArray();
@@ -255,6 +256,15 @@ namespace Aarthificial.Reanimation {
                         node.PlayAnimationPreview();
                     }
                 });
+        }
+
+        public ReanimatorEdge CreateEdgeView()
+        {
+            return new ReanimatorEdge();
+        }
+        public void RegisterCompleteObjectUndo(string name)
+        {
+            Undo.RegisterCompleteObjectUndo(graph, name);
         }
     }
 }

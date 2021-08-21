@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -10,55 +11,6 @@ using Edge = UnityEditor.Experimental.GraphView.Edge;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorPort : Port {
-        private class DefaultEdgeConnectorListener : IEdgeConnectorListener {
-            private GraphViewChange m_GraphViewChange;
-            private List<Edge> m_EdgesToCreate;
-            private List<GraphElement> m_EdgesToDelete;
-
-            public DefaultEdgeConnectorListener()
-            {
-                m_EdgesToCreate = new List<Edge>();
-                m_EdgesToDelete = new List<GraphElement>();
-
-                m_GraphViewChange.edgesToCreate = m_EdgesToCreate;
-            }
-
-            public void OnDropOutsidePort(Edge edge, Vector2 position) { }
-
-            public void OnDrop(GraphView graphView, Edge edge)
-            {
-                m_EdgesToCreate.Clear();
-                m_EdgesToCreate.Add(edge);
-
-                // We can't just add these edges to delete to the m_GraphViewChange
-                // because we want the proper deletion code in GraphView to also
-                // be called. Of course, that code (in DeleteElements) also
-                // sends a GraphViewChange.
-                m_EdgesToDelete.Clear();
-                if (edge.input.capacity == Capacity.Single)
-                    foreach (Edge edgeToDelete in edge.input.connections)
-                        if (edgeToDelete != edge)
-                            m_EdgesToDelete.Add(edgeToDelete);
-                if (edge.output.capacity == Capacity.Single)
-                    foreach (Edge edgeToDelete in edge.output.connections)
-                        if (edgeToDelete != edge)
-                            m_EdgesToDelete.Add(edgeToDelete);
-                if (m_EdgesToDelete.Count > 0)
-                    graphView.DeleteElements(m_EdgesToDelete);
-
-                var edgesToCreate = m_EdgesToCreate;
-                if (graphView.graphViewChanged != null) {
-                    edgesToCreate = graphView.graphViewChanged(m_GraphViewChange).edgesToCreate;
-                }
-
-                foreach (Edge e in edgesToCreate) {
-                    graphView.AddElement(e);
-                    edge.input.Connect(e);
-                    edge.output.Connect(e);
-                }
-            }
-        }
-
         private class PortData : IEquatable<PortData> {
             /// <summary>
             /// Unique identifier for the port
@@ -120,7 +72,7 @@ namespace Aarthificial.Reanimation {
 
         private const string styleName = "PortView";
 
-        private ReanimatorGraphNode owner;
+        public ReanimatorGraphNode owner;
         public event UnityAction<ReanimatorPort, Edge> OnConnected;
         public event UnityAction<ReanimatorPort, Edge> OnDisconnected;
 
@@ -131,7 +83,7 @@ namespace Aarthificial.Reanimation {
         public ReanimatorPort(Direction direction, Capacity capacity) : base(Orientation.Horizontal, direction,
             capacity, typeof(bool))
         {
-            var connectorListener = new DefaultEdgeConnectorListener();
+            var connectorListener = new EdgeConnectorListener();
             m_EdgeConnector = new EdgeConnector<Edge>(connectorListener);
             this.AddManipulator(m_EdgeConnector);
 
@@ -150,16 +102,25 @@ namespace Aarthificial.Reanimation {
             var outputNode = (edge.output as ReanimatorPort)?.owner;
 
             edges.Add(edge);
+
+            inputNode?.OnPortConnected(edge.input as ReanimatorPort, edge);
+            outputNode?.OnPortConnected(edge.output as ReanimatorPort, edge);
         }
 
         public override void Disconnect(Edge edge)
         {
             OnDisconnected?.Invoke(this, edge);
             base.Disconnect(edge);
+            
+            // if (!(edge as Edge).isConnected)
+            //     return ;
 
             var inputNode = (edge.input as ReanimatorPort)?.owner;
             var outputNode = (edge.output as ReanimatorPort)?.owner;
-
+            
+            inputNode?.OnPortDisconnected(edge.input as ReanimatorPort, edge);
+            outputNode?.OnPortDisconnected(edge.output as ReanimatorPort, edge);
+            
             edges.Remove(edge);
         }
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   guid: 7a2bb84e27baa104fa077cfe6069db74
   title: Base Node
   position: {x: 0, y: 0}
-  root: {fileID: -4939339109384449277}
+  root: {fileID: -5118886999789705270}
 --- !u!114 &-6689801868859213147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: f3b175a540fa3e8479f4c017722fe5fe
   title: Run Animation
-  position: {x: 712.1868, y: 93.999985}
+  position: {x: 511.30005, y: 58.35002}
   cels: []
   controlDriver:
     name: 
@@ -54,10 +54,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: af3cb4ddfc4c73d49bb4d680e2a8957b
   title: Switch Node
-  position: {x: 448.1869, y: 0}
+  position: {x: 231.30002, y: -9.649982}
   nodes:
-  - {fileID: -6689801868859213147}
   - {fileID: 5215725629504640835}
+  - {fileID: -6689801868859213147}
   controlDriver:
     name: 
     autoIncrement: 0
@@ -66,23 +66,6 @@ MonoBehaviour:
   drivers:
     keys: []
     values: 
---- !u!114 &-4939339109384449277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cd1e6768d7d47f2976614169efeebba, type: 3}
-  m_Name: Override Node
-  m_EditorClassIdentifier: 
-  guid: 661ea36cfa792714c922ea0490a3957d
-  title: Override Node
-  position: {x: 231.18687, y: 0}
-  next: {fileID: -5118886999789705270}
-  overrides: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,24 +78,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec083b8678648e496376b01594506fa, type: 3}
   m_Name: ResolutionGraph
   m_EditorClassIdentifier: 
-  root: {fileID: -4939339109384449277}
+  root: {fileID: -5118886999789705270}
   nodes:
   - {fileID: -6966010986285571502}
   - {fileID: -6689801868859213147}
   - {fileID: 5215725629504640835}
   - {fileID: -5118886999789705270}
-  - {fileID: -4939339109384449277}
   groups:
   - innerNodeGUIDs:
-    - f3b175a540fa3e8479f4c017722fe5fe
     - 8548e3ac443cdf444820bd4ae0d3c84a
-    title: Group Block
+    - f3b175a540fa3e8479f4c017722fe5fe
+    title: Animation
     position:
       serializedVersion: 2
-      x: 687.1869
-      y: -129.00003
+      x: 486.30005
+      y: -104.65
       width: 231
-      height: 300
+      height: 240
     color: {r: 0.1721698, g: 0.4142836, b: 0.6886792, a: 0.20784314}
     size: {x: 400, y: 200}
   floatingElements: []
@@ -130,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8548e3ac443cdf444820bd4ae0d3c84a
   title: Idle Animation
-  position: {x: 712.00006, y: -71.240524}
+  position: {x: 511.30005, y: -45.64999}
   cels: []
   controlDriver:
     name: 
