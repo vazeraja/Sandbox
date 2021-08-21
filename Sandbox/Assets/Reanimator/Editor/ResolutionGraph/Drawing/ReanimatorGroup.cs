@@ -39,7 +39,6 @@ namespace Aarthificial.Reanimation {
             };
             colorField.RegisterValueChangedCallback(e => { UpdateGroupColor(e.newValue); });
             headerContainer.Add(colorField);
-            this.
 
             InitializeInnerNodes();
         }
@@ -48,18 +47,18 @@ namespace Aarthificial.Reanimation {
 
         private void InitializeInnerNodes()
         {
-            // foreach (var nodeGUID in group.ChildNodes.ToList()) {
-            //     if (!graphView.graph.nodesPerGUID.ContainsKey(nodeGUID)) {
-            //         Debug.LogWarning("Node GUID not found: " + nodeGUID);
-            //         group.innerNodeGUIDs.Remove(nodeGUID);
-            //         continue;
-            //     }
-            //
-            //     var node = graphView.graph.nodesPerGUID[nodeGUID];
-            //     var nodeView = graphView.nodeViewsPerNode[node];
-            //
-            //     AddElement(nodeView);
-            // }
+            foreach (string nodeGUID in group.innerNodeGUIDs.ToList()) {
+                if (!graphView.graph.nodesPerGUID.ContainsKey(nodeGUID)) {
+                    Debug.LogWarning("Node GUID not found: " + nodeGUID);
+                    group.innerNodeGUIDs.Remove(nodeGUID);
+                    continue;
+                }
+            
+                var node = graphView.graph.nodesPerGUID[nodeGUID];
+                var nodeView = graphView.nodeViewsPerNode[node];
+            
+                AddElement(nodeView);
+            }
         }
 
         protected override void OnElementsAdded(IEnumerable<GraphElement> elements)

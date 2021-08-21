@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 namespace Aarthificial.Reanimation {
@@ -14,12 +15,32 @@ namespace Aarthificial.Reanimation {
     public class ResolutionGraph : ScriptableObject {
         public ReanimatorNode root;
         public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
-        
+
         public List<Group> groups = new List<Group>();
         public List<FloatingElement> floatingElements = new List<FloatingElement>();
-        //[NonSerialized] public Dictionary<string, BaseNode> nodesPerGUID = new Dictionary<string, BaseNode>();
-        
-        
+        public Dictionary<string, ReanimatorNode> nodesPerGUID = new Dictionary<string, ReanimatorNode>();
+
+        private void OnEnable()
+        {
+            InitializeGraphElements();
+            DestroyBrokenGraphElements();
+        }
+
+        private void DestroyBrokenGraphElements()
+        {
+            nodes.RemoveAll(n => n == null);
+        }
+
+        private void InitializeGraphElements()
+        {
+            nodes.RemoveAll(n => n == null);
+
+            foreach (var node in nodes.ToList())
+            {
+                nodesPerGUID[node.guid] = node;
+            }
+        }
+
         /// <summary>
         /// Creates a scriptable object sub asset for the current resolution graph and adds it to the list
         /// of nodes saved in the resolution graph
@@ -36,6 +57,7 @@ namespace Aarthificial.Reanimation {
             node.guid = GUID.Generate().ToString();
 
             Undo.RecordObject(this, "Resolution Tree");
+            nodesPerGUID[node.guid] = node;
             nodes.Add(node);
             if (!Application.isPlaying) {
                 AssetDatabase.AddObjectToAsset(node, this);
@@ -55,6 +77,7 @@ namespace Aarthificial.Reanimation {
         public void DeleteSubAsset(ReanimatorNode node)
         {
             Undo.RecordObject(this, "Resolution Tree");
+            nodesPerGUID.Remove(node.guid);
             nodes.Remove(node);
             Undo.DestroyObjectImmediate(node);
 
@@ -121,19 +144,22 @@ namespace Aarthificial.Reanimation {
             }
         }
 
-        
+
         public void AddGroup(Group block)
         {
             groups.Add(block);
         }
+
         public void RemoveGroup(Group block)
         {
             groups.Remove(block);
         }
+
         public void AddFloatingElement(FloatingElement element)
         {
             floatingElements.Add(element);
         }
+
         public void RemoveFloatingElement(FloatingElement element)
         {
             floatingElements.Remove(element);

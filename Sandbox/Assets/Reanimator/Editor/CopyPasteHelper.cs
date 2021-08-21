@@ -9,8 +9,8 @@ namespace Aarthificial.Reanimation {
         public List<JsonElement> copiedNodes = new List<JsonElement>();
 
         public List<JsonElement> copiedGroups = new List<JsonElement>();
-
-        public List<JsonElement> copiedEdges = new List<JsonElement>();
+        
+        // public List<JsonElement> copiedEdges = new List<JsonElement>();
     }
 
     [Serializable]
@@ -54,12 +54,12 @@ namespace Aarthificial.Reanimation {
             return obj;
         }
 
-        public static JsonElement SerializeNode(BaseNode node)
+        public static JsonElement SerializeNode(ReanimatorNode node)
         {
             return Serialize(node);
         }
 
-        public static BaseNode DeserializeNode(JsonElement e)
+        public static ReanimatorNode DeserializeNode(JsonElement e)
         {
             try {
                 var baseNodeType = Type.GetType(e.type);
@@ -67,7 +67,7 @@ namespace Aarthificial.Reanimation {
                 if (e.jsonDatas == null)
                     return null;
 
-                var node = Activator.CreateInstance(baseNodeType) as BaseNode;
+                var node = Activator.CreateInstance(baseNodeType) as ReanimatorNode;
                 #if UNITY_EDITOR
                 EditorJsonUtility.FromJsonOverwrite(e.jsonDatas, node);
                 #else

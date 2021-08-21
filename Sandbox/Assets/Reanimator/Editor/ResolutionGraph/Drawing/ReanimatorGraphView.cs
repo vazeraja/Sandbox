@@ -6,6 +6,7 @@ using Aarthificial.Reanimation.Common;
 using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -20,10 +21,12 @@ namespace Aarthificial.Reanimation {
         private ReanimatorSearchWindowProvider searchWindowProvider;
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
 
-        public List<ReanimatorGraphNode> GraphNodes => nodes.ToList().Cast<ReanimatorGraphNode>().ToList();
+        public List<ReanimatorGraphNode> nodeViews = new List<ReanimatorGraphNode>();
 
-        private IEnumerable<MiniMap> miniMaps =>
-            graphElements.ToList().Where(x => x is MiniMap).Cast<MiniMap>().ToList();
+        public Dictionary<ReanimatorNode, ReanimatorGraphNode> nodeViewsPerNode =
+            new Dictionary<ReanimatorNode, ReanimatorGraphNode>();
+
+        public List<ReanimatorGroup> groupViews = new List<ReanimatorGroup>();
 
         public FloatingAnimationPreview FloatingAnimationPreview;
 
@@ -32,9 +35,182 @@ namespace Aarthificial.Reanimation {
 
         public ReanimatorGraphView()
         {
+            // styleSheets.Add(Resources.Load<StyleSheet>($"Styles/{styleName}"));
+            //
+            // serializeGraphElements = SerializeGraphElementsCallback;
+            // canPasteSerializedData = CanPasteSerializedDataCallback;
+            // unserializeAndPaste = UnserializeAndPasteCallback;
+            // graphViewChanged = OnGraphViewChanged;
+            //
+            // Insert(0, new GridBackground());
+            // this.AddManipulator(new ContentZoomer());
+            // this.AddManipulator(new ContentDragger());
+            // this.AddManipulator(new SelectionDragger());
+            // this.AddManipulator(new RectangleSelector());
+            // this.AddManipulator(new DragAndDropManipulator());
+            //
+            // Undo.undoRedoPerformed += () => {
+            //     Initialize(graph, editorWindow);
+            //     Helpers.SaveService(this).LoadFromSubAssets();
+            //     AssetDatabase.SaveAssets();
+            // };
+            // EditorApplication.update += PlayAnimationPreview;
+        }
+
+        private string SerializeGraphElementsCallback(IEnumerable<GraphElement> elements)
+        {
+            var data = new CopyPasteHelper();
+
+            var enumerable = elements.ToList();
+            foreach (var graphElement in enumerable.Where(e => e is ReanimatorGraphNode)) {
+                var nodeView = (ReanimatorGraphNode) graphElement;
+                data.copiedNodes.Add(JsonSerializer.SerializeNode(nodeView.node));
+            }
+
+            foreach (var graphElement in enumerable.Where(e => e is ReanimatorGroup)) {
+                var groupView = (ReanimatorGroup) graphElement;
+                data.copiedGroups.Add(JsonSerializer.Serialize(groupView.@group));
+            }
+
+            ClearSelection();
+
+            return JsonUtility.ToJson(data, true);
+        }
+
+        private bool CanPasteSerializedDataCallback(string serializedData)
+        {
+            try {
+                return JsonUtility.FromJson(serializedData, typeof(CopyPasteHelper)) != null;
+            }
+            catch {
+                return false;
+            }
+        }
+
+        private void UnserializeAndPasteCallback(string operationName, string serializedData)
+        {
+            var data = JsonUtility.FromJson<CopyPasteHelper>(serializedData);
+
+            RegisterCompleteObjectUndo(operationName);
+
+            Dictionary<string, ReanimatorNode> copiedNodesMap = new Dictionary<string, ReanimatorNode>();
+
+            var unserializedGroups = data.copiedGroups.Select(g => JsonSerializer.Deserialize<Group>(g)).ToList();
+
+            foreach (var serializedNode in data.copiedNodes) {
+                var node = JsonSerializer.DeserializeNode(serializedNode);
+
+                Debug.Log(node.title);
+
+                if (node == null)
+                    continue;
+
+                string sourceGUID = node.guid;
+                graph.nodesPerGUID.TryGetValue(sourceGUID, out var sourceNode);
+                //Call OnNodeCreated on the new fresh copied node
+                node.createdFromDuplication = true;
+                node.createdWithinGroup = unserializedGroups.Any(g => g.innerNodeGUIDs.Contains(sourceGUID));
+                //And move a bit the new node
+                node.position += new Vector2(20, 20);
+
+                var newNodeView = CreateGraphNode(node);
+
+                copiedNodesMap[sourceGUID] = node;
+
+                //Select the new node
+                AddToSelection(nodeViewsPerNode[node]);
+            }
+
+            foreach (var serializedNode in data.copiedNodes) {
+                var p = JsonSerializer.DeserializeNode(serializedNode);
+                Debug.Log(p.title);
+                var children = Helpers.GetChildren(p);
+                foreach (var c in children) {
+                    // Returns node by its guid and cast it back to a ReanimatorGraphNode
+                    // var parent = GetNodeByGuid(p.guid) as ReanimatorGraphNode;
+                    // var child =  GetNodeByGuid(c.guid) as ReanimatorGraphNode;
+            
+                    graph.nodesPerGUID.TryGetValue(p.guid, out var parent);
+                    graph.nodesPerGUID.TryGetValue(c.guid, out var child);
+            
+                    var parentNode = GetNodeByGuid(parent.guid) as ReanimatorGraphNode;
+                    var childNode = GetNodeByGuid(child.guid) as ReanimatorGraphNode;
+            
+                    // If it is a new graph, check if the root has a child or not
+                    if (parentNode?.node is BaseNode && childNode == null)
+                        continue;
+            
+                    // Connect each parents output to the saved children
+                    var edge = parentNode?.output.ConnectTo(childNode?.input);
+                    AddElement(edge);
+                }
+            }
+
+            foreach (var group in unserializedGroups) {
+                //Same than for node
+                group.OnCreated();
+
+                // try to centre the created node in the screen
+                group.position.position += new Vector2(20, 20);
+
+                var oldGUIDList = group.innerNodeGUIDs.ToList();
+                group.innerNodeGUIDs.Clear();
+                foreach (var guid in oldGUIDList) {
+                    graph.nodesPerGUID.TryGetValue(guid, out ReanimatorNode node);
+
+                    // In case group was copied from another graph
+                    if (node == null) {
+                        copiedNodesMap.TryGetValue(guid, out node);
+                        group.innerNodeGUIDs.Add(node.guid);
+                    }
+                    else {
+                        group.innerNodeGUIDs.Add(copiedNodesMap[guid].guid);
+                    }
+                }
+
+                AddGroup(group);
+            }
+        }
+
+        void InitializeNodeViews()
+        {
+            graph.nodes.RemoveAll(n => n == null);
+
+            foreach (var _ in graph.nodes.Select(node => CreateGraphNode(node))) { }
+        }
+
+        void InitializeGroups()
+        {
+            foreach (var group in graph.groups)
+                AddGroupView(group);
+        }
+
+        public void Initialize(ResolutionGraph graph, ReanimatorGraphEditorWindow editorWindow)
+        {
+            this.graph = graph;
+            this.editorWindow = editorWindow;
+            
+            styleSheets.Remove(Resources.Load<StyleSheet>($"Styles/{styleName}"));
             styleSheets.Add(Resources.Load<StyleSheet>($"Styles/{styleName}"));
 
+            serializeGraphElements -= SerializeGraphElementsCallback;
+            serializeGraphElements += SerializeGraphElementsCallback;
+            canPasteSerializedData -= CanPasteSerializedDataCallback;
+            canPasteSerializedData += CanPasteSerializedDataCallback;
+            unserializeAndPaste -= UnserializeAndPasteCallback;
+            unserializeAndPaste += UnserializeAndPasteCallback;
+            graphViewChanged -= OnGraphViewChanged;
+            graphViewChanged += OnGraphViewChanged;
+
+            Remove(new GridBackground());
             Insert(0, new GridBackground());
+            
+            this.RemoveManipulator(new ContentZoomer());
+            this.RemoveManipulator(new ContentDragger());
+            this.RemoveManipulator(new SelectionDragger());
+            this.RemoveManipulator(new RectangleSelector());
+            this.RemoveManipulator(new DragAndDropManipulator());
+            
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
@@ -42,26 +218,30 @@ namespace Aarthificial.Reanimation {
             this.AddManipulator(new DragAndDropManipulator());
 
             Undo.undoRedoPerformed += () => {
-                Reload(graph, editorWindow);
+                Initialize(graph, editorWindow);
                 Helpers.SaveService(this).LoadFromSubAssets();
                 AssetDatabase.SaveAssets();
             };
             EditorApplication.update += PlayAnimationPreview;
-        }
 
+            EditorSceneManager.sceneSaved += _ => SaveGraphToDisk();
+            RegisterCallback<KeyDownEvent>(e => {
+                if (e.keyCode == KeyCode.S && e.actionKey)
+                    SaveGraphToDisk();
+            });
 
-        public void Reload(ResolutionGraph graph, ReanimatorGraphEditorWindow editorWindow)
-        {
-            this.graph = graph;
-            this.editorWindow = editorWindow;
+            ClearGraphElements();
 
-            graphViewChanged -= OnGraphViewChanged;
-            DeleteElements(graphElements.ToList());
-            if(FloatingAnimationPreview != null)
-                RemoveFloatingGraphElement();
-            graphViewChanged += OnGraphViewChanged;
+            InitializeNodeViews();
+            InitializeGroups();
 
-            Helpers.SaveService(this).LoadFromSubAssets();
+            //graphViewChanged -= OnGraphViewChanged;
+            //DeleteElements(graphElements.ToList());
+            //if(FloatingAnimationPreview != null)
+            //    RemoveFloatingGraphElement();
+            //graphViewChanged += OnGraphViewChanged;
+
+            //Helpers.SaveService(this).LoadFromSubAssets();
         }
 
         /// <summary>
@@ -110,6 +290,7 @@ namespace Aarthificial.Reanimation {
         {
             var c = new ReanimatorGroup(this, block);
             AddElement(c);
+            groupViews.Add(c);
             return c;
         }
 
@@ -174,7 +355,32 @@ namespace Aarthificial.Reanimation {
                 onNodeSelected = onNodeSelected
             };
             AddElement(graphNode);
+
+            nodeViews.Add(graphNode);
+            nodeViewsPerNode[node] = graphNode;
+
             return graphNode;
+        }
+
+        void ClearGraphElements()
+        {
+            RemoveGroups();
+            RemoveNodeViews();
+        }
+
+        void RemoveNodeViews()
+        {
+            foreach (var nodeView in nodeViews)
+                RemoveElement(nodeView);
+            nodeViews.Clear();
+            nodeViewsPerNode.Clear();
+        }
+
+        public void RemoveGroups()
+        {
+            foreach (var groupView in groupViews)
+                RemoveElement(groupView);
+            groupViews.Clear();
         }
 
 
@@ -187,7 +393,7 @@ namespace Aarthificial.Reanimation {
         /// <param name="simpleCels"></param>
         /// <param name="controlDriver"></param>
         /// <param name="driverDictionary"></param>
-        public void CreateSimpleAnimationNode(Type type, Vector2 nodePosition, 
+        public void CreateSimpleAnimationNode(Type type, Vector2 nodePosition,
             IEnumerable<SimpleCel> simpleCels, ControlDriver controlDriver, DriverDictionary driverDictionary)
         {
             if (!(CreateNode(type, nodePosition) is SimpleAnimationNode simpleAnimationNode)) return;
@@ -218,10 +424,12 @@ namespace Aarthificial.Reanimation {
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
             graphViewChange.elementsToRemove?.ForEach(elem => {
+                RegisterCompleteObjectUndo("Remove Graph Elements");
                 switch (elem) {
                     case ReanimatorGraphNode graphNode:
                         Helpers.Call(() => graphNode.OnRemoved());
                         graph.DeleteSubAsset(graphNode.node);
+                        RemoveElement(graphNode);
                         break;
                     case Edge edge:
                         var parentNode = edge.output.node as ReanimatorGraphNode;
@@ -236,6 +444,8 @@ namespace Aarthificial.Reanimation {
             });
 
             graphViewChange.edgesToCreate?.ForEach(edge => {
+                RegisterCompleteObjectUndo("Remove Graph Elements");
+
                 var parentNode = edge.output.node as ReanimatorGraphNode;
                 var childNode = edge.input.node as ReanimatorGraphNode;
 
@@ -258,10 +468,14 @@ namespace Aarthificial.Reanimation {
                 });
         }
 
-        public ReanimatorEdge CreateEdgeView()
+        public void SaveGraphToDisk()
         {
-            return new ReanimatorEdge();
+            if (graph == null)
+                return;
+
+            EditorUtility.SetDirty(graph);
         }
+
         public void RegisterCompleteObjectUndo(string name)
         {
             Undo.RegisterCompleteObjectUndo(graph, name);

@@ -11,11 +11,18 @@ using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorGraphEditorWindow : EditorWindow {
-        [MenuItem("Reanimator/Resolution Graph")]
+        // [MenuItem("Reanimator/Resolution Graph")]
         public static void ShowWindow()
         {
             ReanimatorGraphEditorWindow wnd = GetWindow<ReanimatorGraphEditorWindow>();
             wnd.titleContent = new GUIContent("ReanimatorGraph");
+        }
+        
+        [OnOpenAsset]
+        public static bool OnOpenAsset(int instanceId, int line) {
+            if (!(Selection.activeObject is ResolutionGraph)) return false;
+            ShowWindow();
+            return true;
         }
 
         private static string styleName => "ReanimatorGraphEditor";
@@ -30,15 +37,6 @@ namespace Aarthificial.Reanimation {
         private TwoPanelInspector twoPanelInspector;
         private ToolbarButton loadButton;
         private ExtendedToolbarToggle toggle;
-
-        private void Update()
-        {
-            if (graphView != null) {
-                //Debug.Log("Count of GraphNodes: " + graphView.GraphNodes.Count);
-                //Debug.Log("Count of GraphNodesByNode Dict: " + graphView.GraphNodesPerNode.Count);
-                //Debug.Log("Count of GroupViews: " + graphView.groupViews.Count);
-            }
-        }
 
         public void CreateGUI()
         {
@@ -73,7 +71,9 @@ namespace Aarthificial.Reanimation {
 
             var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
             resolutionGraphs.ForEach(graph => {
-                toolbarMenu.menu.AppendAction($"{graph.name}", (a) => { Select(graph); });
+                toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
+                    //Select(graph);
+                });
             });
 
             loadButton.clicked += () => {
@@ -83,7 +83,7 @@ namespace Aarthificial.Reanimation {
                 }
 
                 Select(Selection.activeObject);
-                Helpers.SaveService(graphView).LoadFromSubAssets();
+                //Helpers.SaveService(graphView).LoadFromSubAssets();
                 EditorApplication.delayCall += () => { graphView.FrameAll(); };
             };
             
@@ -103,7 +103,7 @@ namespace Aarthificial.Reanimation {
             #endregion
         }
 
-        private void DrawNodeProperties(ReanimatorGraphNode graphNode)
+        public void DrawNodeProperties(ReanimatorGraphNode graphNode)
         {
             twoPanelInspector.Initialize(inspectorPanel, animationPreviewPanel);
             twoPanelInspector.DrawNodeProperties(graphNode);
@@ -113,7 +113,7 @@ namespace Aarthificial.Reanimation {
         {
             Selection.activeObject = graph;
             resolutionGraph = Selection.activeObject as ResolutionGraph;
-            graphView.Reload(resolutionGraph, this);
+            graphView.Initialize(resolutionGraph, this);
 
             //toggle.value = resolutionGraph && resolutionGraph.floatingElements.Any();
 

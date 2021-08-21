@@ -15,7 +15,7 @@ namespace Aarthificial.Reanimation {
 
         public ReanimatorGraphView reanimatorGraphView;
 
-        public ReanimatorNode node { get; }
+        public ReanimatorNode node { get; set;  }
         public UnityAction<ReanimatorGraphNode> onNodeSelected;
         public ReanimatorPort input { get; }
         public ReanimatorPort output { get; }
@@ -52,7 +52,6 @@ namespace Aarthificial.Reanimation {
                     
                     input.Initialize(this, "");
                     inputContainer.Add(input);
-                    node.needsAnimationPreview = true;
                     AddToClassList("simpleAnimation");
                     break;
                 case SwitchNode _:
@@ -74,7 +73,6 @@ namespace Aarthificial.Reanimation {
 
                     inputContainer.Add(input);
                     outputContainer.Add(output);
-                    node.needsAnimationPreview = false;
                     AddToClassList("switch");
                     break;
                 case OverrideNode _:
@@ -96,7 +94,6 @@ namespace Aarthificial.Reanimation {
 
                     inputContainer.Add(input);
                     outputContainer.Add(output);
-                    node.needsAnimationPreview = false;
                     AddToClassList("override");
                     break;
                 case BaseNode _:
@@ -113,7 +110,6 @@ namespace Aarthificial.Reanimation {
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;
                     capabilities &= ~Capabilities.Deletable;
-                    node.needsAnimationPreview = false;
                     AddToClassList("base");
                     break;
             }
@@ -157,7 +153,8 @@ namespace Aarthificial.Reanimation {
         public override void OnSelected()
         {
             base.OnSelected();
-            onNodeSelected?.Invoke(this);
+            //onNodeSelected?.Invoke(this);
+            reanimatorGraphView.editorWindow.DrawNodeProperties(this);
         }
 
         public void OnPortConnected(ReanimatorPort port, Edge edge)

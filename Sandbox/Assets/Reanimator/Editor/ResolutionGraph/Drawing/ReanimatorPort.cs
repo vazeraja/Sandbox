@@ -11,64 +11,6 @@ using Edge = UnityEditor.Experimental.GraphView.Edge;
 
 namespace Aarthificial.Reanimation {
     public class ReanimatorPort : Port {
-        private class PortData : IEquatable<PortData> {
-            /// <summary>
-            /// Unique identifier for the port
-            /// </summary>
-            public string identifier;
-
-            /// <summary>
-            /// Display name on the node
-            /// </summary>
-            public string displayName;
-
-            /// <summary>
-            /// The type that will be used for coloring with the type stylesheet
-            /// </summary>
-            public Type displayType;
-
-            /// <summary>
-            /// If the port accept multiple connection
-            /// </summary>
-            public bool acceptMultipleEdges;
-
-            /// <summary>
-            /// Port size, will also affect the size of the connected edge
-            /// </summary>
-            public int sizeInPixel;
-
-            /// <summary>
-            /// Tooltip of the port
-            /// </summary>
-            public string tooltip;
-
-            /// <summary>
-            /// Is the port vertical
-            /// </summary>
-            public bool vertical;
-
-            public bool Equals(PortData other)
-            {
-                return identifier == other.identifier
-                       && displayName == other.displayName
-                       && displayType == other.displayType
-                       && acceptMultipleEdges == other.acceptMultipleEdges
-                       && sizeInPixel == other.sizeInPixel
-                       && tooltip == other.tooltip
-                       && vertical == other.vertical;
-            }
-
-            public void CopyFrom(PortData other)
-            {
-                identifier = other.identifier;
-                displayName = other.displayName;
-                displayType = other.displayType;
-                acceptMultipleEdges = other.acceptMultipleEdges;
-                sizeInPixel = other.sizeInPixel;
-                tooltip = other.tooltip;
-                vertical = other.vertical;
-            }
-        }
 
         private const string styleName = "PortView";
 
