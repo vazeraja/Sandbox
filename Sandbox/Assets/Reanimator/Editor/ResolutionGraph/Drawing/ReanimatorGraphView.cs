@@ -278,7 +278,7 @@ namespace Aarthificial.Reanimation {
             nodeViewsPerNode.TryGetValue(data.targetNode, out var targetGraphNode);
             
             var edgeToCreate = baseGraphNode?.output.ConnectTo(targetGraphNode?.input) as ReanimatorEdge;
-            edgeToCreate.userData = data;
+            //edgeToCreate.userData = data;
             
             AddElement(edgeToCreate);
         }
