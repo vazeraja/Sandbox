@@ -1,5 +1,5 @@
-﻿using Aarthificial.Reanimation;
-using UnityEngine;
+﻿using UnityEngine;
+using Reanimator =  Aarthificial.Reanimation.Reanimator;
 
 public class PlayerRenderer : MonoBehaviour {
     private static class Drivers {
@@ -13,14 +13,14 @@ public class PlayerRenderer : MonoBehaviour {
         public const string State = "state";
     }
 
-    private Reanimator reanimator;
+    private Aarthificial.Reanimation.Reanimator reanimator;
     private PlayerController controller;
     private CollisionDetection collisionDetection;
 
     private bool _isRed;
 
     private void Awake() {
-        reanimator = GetComponent<Reanimator>();
+        reanimator = GetComponent<Aarthificial.Reanimation.Reanimator>();
         controller = GetComponent<PlayerController>();
         collisionDetection = GetComponent<CollisionDetection>();
     }

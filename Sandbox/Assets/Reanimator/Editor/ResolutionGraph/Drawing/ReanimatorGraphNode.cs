@@ -45,12 +45,11 @@ namespace Aarthificial.Reanimation {
                         node.title = node.GetType().Name;
                     }
 
-                    input = new ReanimatorPort(Direction.Input, Port.Capacity.Single) {
+                    input = new ReanimatorPort(this, Direction.Input, Port.Capacity.Single) {
                         portColor = new Color(0.12f, 0.44f, 0.81f),
                         portName = "",
                     };
                     
-                    input.Initialize(this, "");
                     inputContainer.Add(input);
                     AddToClassList("simpleAnimation");
                     break;
@@ -59,17 +58,15 @@ namespace Aarthificial.Reanimation {
                         node.title = node.GetType().Name;
                     }
 
-                    input = new ReanimatorPort(Direction.Input, Port.Capacity.Single) {
+                    input = new ReanimatorPort(this, Direction.Input, Port.Capacity.Single) {
                         portColor = new Color(0.94f, 0.7f, 0.31f),
                         portName = "",
                     };
-                    input.Initialize(this, "");
 
-                    output = new ReanimatorPort(Direction.Output, Port.Capacity.Multi) {
+                    output = new ReanimatorPort(this, Direction.Output, Port.Capacity.Multi) {
                         portColor = new Color(0.94f, 0.7f, 0.31f),
                         portName = "",
                     };
-                    output.Initialize(this, "");
 
                     inputContainer.Add(input);
                     outputContainer.Add(output);
@@ -80,17 +77,15 @@ namespace Aarthificial.Reanimation {
                         node.title = node.GetType().Name;
                     }
 
-                    input = new ReanimatorPort(Direction.Input, Port.Capacity.Single) {
+                    input = new ReanimatorPort(this, Direction.Input, Port.Capacity.Single) {
                         portColor = new Color(0.81f, 0.29f, 0.28f),
                         portName = "",
                     };
-                    input.Initialize(this, "");
 
-                    output = new ReanimatorPort(Direction.Output, Port.Capacity.Single) {
+                    output = new ReanimatorPort(this, Direction.Output, Port.Capacity.Single) {
                         portColor = new Color(0.81f, 0.29f, 0.28f),
                         portName = "",
                     };
-                    output.Initialize(this, "");
 
                     inputContainer.Add(input);
                     outputContainer.Add(output);
@@ -101,11 +96,10 @@ namespace Aarthificial.Reanimation {
                         node.title = node.GetType().Name;
                     }
 
-                    output = new ReanimatorPort(Direction.Output, Port.Capacity.Single) {
+                    output = new ReanimatorPort(this, Direction.Output, Port.Capacity.Single) {
                         portColor = new Color(0.98f, 1f, 0.98f),
                         portName = "",
                     };
-                    output.Initialize(this, "");
 
                     outputContainer.Add(output);
                     capabilities &= ~Capabilities.Movable;

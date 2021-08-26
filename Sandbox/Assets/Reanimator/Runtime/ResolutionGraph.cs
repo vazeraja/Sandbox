@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using Aarthificial.Reanimation.Common;
 using Aarthificial.Reanimation.Nodes;
-using JetBrains.Annotations;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
-
 #endif
 
 namespace Aarthificial.Reanimation {
     [CreateAssetMenu(fileName = "ResolutionGraph", menuName = "Reanimator/ResolutionGraph", order = 400)]
     public class ResolutionGraph : ScriptableObject {
         public ReanimatorNode root;
+        
+        
         public List<ReanimatorNode> nodes = new List<ReanimatorNode>();
-
+        public List<EdgeData> edges = new List<EdgeData>();
         public List<Group> groups = new List<Group>();
         public List<FloatingElement> floatingElements = new List<FloatingElement>();
         public Dictionary<string, ReanimatorNode> nodesPerGUID = new Dictionary<string, ReanimatorNode>();
+        public CopyPasteHelper CopyPasteHelper = new CopyPasteHelper();
 
         private void OnEnable()
         {
@@ -144,6 +145,17 @@ namespace Aarthificial.Reanimation {
             }
         }
 
+        public EdgeData AddEdge(EdgeData edge)
+        {
+            edges.Add(edge);
+            return edge;
+        }
+
+        public void RemoveEdge(string edgeGuid)
+        {
+            var edgeToRemove = edges.Find(e => e.guid == edgeGuid);
+            edges.Remove(edgeToRemove);
+        }
 
         public void AddGroup(Group block)
         {

@@ -1,0 +1,6 @@
+.reanimatorEdge.selected {
+    --edge-width: 4;
+}
+.reanimatorEdge.unselected {
+    --edge-width: 2;
+}

@@ -25,6 +25,12 @@ namespace Aarthificial.Reanimation {
             return true;
         }
 
+        private void Update()
+        {
+            if (graphView == null) return;
+            Debug.Log(graphView.edgeViews.Count);
+        }
+
         private static string styleName => "ReanimatorGraphEditor";
         private static string UxmlName => "ReanimatorGraphEditor";
 
@@ -69,12 +75,12 @@ namespace Aarthificial.Reanimation {
 
             #region Toolbar Setup
 
-            var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
-            resolutionGraphs.ForEach(graph => {
-                toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
-                    //Select(graph);
-                });
-            });
+            // var resolutionGraphs = Helpers.LoadAssetsOfType<ResolutionGraph>();
+            // resolutionGraphs.ForEach(graph => {
+            //     toolbarMenu.menu.AppendAction($"{graph.name}", (a) => {
+                    Select(Selection.activeObject as ResolutionGraph);
+            //     });
+            // });
 
             loadButton.clicked += () => {
                 if (!(Selection.activeObject is ResolutionGraph)) {
@@ -82,7 +88,7 @@ namespace Aarthificial.Reanimation {
                     return;
                 }
 
-                Select(Selection.activeObject);
+                //Select(Selection.activeObject);
                 //Helpers.SaveService(graphView).LoadFromSubAssets();
                 EditorApplication.delayCall += () => { graphView.FrameAll(); };
             };

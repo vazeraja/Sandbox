@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using Aarthificial.Reanimation.Nodes;
 using UnityEditor;
 
-namespace Aarthificial.Reanimation {
+namespace Aarthificial.Reanimation.Common {
+    
     [System.Serializable]
     public class CopyPasteHelper {
         public List<JsonElement> copiedNodes = new List<JsonElement>();
 
         public List<JsonElement> copiedGroups = new List<JsonElement>();
         
-        // public List<JsonElement> copiedEdges = new List<JsonElement>();
+        public List<JsonElement> copiedEdges = new List<JsonElement>();
     }
 
     [Serializable]
